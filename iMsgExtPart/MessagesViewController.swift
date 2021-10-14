@@ -7,12 +7,16 @@
 
 import UIKit
 import Messages
+import CoreData
 
 class MessagesViewController: MSMessagesAppViewController {
+    let persistenceController = PersistenceController.shared
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        initView()
     }
     
     // MARK: - Conversation Handling

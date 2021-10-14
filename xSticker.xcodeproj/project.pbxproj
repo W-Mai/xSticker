@@ -18,6 +18,11 @@
 		5E4741FB271824CE001E0E11 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 5E4741F9271824CE001E0E11 /* MainInterface.storyboard */; };
 		5E4741FD271824D0001E0E11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E4741FC271824D0001E0E11 /* Assets.xcassets */; };
 		5E474201271824D0001E0E11 /* iMsgExtPart.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5E4741F2271824CE001E0E11 /* iMsgExtPart.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5E474208271825AF001E0E11 /* CustomStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E474206271825AF001E0E11 /* CustomStickerView.swift */; };
+		5E47420A2718386F001E0E11 /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741F7271824CE001E0E11 /* MessagesViewController.swift */; };
+		5E47420B27183878001E0E11 /* CustomStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E474206271825AF001E0E11 /* CustomStickerView.swift */; };
+		5E47420C271838F8001E0E11 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E327181B25001E0E11 /* Persistence.swift */; };
+		5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +64,7 @@
 		5E4741FA271824CE001E0E11 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		5E4741FC271824D0001E0E11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E4741FE271824D0001E0E11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5E474206271825AF001E0E11 /* CustomStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,6 +139,7 @@
 			isa = PBXGroup;
 			children = (
 				5E4741F7271824CE001E0E11 /* MessagesViewController.swift */,
+				5E474206271825AF001E0E11 /* CustomStickerView.swift */,
 				5E4741F9271824CE001E0E11 /* MainInterface.storyboard */,
 				5E4741FC271824D0001E0E11 /* Assets.xcassets */,
 				5E4741FE271824D0001E0E11 /* Info.plist */,
@@ -241,8 +248,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E47420A2718386F001E0E11 /* MessagesViewController.swift in Sources */,
 				5E4741E427181B25001E0E11 /* Persistence.swift in Sources */,
 				5E4741DD27181B24001E0E11 /* ContentView.swift in Sources */,
+				5E47420B27183878001E0E11 /* CustomStickerView.swift in Sources */,
 				5E4741E727181B25001E0E11 /* xSticker.xcdatamodeld in Sources */,
 				5E4741DB27181B24001E0E11 /* xStickerApp.swift in Sources */,
 			);
@@ -252,7 +261,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
+				5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */,
+				5E474208271825AF001E0E11 /* CustomStickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
