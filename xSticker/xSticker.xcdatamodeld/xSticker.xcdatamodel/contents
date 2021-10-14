@@ -6,20 +6,20 @@
         <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
-        <attribute name="profile" optional="YES" attributeType="Binary"/>
-        <relationship name="stickerSet" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Stickers" inverseName="collection" inverseEntity="Stickers"/>
+        <attribute name="profile" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
+        <relationship name="stickerSet" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Stickers" inverseName="collection" inverseEntity="Stickers"/>
     </entity>
     <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
         <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
     </entity>
     <entity name="Stickers" representedClassName="Stickers" syncable="YES" codeGenerationType="class">
-        <attribute name="image" optional="YES" attributeType="URI"/>
+        <attribute name="image" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
         <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Collections" inverseName="stickerSet" inverseEntity="Collections"/>
     </entity>
     <elements>
-        <element name="Item" positionX="-63" positionY="-18" width="128" height="44"/>
-        <element name="Stickers" positionX="-63" positionY="-9" width="128" height="74"/>
-        <element name="Collections" positionX="-54" positionY="18" width="128" height="134"/>
+        <element name="Item" positionX="-582.6484375" positionY="-72.671875" width="128" height="44"/>
+        <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="88"/>
+        <element name="Collections" positionX="-71.890625" positionY="18.94140625" width="133.57421875" height="148"/>
     </elements>
 </model>

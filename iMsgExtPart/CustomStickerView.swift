@@ -50,7 +50,12 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     
     // MARK: - 数据源
     func numberOfStickers(in stickerBrowserView: MSStickerBrowserView) -> Int {
-        return 2
+        let context = persistenceController.container.viewContext
+        
+        let req: NSFetchRequest<Item> = Item.fetchRequest()
+        let res = (try? context.count(for: req)) ?? 0
+        
+        return res
     }
     
     func stickerBrowserView(_ stickerBrowserView: MSStickerBrowserView, stickerAt index: Int) -> MSSticker {

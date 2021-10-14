@@ -14,8 +14,9 @@ struct PersistenceController {
         let result = PersistenceController(inMemory: true)
         let viewContext = result.container.viewContext
         for _ in 0..<10 {
-            let newItem = Item(context: viewContext)
-            newItem.timestamp = Date()
+            let newItem = Stickers(context: viewContext)
+            newItem.name = UUID().uuidString
+            newItem.image = UUID()
         }
         do {
             try viewContext.save()
@@ -30,6 +31,8 @@ struct PersistenceController {
 
     let container: NSPersistentCloudKitContainer
 
+    var defaultCollection: Collections!
+    
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "xSticker")
         
@@ -62,19 +65,34 @@ struct PersistenceController {
                 * The store could not be migrated to the current model version.
                 Check the error message to determine what the actual problem was.
                 */
+                
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
         
-        let context = container.viewContext
-        let request = Item.fetchRequest() as NSFetchRequest<Item>
+        defaultCollection = initDefaultCollection()
         
-        let count = try? context.count(for: request)
-        if count != 0 { return }
-        for _ in 0..<10 {
-            let newItem = Item(context: context)
-            newItem.timestamp = Date()
+        
+    }
+    
+    func initDefaultCollection() -> Collections{
+        let context = container.viewContext
+        
+        let fetchReq: NSFetchRequest<Collections> = Collections.fetchRequest()
+        fetchReq.predicate = NSPredicate(format: "name=%@", "DefaultStickerCollection")
+        
+        let res = try? context.fetch(fetchReq)
+        if res == nil || res?.count == 0 {
+            let collection = Collections(context: context)
+            collection.name = "DefaultStickerCollection"
+            collection.author = "xSticker"
+            collection.createDate = Date()
+            collection.collectionDescription = "The default collection of stickers"
+            
+            try? context.save()
+            
+            return collection
         }
-        try? context.save()
+        return res!.first!
     }
 }

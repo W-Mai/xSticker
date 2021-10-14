@@ -118,7 +118,6 @@
 		5E4741D927181B24001E0E11 /* xSticker */ = {
 			isa = PBXGroup;
 			children = (
-				5E47421B27186499001E0E11 /* resourcessss */,
 				5E47420E271840E4001E0E11 /* xSticker.entitlements */,
 				5E4741DA27181B24001E0E11 /* xStickerApp.swift */,
 				5E4741DC27181B24001E0E11 /* ContentView.swift */,
@@ -168,21 +167,6 @@
 				5E47421727185E38001E0E11 /* ld.jpg */,
 			);
 			path = TmpStickers;
-			sourceTree = "<group>";
-		};
-		5E47421A27186316001E0E11 /* TmpStickers */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = TmpStickers;
-			sourceTree = "<group>";
-		};
-		5E47421B27186499001E0E11 /* resourcessss */ = {
-			isa = PBXGroup;
-			children = (
-				5E47421A27186316001E0E11 /* TmpStickers */,
-			);
-			path = resourcessss;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
