@@ -10,7 +10,7 @@ import Messages
 import CoreData
 
 class MessagesViewController: MSMessagesAppViewController {
-    let persistenceController = PersistenceController.shared
+    let persistenceController = PersistenceController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
