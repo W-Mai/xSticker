@@ -25,6 +25,8 @@
 		5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
 		5E474211271848DD001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
 		5E474212271856FB001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
+		5E47421827185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
+		5E47421927185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,7 @@
 		5E47420E271840E4001E0E11 /* xSticker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xSticker.entitlements; sourceTree = "<group>"; };
 		5E47420F271840FF001E0E11 /* iMsgExtPart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iMsgExtPart.entitlements; sourceTree = "<group>"; };
 		5E474210271848DD001E0E11 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
+		5E47421727185E38001E0E11 /* ld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ld.jpg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,7 @@
 		5E4741D927181B24001E0E11 /* xSticker */ = {
 			isa = PBXGroup;
 			children = (
+				5E47421B27186499001E0E11 /* resourcessss */,
 				5E47420E271840E4001E0E11 /* xSticker.entitlements */,
 				5E4741DA27181B24001E0E11 /* xStickerApp.swift */,
 				5E4741DC27181B24001E0E11 /* ContentView.swift */,
@@ -147,6 +151,7 @@
 		5E4741F6271824CE001E0E11 /* iMsgExtPart */ = {
 			isa = PBXGroup;
 			children = (
+				5E47421327185DC0001E0E11 /* TmpStickers */,
 				5E47420F271840FF001E0E11 /* iMsgExtPart.entitlements */,
 				5E4741F7271824CE001E0E11 /* MessagesViewController.swift */,
 				5E474206271825AF001E0E11 /* CustomStickerView.swift */,
@@ -155,6 +160,29 @@
 				5E4741FE271824D0001E0E11 /* Info.plist */,
 			);
 			path = iMsgExtPart;
+			sourceTree = "<group>";
+		};
+		5E47421327185DC0001E0E11 /* TmpStickers */ = {
+			isa = PBXGroup;
+			children = (
+				5E47421727185E38001E0E11 /* ld.jpg */,
+			);
+			path = TmpStickers;
+			sourceTree = "<group>";
+		};
+		5E47421A27186316001E0E11 /* TmpStickers */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = TmpStickers;
+			sourceTree = "<group>";
+		};
+		5E47421B27186499001E0E11 /* resourcessss */ = {
+			isa = PBXGroup;
+			children = (
+				5E47421A27186316001E0E11 /* TmpStickers */,
+			);
+			path = resourcessss;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -237,6 +265,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E47421827185E38001E0E11 /* ld.jpg in Resources */,
 				5E4741E227181B25001E0E11 /* Preview Assets.xcassets in Resources */,
 				5E4741DF27181B25001E0E11 /* Assets.xcassets in Resources */,
 			);
@@ -246,6 +275,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E47421927185E38001E0E11 /* ld.jpg in Resources */,
 				5E4741FD271824D0001E0E11 /* Assets.xcassets in Resources */,
 				5E4741FB271824CE001E0E11 /* MainInterface.storyboard in Resources */,
 			);

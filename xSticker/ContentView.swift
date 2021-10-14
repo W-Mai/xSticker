@@ -16,6 +16,14 @@ struct ContentView: View {
         animation: .default)
     private var items: FetchedResults<Item>
 
+    init() {
+        let url = Bundle.main.bundleURL.path + "/TmpStickers" + "/ld.jpg"
+        NSLog("???%@", url)
+        
+        let url2 = Bundle.main.url(forResource: "ld", withExtension: "jpg")?.path
+        NSLog("???%@", url2!)
+    }
+    
     var body: some View {
         VStack{
             HStack {
