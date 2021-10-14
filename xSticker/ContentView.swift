@@ -8,13 +8,27 @@
 import SwiftUI
 import CoreData
 
+private let itemFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .short
+    formatter.timeStyle = .medium
+    return formatter
+}()
+
+struct ContentView_Previews: PreviewProvider {
+    static let persistenceController = PersistenceController.preview
+    
+    static var previews: some View {
+        ContentView(persistenceController: PersistenceController.preview).environment(\.managedObjectContext, persistenceController.container.viewContext)
+    }
+}
+
+let defaultImage = UIImage(data: try! Data(contentsOf: Bundle.main.url(forResource: "ld", withExtension: "jpg")!))!
+
 struct ContentView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
-
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.name, ascending: true)])
-    private var items: FetchedResults<Stickers>
 
     init(persistenceController: PersistenceController) {
         let url = Bundle.main.bundleURL.path + "/TmpStickers" + "/ld.jpg"
@@ -32,7 +46,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                     ForEach(0..<1){ item in
                         NavigationLink(
-                            destination: Text("Destination"),
+                            destination: StickerCollectionView(persistence: persistence),
                             label: {
                                 VStack(spacing: 10){
                                     Image(systemName: "plus")
@@ -47,26 +61,9 @@ struct ContentView: View {
                                 }
                             })
                     }
-                    //                    ForEach(items) { item in
-                    //                        NavigationLink(
-                    //                            destination: Text("Destination"),
-                    //                            label: {
-                    //                                VStack{
-                    //                                    Image(systemName: "plus")
-                    //                                    Text("\(item.name!)")
-                    //                                }.frame(width: 100, height: 100, alignment: .center)
-                    //                            })
-                    //                    }
-                    //                    .onDelete(perform: deleteItems)
                 }.padding()
             }.navigationTitle("Collection")
-            .navigationViewStyle(DoubleColumnNavigationViewStyle())
-            //            .navigationBarItems(trailing: HStack {
-            //                Button(action: addItem) {
-            //                    Label("Add Item", systemImage: "plus")
-//                }
-//                EditButton()
-//            })
+            .navigationViewStyle(StackNavigationViewStyle())
         }
         
     }
@@ -87,7 +84,7 @@ struct ContentView: View {
 
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-            offsets.map { items[$0] }.forEach(viewContext.delete)
+//            offsets.map { items[$0] }.forEach(viewContext.delete)
 
             do {
                 try viewContext.save()
@@ -101,17 +98,81 @@ struct ContentView: View {
     }
 }
 
-private let itemFormatter: DateFormatter = {
-    let formatter = DateFormatter()
-    formatter.dateStyle = .short
-    formatter.timeStyle = .medium
-    return formatter
-}()
 
-struct ContentView_Previews: PreviewProvider {
-    static let persistenceController = PersistenceController.preview
+struct StickerCollectionView: View {
+    var persistence: PersistenceController
     
-    static var previews: some View {
-        ContentView(persistenceController: PersistenceController.preview).environment(\.managedObjectContext, persistenceController.container.viewContext)
+    @Environment(\.managedObjectContext) private var viewContext
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: true)])
+    private var items: FetchedResults<Stickers>
+    
+    var body: some View {
+        ScrollView(.vertical){
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                Button(action: {
+                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                }, label: {
+                    VStack(spacing: 10){
+                        Image(systemName: "plus")
+                            .frame(width: 60, height: 60, alignment: .center)
+                            .background(Color.white)
+                            .cornerRadius(20)
+                            .shadow(radius: 10)
+                        Text("添加")
+                            .font(.body)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.3)
+                    }
+                })
+                
+                ForEach(items){ item in
+                    NavigationLink(
+                        destination: StickerDetailView(sticker: item, persistence: persistence),
+                        label: {
+                            VStack(spacing: 10){
+                                Image(uiImage: defaultImage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: 100, height: 100, alignment: .center)
+                                    .background(Color.white)
+                                    .cornerRadius(20)
+                                    .shadow(radius: 10)
+                                Text("\(item.name!)")
+                                    .font(.body)
+                                    .lineLimit(1)
+                                    .minimumScaleFactor(0.3)
+                            }
+                        })
+                }
+            }.padding()
+        }.navigationTitle(persistence.defaultCollection.name!)
+    }
+}
+
+struct StickerDetailView: View {
+    var sticker: Stickers
+    var persistence: PersistenceController
+    
+    var body: some View {
+        Form{
+            Section(
+                header:
+                    Image(uiImage: defaultImage)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .padding()
+            ){
+                List{
+                    Text(sticker.name!)
+                    Text(sticker.addDate!, style: .date)
+                    Text(sticker.collection!.name!)
+                }
+                Button(action: {
+                    persistence.removeSticker(of: sticker)
+                }, label: {
+                    Text("删掉我吧！").foregroundColor(.red)
+                })
+            }
+        }
     }
 }
