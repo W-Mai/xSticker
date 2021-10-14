@@ -51,5 +51,16 @@ struct PersistenceController {
                 fatalError("Unresolved error \(error), \(error.userInfo)")
             }
         })
+        
+        let context = container.viewContext
+        let request = Item.fetchRequest() as NSFetchRequest<Item>
+        
+        let count = try? context.count(for: request)
+        if count != 0 { return }
+        for _ in 0..<10 {
+            let newItem = Item(context: context)
+            newItem.timestamp = Date()
+        }
+        try? context.save()
     }
 }
