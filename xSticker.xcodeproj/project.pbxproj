@@ -23,6 +23,8 @@
 		5E47420B27183878001E0E11 /* CustomStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E474206271825AF001E0E11 /* CustomStickerView.swift */; };
 		5E47420C271838F8001E0E11 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E327181B25001E0E11 /* Persistence.swift */; };
 		5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
+		5E474211271848DD001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
+		5E474212271856FB001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +67,9 @@
 		5E4741FC271824D0001E0E11 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E4741FE271824D0001E0E11 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5E474206271825AF001E0E11 /* CustomStickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomStickerView.swift; sourceTree = "<group>"; };
+		5E47420E271840E4001E0E11 /* xSticker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xSticker.entitlements; sourceTree = "<group>"; };
+		5E47420F271840FF001E0E11 /* iMsgExtPart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iMsgExtPart.entitlements; sourceTree = "<group>"; };
+		5E474210271848DD001E0E11 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +77,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5E474211271848DD001E0E11 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -80,6 +86,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E4741F5271824CE001E0E11 /* Messages.framework in Frameworks */,
+				5E474212271856FB001E0E11 /* CloudKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,6 +115,7 @@
 		5E4741D927181B24001E0E11 /* xSticker */ = {
 			isa = PBXGroup;
 			children = (
+				5E47420E271840E4001E0E11 /* xSticker.entitlements */,
 				5E4741DA27181B24001E0E11 /* xStickerApp.swift */,
 				5E4741DC27181B24001E0E11 /* ContentView.swift */,
 				5E4741DE27181B25001E0E11 /* Assets.xcassets */,
@@ -130,6 +138,7 @@
 		5E4741F3271824CE001E0E11 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				5E474210271848DD001E0E11 /* CloudKit.framework */,
 				5E4741F4271824CE001E0E11 /* Messages.framework */,
 			);
 			name = Frameworks;
@@ -138,6 +147,7 @@
 		5E4741F6271824CE001E0E11 /* iMsgExtPart */ = {
 			isa = PBXGroup;
 			children = (
+				5E47420F271840FF001E0E11 /* iMsgExtPart.entitlements */,
 				5E4741F7271824CE001E0E11 /* MessagesViewController.swift */,
 				5E474206271825AF001E0E11 /* CustomStickerView.swift */,
 				5E4741F9271824CE001E0E11 /* MainInterface.storyboard */,
@@ -412,6 +422,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
@@ -435,6 +446,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
@@ -456,6 +468,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;
@@ -476,6 +489,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
+				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;

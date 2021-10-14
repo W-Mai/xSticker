@@ -32,9 +32,23 @@ struct PersistenceController {
 
     init(inMemory: Bool = false) {
         container = NSPersistentCloudKitContainer(name: "xSticker")
+        
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
+        } else {
+            let rootPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.xSticker")
+            
+            // Create a store description for a local store
+            let localStoreLocation = URL(fileURLWithPath: rootPath!.path + "/local.store")
+            let localStoreDescription =
+                NSPersistentStoreDescription(url: localStoreLocation)
+            localStoreDescription.configuration = "Default"
+            
+            container.persistentStoreDescriptions = [
+                localStoreDescription
+            ]
         }
+        
         container.loadPersistentStores(completionHandler: { (storeDescription, error) in
             if let error = error as NSError? {
                 // Replace this implementation with code to handle the error appropriately.
