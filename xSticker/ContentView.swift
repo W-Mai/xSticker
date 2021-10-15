@@ -29,7 +29,7 @@ struct ContentView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
-
+    
     init(persistenceController: PersistenceController) {
         let url = Bundle.main.bundleURL.path + "/TmpStickers" + "/ld.jpg"
         NSLog("???%@", url)
@@ -67,7 +67,7 @@ struct ContentView: View {
         }
         
     }
-
+    
     private func addItem() {
         
         withAnimation {
@@ -81,11 +81,11 @@ struct ContentView: View {
             try? viewContext.save()
         }
     }
-
+    
     private func deleteItems(offsets: IndexSet) {
         withAnimation {
-//            offsets.map { items[$0] }.forEach(viewContext.delete)
-
+            //            offsets.map { items[$0] }.forEach(viewContext.delete)
+            
             do {
                 try viewContext.save()
             } catch {
@@ -111,6 +111,8 @@ struct StickerCollectionView: View {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                 Button(action: {
                     _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                    
+                    
                 }, label: {
                     VStack(spacing: 10){
                         Image(systemName: "plus")
@@ -126,6 +128,7 @@ struct StickerCollectionView: View {
                 })
                 
                 ForEach(items){ item in
+                    
                     NavigationLink(
                         destination: StickerDetailView(sticker: item, persistence: persistence),
                         label: {
@@ -143,6 +146,7 @@ struct StickerCollectionView: View {
                                     .minimumScaleFactor(0.3)
                             }
                         })
+                    
                 }
             }.padding()
         }.navigationTitle(persistence.defaultCollection.name!)
@@ -152,6 +156,8 @@ struct StickerCollectionView: View {
 struct StickerDetailView: View {
     var sticker: Stickers
     var persistence: PersistenceController
+    
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         Form{
@@ -163,12 +169,13 @@ struct StickerDetailView: View {
                     .padding()
             ){
                 List{
-                    Text(sticker.name!)
-                    Text(sticker.addDate!, style: .date)
-                    Text(sticker.collection!.name!)
+                    Text(sticker.name ?? "")
+                    Text(sticker.addDate ?? Date(), style: .date)
+                    Text(sticker.collection?.name ?? "")
                 }
                 Button(action: {
                     persistence.removeSticker(of: sticker)
+                    presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("删掉我吧！").foregroundColor(.red)
                 })
