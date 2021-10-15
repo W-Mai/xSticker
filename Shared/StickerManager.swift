@@ -79,7 +79,9 @@ class StickerManager {
     
     func get(sticker: Stickers) -> UIImage{
         guard let readPath = get(path: sticker)
-        else { return StickerManager.defaultImage }
+        else {
+            return StickerManager.defaultImage
+        }
         
         guard let imgData = try? Data(contentsOf: readPath)
         else { return StickerManager.defaultImage }

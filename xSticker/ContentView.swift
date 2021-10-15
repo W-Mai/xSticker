@@ -123,63 +123,63 @@ struct StickerCollectionView: View {
     }
     
     var body: some View {
-        ScrollView(.vertical){
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-                Button(action: {
-//                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
-                    isImagePickerViewPresented = true
-                    
-                }, label: {
-                    VStack(spacing: 10){
-                        Image(systemName: "plus")
-                            .frame(width: 60, height: 60, alignment: .center)
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                            .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
-                        Text("添加")
-                            .font(.body)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.3)
-                    }
-                })
-                
-                ForEach(items.wrappedValue){ item in
-                    NavigationLink(
-                        destination: StickerDetailView(sticker: item, persistence: persistence),
-                        label: {
-                            VStack(spacing: 10){
-                                Image(uiImage: stickerManager.get(sticker: item))
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 100, height: 100, alignment: .center)
-//                                    .background(Color.white)
-                                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                    .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
-                                Text("\(item.name!)\(item.order)")
-                                    .font(.body)
-                                    .lineLimit(1)
-                                    .minimumScaleFactor(0.3)
-                            }.padding(10)
-                            .drawingGroup()
+        ZStack {
+            ScrollView(.vertical){
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                    Button(action: {
+    //                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                        isImagePickerViewPresented = true
+                        
+                    }, label: {
+                        VStack(spacing: 10){
+                            Image(systemName: "plus")
+                                .frame(width: 60, height: 60, alignment: .center)
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
+                            Text("添加")
+                                .font(.body)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.3)
                         }
-                    )
-                }
-            }.padding()
-            .animation(isAnimating ? .easeInOut : .none)
-        }
-        .navigationTitle(persistence.defaultCollection.name!)
-        .sheet(isPresented: $isImagePickerViewPresented){
-            ZStack{
-                ImagePickerView(
-                    filter: .any(of: [.images, .livePhotos]),
-                    selectionLimit: 0,
-                    delegate: ImagePickerView.Delegate(
-                        isPresented: $isImagePickerViewPresented,
-                        isProccesing: $isProccesing,
-                        didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
-                        didSelect: { (result) in
-                            isAnimating = true
-                            DispatchQueue.main.async {
+                    })
+                    
+                    ForEach(items.wrappedValue){ item in
+                        NavigationLink(
+                            destination: StickerDetailView(sticker: item, persistence: persistence),
+                            label: {
+                                VStack(spacing: 10){
+                                    Image(uiImage: stickerManager.get(sticker: item))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 100, height: 100, alignment: .center)
+    //                                    .background(Color.white)
+                                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                        .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
+                                    Text("\(item.name!)\(item.order)")
+                                        .font(.body)
+                                        .lineLimit(1)
+                                        .minimumScaleFactor(0.3)
+                                }.padding(10)
+                                .drawingGroup()
+                            }
+                        )
+                    }
+                }.padding()
+                .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
+            }
+            .navigationTitle(persistence.defaultCollection.name!)
+            .sheet(isPresented: $isImagePickerViewPresented){
+                ZStack{
+                    ImagePickerView(
+                        filter: .any(of: [.images, .livePhotos]),
+                        selectionLimit: 0,
+                        delegate: ImagePickerView.Delegate(
+                            isPresented: $isImagePickerViewPresented,
+                            isProccesing: $isProccesing,
+                            didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
+                            didSelect: { (result) in
+                                isAnimating = true
                                 let phPickerViewController = result.picker
                                 let images = result.images
                                 print("Did Select images: \(images) from \(phPickerViewController)")
@@ -189,29 +189,31 @@ struct StickerCollectionView: View {
                                     let stauts = stickerManager.save(image: img, named: sticker)
                                     if stauts {
                                         sticker.hasSaved = true
+                                        persistence.save()
                                     }
                                 }
-                                persistence.save()
                                 isAnimating = false
+                            },
+                            didFail: { (imagePickerError) in
+                                let phPickerViewController = imagePickerError.picker
+                                let error = imagePickerError.error
+                                print("Did Fail with error: \(error) in \(phPickerViewController)")
                             }
-                            
-                            
-                        },
-                        didFail: { (imagePickerError) in
-                            let phPickerViewController = imagePickerError.picker
-                            let error = imagePickerError.error
-                            print("Did Fail with error: \(error) in \(phPickerViewController)")
-                        }
-                    )
-                ).blur(radius: isProccesing ? 5 : 0)
-                                
-                if isProccesing {
-                    Color.white.opacity(0.1)
-                        .overlay(
-                            ProgressView()
-                                .scaleEffect(3)
                         )
+                    ).blur(radius: isProccesing ? 5 : 0)
+                    
+                    if isProccesing {
+                        Color.white.opacity(0.1)
+                            .overlay(
+                                ProgressView()
+                                    .scaleEffect(3)
+                            )
+                    }
                 }
+            }
+            
+            if isAnimating {
+                Color.white.opacity(0.1)
             }
         }
     }
@@ -242,10 +244,8 @@ struct StickerDetailView: View {
                 }
                 Button(action: {
                     sticker.hasSaved = false
-                    let res = stickerManager.delete(sticker: sticker)
-                    if res {
-                        persistence.removeSticker(of: sticker)
-                    }
+                    _ = stickerManager.delete(sticker: sticker)
+                    persistence.removeSticker(of: sticker)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("删掉我吧！").foregroundColor(.red)
