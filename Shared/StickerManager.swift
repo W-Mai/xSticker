@@ -71,7 +71,18 @@ class StickerManager {
         do {
             try fsmngr.removeItem(at: path)
         } catch {
-            NSLog("Delete Sticker %@ Failed, because: %@", sticker.name!, error.localizedDescription)
+            NSLog("Delete Sticker %@ Failed, because: %@", sticker.image!.uuidString, error.localizedDescription)
+            return false
+        }
+        return true
+    }
+    
+    func delete(collection: Collections) -> Bool {
+        let path = get(path: collection)
+        do {
+            try fsmngr.removeItem(at: path)
+        } catch {
+            NSLog("Delete Collection %@ Failed, because: %@", collection.id!.uuidString, error.localizedDescription)
             return false
         }
         return true
@@ -111,8 +122,12 @@ class StickerManager {
         return savePath
     }
     
+    func get(path collection: Collections) -> URL {
+        return rootPath.appendingPathComponent(collection.id!.uuidString, isDirectory: true)
+    }
+    
     func createCollectionDir(for collection: Collections) -> Bool {
-        let collectionPath = rootPath.appendingPathComponent(collection.id!.uuidString, isDirectory: true)
+        let collectionPath = get(path: collection)
         let collectionExt = fsmngr.fileExists(atPath: collectionPath.path)
         if !collectionExt {
             NSLog("Collection %@ Path Not Exist, Creating", collection.id!.uuidString)

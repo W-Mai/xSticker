@@ -125,10 +125,10 @@ struct StickerCollectionView: View {
     private var items: FetchRequest<Stickers>
     
     @State var isImagePickerViewPresented = false
-
+    @State var isCollectionInfoViewPresented = false
+    
     @State var isAnimating = false
     @State var isProccesing = false
-    
     
     init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
@@ -141,9 +141,7 @@ struct StickerCollectionView: View {
             ScrollView(.vertical){
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 20) {
                     Button(action: {
-    //                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
                         isImagePickerViewPresented = true
-                        
                     }, label: {
                         VStack(spacing: 10){
                             Image(systemName: "rectangle.badge.plus")
@@ -178,10 +176,10 @@ struct StickerCollectionView: View {
                 }.padding()
                 .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
-            .navigationTitle(collection.name!)
+            .navigationTitle(collection.name ?? "Deleted")
             .navigationBarItems(trailing: HStack {
                 Button {
-                    
+                    isCollectionInfoViewPresented = true
                 } label: {
                     Image(systemName: "info.circle")
                 }
@@ -225,6 +223,32 @@ struct StickerCollectionView: View {
                                 ProgressView()
                                     .scaleEffect(3)
                             )
+                    }
+                }
+            }
+            .sheet(isPresented: $isCollectionInfoViewPresented) {
+                let image = stickerManager.get(profile: collection)
+                
+                Form{
+                    Section(
+                        header:
+                            Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding()
+                    ){
+                        List{
+                            Text(collection.name ?? "")
+                            Text(image.size.debugDescription)
+                            Text(collection.createDate ?? Date(), style: .date)
+                        }
+                        Button(action: {
+                            _ = stickerManager.delete(collection: collection)
+                            persistence.removeCollection(of: collection)
+                            isCollectionInfoViewPresented = false
+                        }, label: {
+                            Text("删掉我吧！").foregroundColor(.red)
+                        })
                     }
                 }
             }
