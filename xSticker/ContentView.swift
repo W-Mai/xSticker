@@ -29,6 +29,9 @@ struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.createDate, ascending: false)])
+    private var collections: FetchedResults<Collections>
+    
     init(persistenceController: PersistenceController) {
         let url = Bundle.main.bundleURL.path + "/TmpStickers" + "/ld.jpg"
         NSLog("???%@", url)
@@ -43,17 +46,19 @@ struct ContentView: View {
         NavigationView{
             ScrollView(.vertical){
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-                    ForEach(0..<1){ item in
+                    ForEach(collections){ item in
                         NavigationLink(
                             destination: StickerCollectionView(persistence: persistence),
                             label: {
                                 VStack(spacing: 10){
-                                    Image(systemName: "plus")
+                                    Image(uiImage: stickerManager.get(profile: item))
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
                                         .frame(width: 100, height: 100, alignment: .center)
                                         .background(Color.white)
-                                        .cornerRadius(20)
-                                        .shadow(radius: 10)
-                                    Text("\(persistence.defaultCollection.name!)")
+                                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                        .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
+                                    Text("\(item.name!)")
                                         .font(.body)
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.3)
@@ -102,12 +107,18 @@ struct StickerCollectionView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)])
-    private var items: FetchedResults<Stickers>
+//    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection", persistence.defaultCollection))
+    private var items: FetchRequest<Stickers>
     
     @State var isImagePickerViewPresented = false
 
-    @State var currentDrag: Stickers?
+    @State var isAnimating = false
+    
+    init(persistence: PersistenceController) {
+        self.persistence = persistence
+        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection=%@", persistence.defaultCollection))
+        
+    }
     
     var body: some View {
         ScrollView(.vertical){
@@ -121,8 +132,8 @@ struct StickerCollectionView: View {
                         Image(systemName: "plus")
                             .frame(width: 60, height: 60, alignment: .center)
                             .background(Color.white)
-                            .cornerRadius(20)
-                            .shadow(radius: 10)
+                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                            .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
                         Text("添加")
                             .font(.body)
                             .lineLimit(1)
@@ -130,7 +141,7 @@ struct StickerCollectionView: View {
                     }
                 })
                 
-                ForEach(items){ item in
+                ForEach(items.wrappedValue){ item in
                     NavigationLink(
                         destination: StickerDetailView(sticker: item, persistence: persistence),
                         label: {
@@ -139,24 +150,20 @@ struct StickerCollectionView: View {
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 100, height: 100, alignment: .center)
-                                    .background(Color.white)
-                                    .cornerRadius(20)
-                                    .shadow(radius: 10)
+//                                    .background(Color.white)
+                                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                    .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
                                 Text("\(item.name!)\(item.order)")
                                     .font(.body)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.3)
-                            }
-                        })
-//                        .onDrag({
-//                            currentDrag = item
-//                            return NSItemProvider(object: NSString(string: item.name!))
-//                        })
-//                        .onDrop(of: [.text], delegate: StickerDragRelocateDelegate(item: item, listData: items, current: $currentDrag, persistence: persistence))
+                            }.padding(10)
+                            .drawingGroup()
+                        }
+                    )
                 }
             }.padding()
-            .animation(.easeInOut)
-            
+            .animation(isAnimating ? .easeInOut : .none)
         }
         .navigationTitle(persistence.defaultCollection.name!)
         .sheet(isPresented: $isImagePickerViewPresented){
@@ -167,11 +174,11 @@ struct StickerCollectionView: View {
                     isPresented: $isImagePickerViewPresented,
                     didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
                     didSelect: { (result) in
+                        isAnimating = true
                         let phPickerViewController = result.picker
                         let images = result.images
                         print("Did Select images: \(images) from \(phPickerViewController)")
                         let pickedImages = images
-                        
                         for img in pickedImages {
                             let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
                             let stauts = stickerManager.save(image: img, named: sticker)
@@ -180,6 +187,7 @@ struct StickerCollectionView: View {
                                 persistence.save()
                             }
                         }
+                        isAnimating = false
                     },
                     didFail: { (imagePickerError) in
                         let phPickerViewController = imagePickerError.picker
@@ -228,40 +236,5 @@ struct StickerDetailView: View {
                 })
             }
         }
-    }
-}
-
-struct StickerDragRelocateDelegate: DropDelegate {
-    let item: Stickers
-    var listData: FetchedResults<Stickers>
-    @Binding var current: Stickers?
-    
-    let persistence: PersistenceController
-    
-    func dropEntered(info: DropInfo) {
-        print(item)
-//        withAnimation(.easeInOut) {
-//            if item != current {
-//                let from = listData.firstIndex(of: current!)!
-//                let to = listData.firstIndex(of: item)!
-//                if item.image! != current!.image! {
-//                    current!.order = Int64(to > from ? FetchedResults<Stickers>.Index(item.order + 1) : to)
-//                    print("!!!!!!!!!!!")
-//                }
-//                print(from, to, item.image, current?.image)
-//                
-//                persistence.save()
-//            }
-//                        persistence.reorder(for: item.collection!)
-//        }
-    }
-
-    func dropUpdated(info: DropInfo) -> DropProposal? {
-        return DropProposal(operation: .move)
-    }
-
-    func performDrop(info: DropInfo) -> Bool {
-        self.current = nil
-        return true
     }
 }

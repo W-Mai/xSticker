@@ -26,7 +26,12 @@ extension PersistenceController {
         sticker.name = name
         
         save()
-//        reorder(for: collection)
+        
+        print(count(collection: collection))
+        if count(collection: collection) == 1 {
+            collection.profile = sticker.image
+            save()
+        }
         return sticker
     }
     
@@ -37,12 +42,15 @@ extension PersistenceController {
         save()
     }
     
-    func count(collection: Collections) -> Int64 {
+    func count(collection: Collections) -> Int {
+        container.viewContext.refresh(collection, mergeChanges: false)
         let context = container.viewContext
-        let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
+        
+        req.predicate = NSPredicate(format: "collection=%@", collection)
         
         if let num = try? context.count(for: req) {
-            return Int64(num)
+            return num
         }
         return 0
     }

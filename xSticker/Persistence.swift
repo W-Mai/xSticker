@@ -78,13 +78,13 @@ struct PersistenceController {
         let context = container.viewContext
         
         let fetchReq: NSFetchRequest<Collections> = Collections.fetchRequest()
-        fetchReq.predicate = NSPredicate(format: "name=%@", "DefaultStickerCollection")
+        fetchReq.predicate = NSPredicate(format: "name=%@", "Default Sticker Collection")
         
         let res = try? context.fetch(fetchReq)
         if res == nil || res?.count == 0 {
             let collection = Collections(context: context)
             collection.id = UUID()
-            collection.name = "DefaultStickerCollection"
+            collection.name = "Default Sticker Collection"
             collection.author = "xSticker"
             collection.createDate = Date()
             collection.collectionDescription = "The default collection of stickers"

@@ -78,17 +78,24 @@ class StickerManager {
     }
     
     func get(sticker: Stickers) -> UIImage{
-        let readPath = get(path: sticker)
-        if readPath == nil {
-            return StickerManager.defaultImage
-        }
+        guard let readPath = get(path: sticker)
+        else { return StickerManager.defaultImage }
         
-        let imgData = try? Data(contentsOf: readPath!)
+        guard let imgData = try? Data(contentsOf: readPath)
+        else { return StickerManager.defaultImage }
         
-        guard imgData != nil else {
-            return StickerManager.defaultImage
-        }
-        return UIImage(data: imgData!)!
+        return UIImage(data: imgData)!
+    }
+    
+    func get(profile collection: Collections) -> UIImage {
+        guard collection.profile != nil else { return StickerManager.defaultImage }
+        
+        guard let sticker = collection.stickerSet?.first(where: { item in
+            (item as! Stickers).image == collection.profile
+        }) as? Stickers
+        else { return StickerManager.defaultImage }
+        
+        return get(sticker: sticker)
     }
     
     func get(path sticker: Stickers) -> URL? {
