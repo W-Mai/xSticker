@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import ImagePickerView
 
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -106,12 +107,14 @@ struct StickerCollectionView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: true)])
     private var items: FetchedResults<Stickers>
     
+    @State var isImagePickerViewPresented = false
+    
     var body: some View {
         ScrollView(.vertical){
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                 Button(action: {
-                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
-                    
+//                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                    isImagePickerViewPresented = true
                     
                 }, label: {
                     VStack(spacing: 10){
@@ -150,6 +153,28 @@ struct StickerCollectionView: View {
                 }
             }.padding()
         }.navigationTitle(persistence.defaultCollection.name!)
+        .sheet(isPresented: $isImagePickerViewPresented){
+            ImagePickerView(
+                filter: .any(of: [.images, .livePhotos]),
+                selectionLimit: 0,
+                delegate: ImagePickerView.Delegate(
+                    isPresented: $isImagePickerViewPresented,
+                    didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
+                    didSelect: { (result) in
+                        let phPickerViewController = result.picker
+                        let images = result.images
+                        print("Did Select images: \(images) from \(phPickerViewController)")
+                        let pickedImages = images
+                    },
+                    didFail: { (imagePickerError) in
+                        let phPickerViewController = imagePickerError.picker
+                        let error = imagePickerError.error
+                        print("Did Fail with error: \(error) in \(phPickerViewController)")
+                    }
+                )
+            )
+            
+        }
     }
 }
 
