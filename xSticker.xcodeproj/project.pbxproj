@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 50;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -28,11 +28,14 @@
 		5E47421827185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
 		5E47421927185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
 		5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
-		5E8686E92719717700A65DF4 /* ImagePickerView in Frameworks */ = {isa = PBXBuildFile; productRef = 5E8686E82719717700A65DF4 /* ImagePickerView */; };
 		5E8686EB2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
 		5E8686EC2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
 		5E8686F22719E5EA00A65DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
 		5E8686F32719E5EA00A65DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
+		5E8686F9271A052700A65DF4 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F7271A052700A65DF4 /* ImagePickerView.swift */; };
+		5E8686FA271A052700A65DF4 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F7271A052700A65DF4 /* ImagePickerView.swift */; };
+		5E8686FB271A052700A65DF4 /* UIImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */; };
+		5E8686FC271A052700A65DF4 /* UIImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -82,6 +85,8 @@
 		5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Persistence+Operate.swift"; sourceTree = "<group>"; };
 		5E8686EA2719764100A65DF4 /* StickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerManager.swift; sourceTree = "<group>"; };
 		5E8686F12719E5EA00A65DF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		5E8686F7271A052700A65DF4 /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
+		5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImagePickerView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,7 +95,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				5E474211271848DD001E0E11 /* CloudKit.framework in Frameworks */,
-				5E8686E92719717700A65DF4 /* ImagePickerView in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -109,6 +113,7 @@
 		5E4741CE27181B24001E0E11 = {
 			isa = PBXGroup;
 			children = (
+				5E8686F6271A052700A65DF4 /* ImagePickerView */,
 				5E8686ED2719764B00A65DF4 /* Shared */,
 				5E4741D927181B24001E0E11 /* xSticker */,
 				5E4741F6271824CE001E0E11 /* iMsgExtPart */,
@@ -190,6 +195,15 @@
 			path = Shared;
 			sourceTree = "<group>";
 		};
+		5E8686F6271A052700A65DF4 /* ImagePickerView */ = {
+			isa = PBXGroup;
+			children = (
+				5E8686F7271A052700A65DF4 /* ImagePickerView.swift */,
+				5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */,
+			);
+			path = ImagePickerView;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -209,7 +223,6 @@
 			);
 			name = xSticker;
 			packageProductDependencies = (
-				5E8686E82719717700A65DF4 /* ImagePickerView */,
 			);
 			productName = xSticker;
 			productReference = 5E4741D727181B24001E0E11 /* xSticker.app */;
@@ -259,7 +272,6 @@
 			);
 			mainGroup = 5E4741CE27181B24001E0E11;
 			packageReferences = (
-				5E8686E72719717700A65DF4 /* XCRemoteSwiftPackageReference "ImagePickerView" */,
 			);
 			productRefGroup = 5E4741D827181B24001E0E11 /* Products */;
 			projectDirPath = "";
@@ -303,8 +315,10 @@
 			files = (
 				5E47420A2718386F001E0E11 /* MessagesViewController.swift in Sources */,
 				5E4741E427181B25001E0E11 /* Persistence.swift in Sources */,
+				5E8686FB271A052700A65DF4 /* UIImagePickerView.swift in Sources */,
 				5E4741DD27181B24001E0E11 /* ContentView.swift in Sources */,
 				5E47420B27183878001E0E11 /* CustomStickerView.swift in Sources */,
+				5E8686F9271A052700A65DF4 /* ImagePickerView.swift in Sources */,
 				5E4741E727181B25001E0E11 /* xSticker.xcdatamodeld in Sources */,
 				5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */,
 				5E4741DB27181B24001E0E11 /* xStickerApp.swift in Sources */,
@@ -319,7 +333,9 @@
 				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
 				5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */,
+				5E8686FC271A052700A65DF4 /* UIImagePickerView.swift in Sources */,
 				5E8686EC2719764100A65DF4 /* StickerManager.swift in Sources */,
+				5E8686FA271A052700A65DF4 /* ImagePickerView.swift in Sources */,
 				5E474208271825AF001E0E11 /* CustomStickerView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -583,25 +599,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		5E8686E72719717700A65DF4 /* XCRemoteSwiftPackageReference "ImagePickerView" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/rebeloper/ImagePickerView.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 0.2.2;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		5E8686E82719717700A65DF4 /* ImagePickerView */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 5E8686E72719717700A65DF4 /* XCRemoteSwiftPackageReference "ImagePickerView" */;
-			productName = ImagePickerView;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */ = {

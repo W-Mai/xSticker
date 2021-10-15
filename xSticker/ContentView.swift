@@ -113,6 +113,8 @@ struct StickerCollectionView: View {
     @State var isImagePickerViewPresented = false
 
     @State var isAnimating = false
+    @State var isProccesing = false
+    
     
     init(persistence: PersistenceController) {
         self.persistence = persistence
@@ -167,36 +169,50 @@ struct StickerCollectionView: View {
         }
         .navigationTitle(persistence.defaultCollection.name!)
         .sheet(isPresented: $isImagePickerViewPresented){
-            ImagePickerView(
-                filter: .any(of: [.images, .livePhotos]),
-                selectionLimit: 0,
-                delegate: ImagePickerView.Delegate(
-                    isPresented: $isImagePickerViewPresented,
-                    didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
-                    didSelect: { (result) in
-                        isAnimating = true
-                        let phPickerViewController = result.picker
-                        let images = result.images
-                        print("Did Select images: \(images) from \(phPickerViewController)")
-                        let pickedImages = images
-                        for img in pickedImages {
-                            let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
-                            let stauts = stickerManager.save(image: img, named: sticker)
-                            if stauts {
-                                sticker.hasSaved = true
+            ZStack{
+                ImagePickerView(
+                    filter: .any(of: [.images, .livePhotos]),
+                    selectionLimit: 0,
+                    delegate: ImagePickerView.Delegate(
+                        isPresented: $isImagePickerViewPresented,
+                        isProccesing: $isProccesing,
+                        didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
+                        didSelect: { (result) in
+                            isAnimating = true
+                            DispatchQueue.main.async {
+                                let phPickerViewController = result.picker
+                                let images = result.images
+                                print("Did Select images: \(images) from \(phPickerViewController)")
+                                let pickedImages = images
+                                for img in pickedImages {
+                                    let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                                    let stauts = stickerManager.save(image: img, named: sticker)
+                                    if stauts {
+                                        sticker.hasSaved = true
+                                    }
+                                }
                                 persistence.save()
+                                isAnimating = false
                             }
+                            
+                            
+                        },
+                        didFail: { (imagePickerError) in
+                            let phPickerViewController = imagePickerError.picker
+                            let error = imagePickerError.error
+                            print("Did Fail with error: \(error) in \(phPickerViewController)")
                         }
-                        isAnimating = false
-                    },
-                    didFail: { (imagePickerError) in
-                        let phPickerViewController = imagePickerError.picker
-                        let error = imagePickerError.error
-                        print("Did Fail with error: \(error) in \(phPickerViewController)")
-                    }
-                )
-            )
-            
+                    )
+                ).blur(radius: isProccesing ? 5 : 0)
+                                
+                if isProccesing {
+                    Color.white.opacity(0.1)
+                        .overlay(
+                            ProgressView()
+                                .scaleEffect(3)
+                        )
+                }
+            }
         }
     }
 }
