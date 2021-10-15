@@ -32,7 +32,7 @@ class StickerManager {
     }
     
     func save(image : UIImage, named sticker: Stickers) -> Bool {
-        let savePath = get(path: sticker)
+        let savePath = get(path: sticker)!
         print(savePath)
         
         let saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
@@ -41,9 +41,24 @@ class StickerManager {
         return saveRes
     }
     
+    func delete(sticker: Stickers) -> Bool {
+        let path = get(path: sticker)!
+        do {
+            try fsmngr.removeItem(at: path)
+        } catch {
+            NSLog("Delete Sticker %@ Failed, because: %@", sticker.name!, error.localizedDescription)
+            return false
+        }
+        return true
+    }
+    
     func get(sticker: Stickers) -> UIImage{
         let readPath = get(path: sticker)
-        let imgData = try? Data(contentsOf: readPath)
+        if readPath == nil {
+            return StickerManager.defaultImage
+        }
+        
+        let imgData = try? Data(contentsOf: readPath!)
         
         guard imgData != nil else {
             return StickerManager.defaultImage
@@ -51,9 +66,12 @@ class StickerManager {
         return UIImage(data: imgData!)!
     }
     
-    func get(path sticker: Stickers) -> URL {
-        let collection = sticker.collection!
-        var savePath = rootPath.appendingPathComponent(collection.id!.uuidString, isDirectory: true)
+    func get(path sticker: Stickers) -> URL? {
+        let collection = sticker.collection
+        if collection == nil {
+            return nil
+        }
+        var savePath = rootPath.appendingPathComponent(collection!.id!.uuidString, isDirectory: true)
         savePath.appendPathComponent(sticker.image!.uuidString, isDirectory: false)
         savePath.appendPathExtension("png")
         return savePath

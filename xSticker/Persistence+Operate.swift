@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import CoreData
 
 extension PersistenceController {
     func save() {
@@ -23,6 +24,7 @@ extension PersistenceController {
         sticker.collection = collection
         sticker.image = UUID()
         sticker.name = name
+        sticker.order = count(collection: collection) + 1
         
         save()
         return sticker
@@ -31,5 +33,15 @@ extension PersistenceController {
     func removeSticker(of sticker: Stickers) {
         container.viewContext.delete(sticker)
         save()
+    }
+    
+    func count(collection: Collections) -> Int64 {
+        let context = container.viewContext
+        let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        
+        if let num = try? context.count(for: req) {
+            return Int64(num)
+        }
+        return 0
     }
 }

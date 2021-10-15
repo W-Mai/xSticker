@@ -59,15 +59,12 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     }
     
     func stickerBrowserView(_ stickerBrowserView: MSStickerBrowserView, stickerAt index: Int) -> MSSticker {
-        let url = Bundle.main.bundleURL.path + "/ld.jpg"
-        print(url)
         let context = persistenceController.container.viewContext
         let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
         guard let stickers = try? context.fetch(req)
         else { return try! MSSticker(contentsOfFileURL: StickerManager.defaultImagePath, localizedDescription: "拉普兰德和德克萨斯") }
-//        StickerManager.defaultImage
         let sticker = stickers[index]
-        let stickerPath = stickerManager.get(path: sticker)
+        let stickerPath = stickerManager.get(path: sticker) ?? StickerManager.defaultImagePath
         
         return try! MSSticker(contentsOfFileURL: stickerPath, localizedDescription: sticker.name!)
     }

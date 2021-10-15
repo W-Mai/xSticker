@@ -206,7 +206,11 @@ struct StickerDetailView: View {
                     Text(sticker.collection?.name ?? "")
                 }
                 Button(action: {
-                    persistence.removeSticker(of: sticker)
+                    sticker.hasSaved = false
+                    let res = stickerManager.delete(sticker: sticker)
+                    if res {
+                        persistence.removeSticker(of: sticker)
+                    }
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
                     Text("删掉我吧！").foregroundColor(.red)
