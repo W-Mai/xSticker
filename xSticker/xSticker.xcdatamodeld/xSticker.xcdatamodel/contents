@@ -14,13 +14,15 @@
     </entity>
     <entity name="Stickers" representedClassName="Stickers" syncable="YES" codeGenerationType="class">
         <attribute name="addDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+        <attribute name="hasSaved" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="image" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Collections" inverseName="stickerSet" inverseEntity="Collections"/>
     </entity>
     <elements>
         <element name="Collections" positionX="-71.890625" positionY="18.94140625" width="133.57421875" height="148"/>
         <element name="Item" positionX="-582.6484375" positionY="-72.671875" width="128" height="44"/>
-        <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="103"/>
+        <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="133"/>
     </elements>
 </model>

@@ -39,10 +39,10 @@ struct PersistenceController {
         if inMemory {
             container.persistentStoreDescriptions.first!.url = URL(fileURLWithPath: "/dev/null")
         } else {
-            let rootPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.xSticker")
+            let rootPath = GroupRootPath
             
             // Create a store description for a local store
-            let localStoreLocation = URL(fileURLWithPath: rootPath!.path + "/local.store")
+            let localStoreLocation = URL(fileURLWithPath: rootPath.path + "/local.store")
             let localStoreDescription =
                 NSPersistentStoreDescription(url: localStoreLocation)
             localStoreDescription.configuration = "Default"
@@ -71,8 +71,7 @@ struct PersistenceController {
         })
         
         defaultCollection = initDefaultCollection()
-        
-        
+        _ = stickerManager.createCollectionDir(for: defaultCollection)
     }
     
     func initDefaultCollection() -> Collections{
@@ -84,6 +83,7 @@ struct PersistenceController {
         let res = try? context.fetch(fetchReq)
         if res == nil || res?.count == 0 {
             let collection = Collections(context: context)
+            collection.id = UUID()
             collection.name = "DefaultStickerCollection"
             collection.author = "xSticker"
             collection.createDate = Date()

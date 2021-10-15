@@ -24,8 +24,6 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-let defaultImage = UIImage(data: try! Data(contentsOf: Bundle.main.url(forResource: "ld", withExtension: "jpg")!))!
-
 struct ContentView: View {
     var persistence: PersistenceController
     
@@ -108,7 +106,7 @@ struct StickerCollectionView: View {
     private var items: FetchedResults<Stickers>
     
     @State var isImagePickerViewPresented = false
-    
+
     var body: some View {
         ScrollView(.vertical){
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
@@ -136,7 +134,7 @@ struct StickerCollectionView: View {
                         destination: StickerDetailView(sticker: item, persistence: persistence),
                         label: {
                             VStack(spacing: 10){
-                                Image(uiImage: defaultImage)
+                                Image(uiImage: stickerManager.get(sticker: item))
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
                                     .frame(width: 100, height: 100, alignment: .center)
@@ -165,6 +163,13 @@ struct StickerCollectionView: View {
                         let images = result.images
                         print("Did Select images: \(images) from \(phPickerViewController)")
                         let pickedImages = images
+                        
+                        let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                        let stauts = stickerManager.save(image: images.first!, named: sticker)
+                        if stauts {
+                            sticker.hasSaved = true
+                            persistence.save()
+                        }
                     },
                     didFail: { (imagePickerError) in
                         let phPickerViewController = imagePickerError.picker
@@ -188,7 +193,7 @@ struct StickerDetailView: View {
         Form{
             Section(
                 header:
-                    Image(uiImage: defaultImage)
+                    Image(uiImage: stickerManager.get(sticker: sticker))
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding()
