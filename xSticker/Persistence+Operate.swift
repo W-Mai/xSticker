@@ -24,15 +24,15 @@ extension PersistenceController {
         sticker.collection = collection
         sticker.image = UUID()
         sticker.name = name
-        sticker.order = count(collection: collection) + 1
         
-        save()
+        reorder(for: collection)
         return sticker
     }
     
     func removeSticker(of sticker: Stickers) {
+        let collection = sticker.collection!
         container.viewContext.delete(sticker)
-        save()
+        reorder(for: collection)
     }
     
     func count(collection: Collections) -> Int64 {
@@ -43,5 +43,17 @@ extension PersistenceController {
             return Int64(num)
         }
         return 0
+    }
+    
+    func reorder(for collection: Collections){
+        let context = container.viewContext
+        let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
+        req.predicate = NSPredicate(format: "collection=%@", collection)
+        let items = try! context.fetch(req)
+        
+        for item in items {
+            item.order = Int64(items.firstIndex(of: item)! * 10)
+        }
+        save()
     }
 }

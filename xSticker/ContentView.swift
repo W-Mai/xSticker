@@ -102,11 +102,13 @@ struct StickerCollectionView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: true)])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)])
     private var items: FetchedResults<Stickers>
     
     @State var isImagePickerViewPresented = false
 
+    @State var currentDrag: Stickers?
+    
     var body: some View {
         ScrollView(.vertical){
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
@@ -129,7 +131,6 @@ struct StickerCollectionView: View {
                 })
                 
                 ForEach(items){ item in
-                    
                     NavigationLink(
                         destination: StickerDetailView(sticker: item, persistence: persistence),
                         label: {
@@ -141,16 +142,23 @@ struct StickerCollectionView: View {
                                     .background(Color.white)
                                     .cornerRadius(20)
                                     .shadow(radius: 10)
-                                Text("\(item.name!)")
+                                Text("\(item.name!)\(item.order)")
                                     .font(.body)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.3)
                             }
                         })
-                    
+//                        .onDrag({
+//                            currentDrag = item
+//                            return NSItemProvider(object: NSString(string: item.name!))
+//                        })
+//                        .onDrop(of: [.text], delegate: StickerDragRelocateDelegate(item: item, listData: items, current: $currentDrag, persistence: persistence))
                 }
             }.padding()
-        }.navigationTitle(persistence.defaultCollection.name!)
+            
+        }
+        .animation(.easeInOut)
+        .navigationTitle(persistence.defaultCollection.name!)
         .sheet(isPresented: $isImagePickerViewPresented){
             ImagePickerView(
                 filter: .any(of: [.images, .livePhotos]),
@@ -217,5 +225,40 @@ struct StickerDetailView: View {
                 })
             }
         }
+    }
+}
+
+struct StickerDragRelocateDelegate: DropDelegate {
+    let item: Stickers
+    var listData: FetchedResults<Stickers>
+    @Binding var current: Stickers?
+    
+    let persistence: PersistenceController
+    
+    func dropEntered(info: DropInfo) {
+        print(item)
+//        withAnimation(.easeInOut) {
+//            if item != current {
+//                let from = listData.firstIndex(of: current!)!
+//                let to = listData.firstIndex(of: item)!
+//                if item.image! != current!.image! {
+//                    current!.order = Int64(to > from ? FetchedResults<Stickers>.Index(item.order + 1) : to)
+//                    print("!!!!!!!!!!!")
+//                }
+//                print(from, to, item.image, current?.image)
+//                
+//                persistence.save()
+//            }
+//                        persistence.reorder(for: item.collection!)
+//        }
+    }
+
+    func dropUpdated(info: DropInfo) -> DropProposal? {
+        return DropProposal(operation: .move)
+    }
+
+    func performDrop(info: DropInfo) -> Bool {
+        self.current = nil
+        return true
     }
 }
