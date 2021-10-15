@@ -42,6 +42,24 @@ extension PersistenceController {
         save()
     }
     
+    func addCollection(with name: String) -> Collections {
+        let collection = Collections(context: container.viewContext)
+        
+        collection.author = "xSticker"
+        collection.collectionDescription = "It's a collection"
+        collection.createDate = Date()
+        collection.id = UUID()
+        collection.name = name
+        
+        save()
+        return collection
+    }
+    
+    func removeCollection(of collection: Collections) {
+        container.viewContext.delete(collection)
+        save()
+    }
+    
     func count(collection: Collections) -> Int {
         container.viewContext.refresh(collection, mergeChanges: false)
         let context = container.viewContext

@@ -29,7 +29,7 @@ struct ContentView: View {
     
     @Environment(\.managedObjectContext) private var viewContext
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.createDate, ascending: false)])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.createDate, ascending: true)])
     private var collections: FetchedResults<Collections>
     
     init(persistenceController: PersistenceController) {
@@ -48,7 +48,7 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
                     ForEach(collections){ item in
                         NavigationLink(
-                            destination: StickerCollectionView(persistence: persistence),
+                            destination: StickerCollectionView(persistence: persistence, collection: item),
                             label: {
                                 VStack(spacing: 10){
                                     Image(uiImage: stickerManager.get(profile: item))
@@ -68,6 +68,19 @@ struct ContentView: View {
                 }.padding()
             }.navigationTitle("Collection")
             .navigationViewStyle(StackNavigationViewStyle())
+            .navigationBarItems(trailing: HStack(spacing: 20){
+                Button {
+                    let collection = persistence.addCollection(with: "Collection")
+                    _ = stickerManager.createCollectionDir(for: collection)
+                } label: {
+                    Image(systemName: "rectangle.stack.badge.plus")
+                }
+                Button {
+                    
+                } label: {
+                    Text("🤔")
+                }
+            })
         }
         
     }
@@ -105,6 +118,7 @@ struct ContentView: View {
 
 struct StickerCollectionView: View {
     var persistence: PersistenceController
+    var collection: Collections
     
     @Environment(\.managedObjectContext) private var viewContext
 //    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection", persistence.defaultCollection))
@@ -116,10 +130,10 @@ struct StickerCollectionView: View {
     @State var isProccesing = false
     
     
-    init(persistence: PersistenceController) {
+    init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
-        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection=%@", persistence.defaultCollection))
-        
+        self.collection = collection
+        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection=%@", self.collection))
     }
     
     var body: some View {
@@ -168,7 +182,14 @@ struct StickerCollectionView: View {
                 }.padding()
                 .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
-            .navigationTitle(persistence.defaultCollection.name!)
+            .navigationTitle(collection.name!)
+            .navigationBarItems(trailing: HStack {
+                Button {
+                    
+                } label: {
+                    Image(systemName: "info.circle")
+                }
+            }.opacity(collection != persistence.defaultCollection ? 1 : 0))
             .sheet(isPresented: $isImagePickerViewPresented){
                 ZStack{
                     ImagePickerView(
@@ -185,7 +206,7 @@ struct StickerCollectionView: View {
                                 print("Did Select images: \(images) from \(phPickerViewController)")
                                 let pickedImages = images
                                 for img in pickedImages {
-                                    let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                                    let sticker = persistence.addSticker(with: "Sticker", in: collection)
                                     let stauts = stickerManager.save(image: img, named: sticker)
                                     if stauts {
                                         sticker.hasSaved = true
