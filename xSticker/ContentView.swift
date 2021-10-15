@@ -102,7 +102,7 @@ struct StickerCollectionView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)])
     private var items: FetchedResults<Stickers>
     
     @State var isImagePickerViewPresented = false
@@ -155,9 +155,9 @@ struct StickerCollectionView: View {
 //                        .onDrop(of: [.text], delegate: StickerDragRelocateDelegate(item: item, listData: items, current: $currentDrag, persistence: persistence))
                 }
             }.padding()
+            .animation(.easeInOut)
             
         }
-        .animation(.easeInOut)
         .navigationTitle(persistence.defaultCollection.name!)
         .sheet(isPresented: $isImagePickerViewPresented){
             ImagePickerView(
@@ -200,16 +200,19 @@ struct StickerDetailView: View {
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
+        let image = stickerManager.get(sticker: sticker)
+        
         Form{
             Section(
                 header:
-                    Image(uiImage: stickerManager.get(sticker: sticker))
+                    Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .padding()
             ){
                 List{
                     Text(sticker.name ?? "")
+                    Text(image.size.debugDescription)
                     Text(sticker.addDate ?? Date(), style: .date)
                     Text(sticker.collection?.name ?? "")
                 }

@@ -11,6 +11,7 @@ import UIKit
 class StickerManager {
     static let defaultImagePath = Bundle.main.url(forResource: "ld", withExtension: "jpg")!
     static let defaultImage = UIImage(data: try! Data(contentsOf: defaultImagePath))!
+    static let stickerMaxSize: CGFloat = 618
     
     var rootPath: URL
     var fsmngr: FileManager
@@ -34,8 +35,32 @@ class StickerManager {
     func save(image : UIImage, named sticker: Stickers) -> Bool {
         let savePath = get(path: sticker)!
         print(savePath)
+        let size = image.size
+        print(size)
         
-        let saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
+        let saveRes: Bool
+        if size.width > StickerManager.stickerMaxSize || size.height > StickerManager.stickerMaxSize {
+            // 计算尺寸
+            let maxLength = max(size.width, size.height)
+            let newSize: CGSize
+            let ratio: CGFloat
+            if size.width == maxLength {
+                ratio = StickerManager.stickerMaxSize / size.width
+                newSize = CGSize(width: StickerManager.stickerMaxSize, height: size.height * ratio)
+            } else {
+                ratio = StickerManager.stickerMaxSize / size.height
+                newSize = CGSize(width: size.width * ratio, height: StickerManager.stickerMaxSize)
+            }
+            // 获取处理后的图像
+            UIGraphicsBeginImageContext(newSize)
+            image.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: newSize))
+            let newImage = UIGraphicsGetImageFromCurrentImageContext()!
+            UIGraphicsEndImageContext()
+            
+            saveRes = fsmngr.createFile(atPath: savePath.path, contents: newImage.pngData())
+        } else {
+            saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
+        }
         
         print(saveRes)
         return saveRes

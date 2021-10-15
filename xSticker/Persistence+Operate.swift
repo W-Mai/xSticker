@@ -25,14 +25,16 @@ extension PersistenceController {
         sticker.image = UUID()
         sticker.name = name
         
-        reorder(for: collection)
+        save()
+//        reorder(for: collection)
         return sticker
     }
     
     func removeSticker(of sticker: Stickers) {
-        let collection = sticker.collection!
+//        let collection = sticker.collection!
         container.viewContext.delete(sticker)
-        reorder(for: collection)
+//        reorder(for: collection)
+        save()
     }
     
     func count(collection: Collections) -> Int64 {
