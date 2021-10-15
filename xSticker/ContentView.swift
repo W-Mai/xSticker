@@ -164,11 +164,13 @@ struct StickerCollectionView: View {
                         print("Did Select images: \(images) from \(phPickerViewController)")
                         let pickedImages = images
                         
-                        let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
-                        let stauts = stickerManager.save(image: images.first!, named: sticker)
-                        if stauts {
-                            sticker.hasSaved = true
-                            persistence.save()
+                        for img in pickedImages {
+                            let sticker = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
+                            let stauts = stickerManager.save(image: img, named: sticker)
+                            if stauts {
+                                sticker.hasSaved = true
+                                persistence.save()
+                            }
                         }
                     },
                     didFail: { (imagePickerError) in
