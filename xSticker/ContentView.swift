@@ -45,7 +45,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             ScrollView(.vertical){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 20) {
                     ForEach(collections){ item in
                         NavigationLink(
                             destination: StickerCollectionView(persistence: persistence, collection: item),
@@ -139,23 +139,19 @@ struct StickerCollectionView: View {
     var body: some View {
         ZStack {
             ScrollView(.vertical){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 20) {
                     Button(action: {
     //                    _ = persistence.addSticker(with: "Sticker", in: persistence.defaultCollection)
                         isImagePickerViewPresented = true
                         
                     }, label: {
                         VStack(spacing: 10){
-                            Image(systemName: "plus")
+                            Image(systemName: "rectangle.badge.plus")
                                 .frame(width: 60, height: 60, alignment: .center)
                                 .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                 .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
-                            Text("添加")
-                                .font(.body)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.3)
-                        }
+                        }.padding(30)
                     })
                     
                     ForEach(items.wrappedValue){ item in
