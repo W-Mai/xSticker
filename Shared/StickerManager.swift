@@ -9,7 +9,8 @@ import Foundation
 import UIKit
 
 class StickerManager {
-    static let defaultImage = UIImage(data: try! Data(contentsOf: Bundle.main.url(forResource: "ld", withExtension: "jpg")!))!
+    static let defaultImagePath = Bundle.main.url(forResource: "ld", withExtension: "jpg")!
+    static let defaultImage = UIImage(data: try! Data(contentsOf: defaultImagePath))!
     
     var rootPath: URL
     var fsmngr: FileManager
