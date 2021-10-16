@@ -14,8 +14,10 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
         view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
         
-        stickerPickerViewController.contentInsetAdjustmentBehavior = .never
-        collectionPickerViewController.contentInsetAdjustmentBehavior = .never
+//        stickerPickerViewController.contentInsetAdjustmentBehavior = .never
+//        collectionPickerViewController.contentInsetAdjustmentBehavior = .never
+        collectionPickerViewController.showsHorizontalScrollIndicator = false
+        collectionPickerViewController.backgroundColor = .blue
         
         createStickerBrowser()
         createColletionSelector()
@@ -34,10 +36,12 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         let fllayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: collectionPickerViewController.bounds, collectionViewLayout: fllayout)
         
+        collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistenceController)
         collectionView.delegate = collectionViewDelegateAndDataSource
         collectionView.dataSource = collectionViewDelegateAndDataSource
         
         collectionView.backgroundColor = .orange
+        collectionView.showsHorizontalScrollIndicator = false
         
         fllayout.minimumInteritemSpacing = 0
         fllayout.scrollDirection = .horizontal
@@ -95,14 +99,35 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
 }
 
 class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDataSource {
+    var persistence: PersistenceController!
+    
+    var collections: [Collections]?
+    
+    init(persistence: PersistenceController) {
+        super.init(frame: .zero)
+        self.persistence = persistence
+        
+        let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        
+        let context = persistence.container.viewContext
+        collections = try? context.fetch(req)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        100
+        return collections?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Cell", for: indexPath) as! MyCollectionCell
         cell.backgroundColor = .red
-        cell.update(text: "\(indexPath.row)")
+        
+        let collection = collections?[indexPath.row]
+        let img = stickerManager.get(profile: collection!)
+        cell.update(img: img)
         return cell
     }
     
@@ -111,7 +136,7 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
 
 class MyCollectionCell: UICollectionViewCell {
     
-    var label: UILabel!
+    var imageView: UIImageView!
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -127,14 +152,14 @@ class MyCollectionCell: UICollectionViewCell {
 //        let v = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
 //        v.backgroundColor = .red
         
-        label = UILabel(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+        imageView = UIImageView(frame: bounds)
         
 //        addSubview(v)
-        addSubview(label)
+        addSubview(imageView)
         backgroundColor = .green
     }
     
-    func update(text: String) {
-        label.text = text
+    func update(img: UIImage) {
+        imageView.image = img
     }
 }

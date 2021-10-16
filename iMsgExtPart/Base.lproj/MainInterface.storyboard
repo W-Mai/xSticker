@@ -23,7 +23,7 @@
                                 <viewLayoutGuide key="frameLayoutGuide" id="PxX-Gi-ebj"/>
                             </scrollView>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="gMW-BU-QbH">
-                                <rect key="frame" x="40" y="173" width="156" height="40"/>
+                                <rect key="frame" x="40" y="165" width="156" height="40"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="yRf-kt-fwF"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="Ba2-nG-dLQ"/>

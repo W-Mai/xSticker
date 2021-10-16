@@ -16,7 +16,7 @@ class MessagesViewController: MSMessagesAppViewController {
     @IBOutlet weak var collectionPickerViewController: UIScrollView!
     
     var stickerBrowser: MSStickerBrowserViewController!
-    let collectionViewDelegateAndDataSource = MyCollectionDelegate()
+    var collectionViewDelegateAndDataSource: MyCollectionDelegate!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -35,7 +35,7 @@ class MessagesViewController: MSMessagesAppViewController {
         stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
 //        stickerPickerViewController.contentSize = stickerBrowser.view.frame.size
         
-        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80 + view.safeAreaInsets.bottom, width: view.frame.width, height: 80)
+        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80, width: view.frame.width, height: 80)
         collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
     }
     
