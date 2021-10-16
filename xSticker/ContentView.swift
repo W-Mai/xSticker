@@ -258,7 +258,8 @@ struct StickerCollectionView: View {
                                 }
                                 isCollectionInfoViewPresented = false
                             }, label: {
-                                Text("清空「我喜欢」").foregroundColor(.red)
+                                Label("清空「我喜欢」", systemImage: "trash.circle")
+                                    .foregroundColor(.red)
                             })
                         } else if collection != persistence.defaultCollection {
                             Button(action: {
@@ -266,7 +267,8 @@ struct StickerCollectionView: View {
                                 persistence.removeCollection(of: collection)
                                 isCollectionInfoViewPresented = false
                             }, label: {
-                                Text("删掉我吧！").foregroundColor(.red)
+                                Label("删掉我呗", systemImage: "trash.circle")
+                                    .foregroundColor(.red)
                             })
                         }
                     }
@@ -373,13 +375,24 @@ struct StickerDetailView: View {
             }
             
             Section{
+                Button {
+                    let collection = sticker.collection
+                    collection?.profile = sticker.image
+                    presentationMode.wrappedValue.dismiss()
+                } label: {
+                    Label("设置「\(sticker.name ?? "已删除")」为封面", systemImage: "heart.text.square")
+                }
+            }
+            
+            Section{
                 Button(action: {
                     sticker.hasSaved = false
                     _ = stickerManager.delete(sticker: sticker)
                     persistence.removeSticker(of: sticker)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Text("删掉我吧！").foregroundColor(.red)
+                    Label("删掉我呗", systemImage: "trash.circle")
+                        .foregroundColor(.red)
                 })
             }
         }.navigationBarTitle(sticker.name ?? "已删除")
