@@ -137,34 +137,24 @@ struct StickerCollectionView: View {
         collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
     }
     
-    fileprivate func OneStickerShowView(_ item: FetchedResults<Stickers>.Element) -> some View {
-        return NavigationLink(
-            destination: StickerDetailView(sticker: item, persistence: persistence),
-            isActive: $isShowingStickerDetails,
-            label: {
-                VStack(spacing: 10){
-                    VStack{
-                        Image(uiImage: stickerManager.get(sticker: item))
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 96, height: 96, alignment: .center)
-                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                    }.padding(2)
-                    .background(Color("AccentColor").opacity(0.6))
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                    .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
-                    Text("\(item.name ?? "已删除")")
-                        .font(.body)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.3)
-                }.padding(10)
-                .drawingGroup()
-            }
-        ).onChange(of: isShowingStickerDetails) { v in
-            if v == false {
-//                persistence.save()
-            }
-        }
+    fileprivate func OneStickerShowView(_ item: Stickers) -> some View {
+        return VStack(spacing: 10){
+            VStack{
+                Image(uiImage: stickerManager.get(sticker: item))
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 96, height: 96, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            }.padding(2)
+            .background(Color("AccentColor").opacity(0.6))
+            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
+            Text("\(item.name ?? "已删除")")
+                .font(.body)
+                .lineLimit(1)
+                .minimumScaleFactor(0.3)
+        }.padding(10)
+        .drawingGroup()
     }
     
     fileprivate func CurrentImagePickerView() -> some View {
@@ -305,7 +295,12 @@ struct StickerCollectionView: View {
                     })
                     
                     ForEach(items.wrappedValue){ item in
-                        OneStickerShowView(item)
+                        NavigationLink(
+                            destination: StickerDetailView(sticker: item, persistence: persistence),
+                            label: {
+                                OneStickerShowView(item)
+                            }
+                        )
                     }
                 }.padding()
                 .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
@@ -384,6 +379,9 @@ struct StickerDetailView: View {
                 })
             }
         }.navigationBarTitle(sticker.name ?? "已删除")
+        .onDisappear {
+            persistence.save()
+        }
     }
 }
 
