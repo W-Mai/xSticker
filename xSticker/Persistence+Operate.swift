@@ -59,6 +59,7 @@ extension PersistenceController {
     
     func removeCollection(of collection: Collections) {
         container.viewContext.delete(collection)
+        
         save()
     }
     
