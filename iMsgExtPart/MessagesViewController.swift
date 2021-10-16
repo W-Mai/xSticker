@@ -12,10 +12,11 @@ import CoreData
 class MessagesViewController: MSMessagesAppViewController {
     let persistenceController = PersistenceController()
     
-    @IBOutlet weak var stickerPickerViewController: UIView!
-    @IBOutlet weak var collectionPickerViewController: UIView!
+    @IBOutlet weak var stickerPickerViewController: UIScrollView!
+    @IBOutlet weak var collectionPickerViewController: UIScrollView!
     
     var stickerBrowser: MSStickerBrowserViewController!
+    let collectionViewDelegateAndDataSource = MyCollectionDelegate()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,16 +27,16 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: - Conversation Handling
     
-    @IBOutlet weak var mylabel: UILabel!
-    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         
-        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.bottom)
+        stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
         
-        mylabel.text = "\(view.frame.height) \(view.safeAreaInsets.bottom + view.safeAreaInsets.top)"
+        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+//        stickerPickerViewController.contentSize = stickerBrowser.view.frame.size
         
-        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - view.safeAreaInsets.bottom - 40, width: view.frame.width, height: 40)
+        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80 + view.safeAreaInsets.bottom, width: view.frame.width, height: 80)
+        collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
     }
     
     override func willBecomeActive(with conversation: MSConversation) {
