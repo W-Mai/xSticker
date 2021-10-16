@@ -12,18 +12,23 @@ import CoreData
 
 extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
+        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        
         createStickerBrowser()
+        createColletionSelector()
     }
     
     func createStickerBrowser() {
-        let stickerBrowser = MSStickerBrowserViewController()
+        stickerBrowser = MSStickerBrowserViewController()
         addChild(stickerBrowser)
-        view.addSubview(stickerBrowser.view)
+        stickerPickerViewController.addSubview(stickerBrowser.view)
         
         stickerBrowser.stickerBrowserView.dataSource = self
-        stickerBrowser.stickerBrowserView.backgroundColor = #colorLiteral(red: 0.1764705926, green: 0.01176470611, blue: 0.5607843399, alpha: 1)
+        stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "AccentColor")
+    }
+    
+    func createColletionSelector() {
         
-        stickerBrowser.view.frame = view.frame
     }
     
     @objc func buttonOnClick(){
@@ -37,7 +42,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         
         layout.caption = "你好👋"
         layout.image = UIImage(named: "plus.circle")
-        layout.subcaption = "\(res?.last?.timestamp)"
+        layout.subcaption = "\(String(describing: res?.last?.timestamp))"
         layout.trailingCaption = "再见👋"
         
         let msg = MSMessage()

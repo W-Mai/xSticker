@@ -12,6 +12,11 @@ import CoreData
 class MessagesViewController: MSMessagesAppViewController {
     let persistenceController = PersistenceController()
     
+    @IBOutlet weak var stickerPickerViewController: UIView!
+    @IBOutlet weak var collectionPickerViewController: UIView!
+    
+    var stickerBrowser: MSStickerBrowserViewController!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -20,6 +25,18 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     // MARK: - Conversation Handling
+    
+    @IBOutlet weak var mylabel: UILabel!
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - view.safeAreaInsets.bottom)
+        
+        mylabel.text = "\(view.frame.height) \(view.safeAreaInsets.bottom + view.safeAreaInsets.top)"
+        
+        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - view.safeAreaInsets.bottom - 40, width: view.frame.width, height: 40)
+    }
     
     override func willBecomeActive(with conversation: MSConversation) {
         // Called when the extension is about to move from the inactive to active state.
