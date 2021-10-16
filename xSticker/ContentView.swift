@@ -226,9 +226,13 @@ struct StickerCollectionView: View {
                         
                     ){
                         List{
-                            NavigationEditor(
-                                title: "贴贴集名字", systemImage: "square.grid.2x2",
-                                text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
+                            if collection == persistence.defaultCollection {
+                                Label("我喜欢", systemImage: "square.grid.2x2")
+                            } else {
+                                NavigationEditor(
+                                    title: "贴贴集名字", systemImage: "square.grid.2x2",
+                                    text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
+                            }
                             NavigationEditor(
                                 title: "贴贴集作者", systemImage: "person.circle",
                                 text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
