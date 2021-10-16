@@ -6,11 +6,19 @@
 //
 
 import SwiftUI
+import Foundation
+import Photos
 
 @main
 struct xStickerApp: App {
     let persistenceController = PersistenceController.shared
 
+    init() {
+        PHPhotoLibrary.requestAuthorization(for: .readWrite) { status in
+            print(status)
+        }
+    }
+    
     var body: some Scene {
         WindowGroup {
             ContentView(persistenceController: persistenceController)

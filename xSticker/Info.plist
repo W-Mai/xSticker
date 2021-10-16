@@ -20,6 +20,10 @@
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>需要您同意才能获取相册权限，从而导出您的表情包</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要您同意才能获取相册权限，从而导入您的表情包</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

@@ -7,7 +7,6 @@
 
 import SwiftUI
 import CoreData
-import ImagePickerView
 
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -174,7 +173,7 @@ struct StickerCollectionView: View {
                         )
                     }
                 }.padding()
-                .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
+//                .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
             .navigationTitle(collection.name ?? "Deleted")
             .navigationBarItems(trailing: HStack {
@@ -199,12 +198,15 @@ struct StickerCollectionView: View {
                                 let images = result.images
                                 print("Did Select images: \(images) from \(phPickerViewController)")
                                 let pickedImages = images
-                                for img in pickedImages {
-                                    let sticker = persistence.addSticker(with: "Sticker", in: collection)
-                                    let stauts = stickerManager.save(image: img, named: sticker)
-                                    if stauts {
-                                        sticker.hasSaved = true
-                                        persistence.save()
+                                DispatchQueue.main.async {
+                                    for img in pickedImages {
+                                        
+                                        let sticker = persistence.addSticker(with: "Sticker", in: collection)
+                                        let stauts = stickerManager.save(image: img, named: sticker)
+                                        if stauts {
+                                            sticker.hasSaved = true
+                                            persistence.save()
+                                        }
                                     }
                                 }
                                 isAnimating = false
@@ -227,7 +229,7 @@ struct StickerCollectionView: View {
                 }
             }
             .sheet(isPresented: $isCollectionInfoViewPresented) {
-                let image = stickerManager.get(profile: collection)
+                let image = stickerManager.get(profile: collection, targetSize: 600)
                 
                 Form{
                     Section(
@@ -241,6 +243,7 @@ struct StickerCollectionView: View {
                             Text(collection.name ?? "")
                             Text(image.size.debugDescription)
                             Text(collection.createDate ?? Date(), style: .date)
+                            Text("\(collection.stickerSet?.count ?? 0)")
                         }
                         Button(action: {
                             _ = stickerManager.delete(collection: collection)

@@ -58,10 +58,12 @@ class StickerManager {
             UIGraphicsEndImageContext()
             
             saveRes = fsmngr.createFile(atPath: savePath.path, contents: newImage.pngData())
+//            newImage.finalize()
         } else {
             saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
         }
         
+//        image.finalize()
         print(saveRes)
         return saveRes
     }
@@ -88,19 +90,23 @@ class StickerManager {
         return true
     }
     
-    func get(sticker: Stickers) -> UIImage{
+    func get(sticker: Stickers, targetSize: CGFloat? = nil) -> UIImage{
         guard let readPath = get(path: sticker)
         else {
             return StickerManager.defaultImage
         }
         
-        guard let imgData = try? Data(contentsOf: readPath)
-        else { return StickerManager.defaultImage }
-        
-        return UIImage(data: imgData)!
+        if targetSize != nil {
+            let img = downsample(imageAt: readPath, targetMaxSize: targetSize!)
+            return img
+        } else {
+            guard let img = UIImage(contentsOfFile: readPath.path)
+            else { return StickerManager.defaultImage }
+            return img
+        }
     }
     
-    func get(profile collection: Collections) -> UIImage {
+    func get(profile collection: Collections, targetSize: CGFloat = 300) -> UIImage {
         guard collection.profile != nil else { return StickerManager.defaultImage }
         
         guard let sticker = collection.stickerSet?.first(where: { item in
@@ -108,7 +114,7 @@ class StickerManager {
         }) as? Stickers
         else { return StickerManager.defaultImage }
         
-        return get(sticker: sticker)
+        return get(sticker: sticker, targetSize: targetSize)
     }
     
     func get(path sticker: Stickers) -> URL? {
@@ -116,7 +122,10 @@ class StickerManager {
         if collection == nil {
             return nil
         }
-        var savePath = rootPath.appendingPathComponent(collection!.id!.uuidString, isDirectory: true)
+        guard let collectionId = collection!.id
+        else { return nil }
+        
+        var savePath = rootPath.appendingPathComponent(collectionId.uuidString, isDirectory: true)
         savePath.appendPathComponent(sticker.image!.uuidString, isDirectory: false)
         savePath.appendPathExtension("png")
         return savePath
@@ -144,3 +153,21 @@ class StickerManager {
 
 let GroupRootPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.xSticker")!
 let stickerManager = StickerManager(root: GroupRootPath)
+
+func downsample(imageAt imageURL: URL, targetMaxSize: CGFloat) -> UIImage {
+
+    //生成CGImageSourceRef 时，不需要先解码。
+    let imageSourceOptions = [kCGImageSourceShouldCache: false] as CFDictionary
+    let imageSource = CGImageSourceCreateWithURL(imageURL as CFURL, imageSourceOptions)!
+    let maxDimensionInPixels = targetMaxSize
+    
+    //kCGImageSourceShouldCacheImmediately
+    //在创建Thumbnail时直接解码，这样就把解码的时机控制在这个downsample的函数内
+    let downsampleOptions = [kCGImageSourceCreateThumbnailFromImageAlways: true,
+                                 kCGImageSourceShouldCacheImmediately: true,
+                                 kCGImageSourceCreateThumbnailWithTransform: true,
+                                 kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
+    //生成
+    let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions)!
+    return UIImage(cgImage: downsampledImage)
+}
