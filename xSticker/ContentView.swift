@@ -32,12 +32,6 @@ struct ContentView: View {
     private var collections: FetchedResults<Collections>
     
     init(persistenceController: PersistenceController) {
-        let url = Bundle.main.bundleURL.path + "/TmpStickers" + "/ld.jpg"
-        NSLog("???%@", url)
-        
-        let url2 = Bundle.main.url(forResource: "ld", withExtension: "jpg")?.path
-        NSLog("???%@", url2!)
-        
         persistence = persistenceController
     }
     
@@ -57,7 +51,7 @@ struct ContentView: View {
                                         .background(Color.white)
                                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                                         .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
-                                    Text("\(item.name!)")
+                                    Text("\(item == persistence.defaultCollection ? "我喜欢" : (item.name ?? "Deleted"))")
                                         .font(.body)
                                         .lineLimit(1)
                                         .minimumScaleFactor(0.3)
@@ -65,12 +59,14 @@ struct ContentView: View {
                             })
                     }
                 }.padding()
-            }.navigationTitle("Collection")
+            }.navigationBarTitle(Text("俺的Sticker"))
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
                 Button {
-                    let collection = persistence.addCollection(with: "Collection")
-                    _ = stickerManager.createCollectionDir(for: collection)
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        let collection = persistence.addCollection(with: "Collection")
+                        _ = stickerManager.createCollectionDir(for: collection)
+                    }
                 } label: {
                     Image(systemName: "rectangle.stack.badge.plus")
                 }
@@ -120,7 +116,6 @@ struct StickerCollectionView: View {
     var collection: Collections
     
     @Environment(\.managedObjectContext) private var viewContext
-//    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection", persistence.defaultCollection))
     private var items: FetchRequest<Stickers>
     
     @State var isImagePickerViewPresented = false
@@ -129,10 +124,137 @@ struct StickerCollectionView: View {
     @State var isAnimating = false
     @State var isProccesing = false
     
+    let collectionName: String!
+    
     init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
         self.collection = collection
         self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection=%@", self.collection))
+        collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
+    }
+    
+    fileprivate func OneStickerShowView(_ item: FetchedResults<Stickers>.Element) -> some View {
+        return NavigationLink(
+            destination: StickerDetailView(sticker: item, persistence: persistence),
+            label: {
+                VStack(spacing: 10){
+                    Image(uiImage: stickerManager.get(sticker: item))
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 100, height: 100, alignment: .center)
+                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
+                    Text("\(item.name!)\(item.order)")
+                        .font(.body)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.3)
+                }.padding(10)
+                .drawingGroup()
+            }
+        )
+    }
+    
+    fileprivate func CurrentImagePickerView() -> some View {
+        return ZStack{
+            ImagePickerView(
+                filter: .any(of: [.images, .livePhotos]),
+                selectionLimit: 0,
+                delegate: ImagePickerView.Delegate(
+                    isPresented: $isImagePickerViewPresented,
+                    isProccesing: $isProccesing,
+                    didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
+                    didSelect: { (result) in
+                        isAnimating = true
+                        let phPickerViewController = result.picker
+                        let images = result.images
+                        print("Did Select images: \(images) from \(phPickerViewController)")
+                        let pickedImages = images
+                        DispatchQueue.main.async {
+                            for img in pickedImages {
+                                
+                                let sticker = persistence.addSticker(with: "Sticker", in: collection)
+                                let stauts = stickerManager.save(image: img, named: sticker)
+                                if stauts {
+                                    sticker.hasSaved = true
+                                    persistence.save()
+                                }
+                            }
+                        }
+                        isAnimating = false
+                    },
+                    didFail: { (imagePickerError) in
+                        let phPickerViewController = imagePickerError.picker
+                        let error = imagePickerError.error
+                        print("Did Fail with error: \(error) in \(phPickerViewController)")
+                    }
+                )
+            ).blur(radius: isProccesing ? 5 : 0)
+            
+            if isProccesing {
+                Color.white.opacity(0.1)
+                    .overlay(
+                        ProgressView()
+                            .scaleEffect(3)
+                    )
+            }
+        }
+    }
+    
+    fileprivate func CurrentInfomationView() -> some View {
+        let image = stickerManager.get(profile: collection, targetSize: 600)
+        return
+            NavigationView{
+                Form{
+                    Section(
+                        header:
+                            VStack{
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                            }
+                            .padding()
+                            .background(Color.white)
+                            .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
+                            .padding([.vertical], 30)
+                        
+                    ){
+                        List{
+                            Text(collection.name ?? "")
+                            Text(collection.collectionDescription ?? "")
+                            Text(image.size.debugDescription)
+                            Text(collection.createDate ?? Date(), style: .date)
+                            Text("\(collection.stickerSet?.count ?? 0)")
+                        }
+                    }
+                    if collection == persistence.defaultCollection && items.wrappedValue.count != 0 {
+                        Button(action: {
+                            items.wrappedValue.forEach { sticker in
+                                _ = stickerManager.delete(sticker: sticker)
+                                persistence.removeSticker(of: sticker)
+                                print(sticker)
+                            }
+                            isCollectionInfoViewPresented = false
+                        }, label: {
+                            Text("清空「我喜欢」").foregroundColor(.red)
+                        })
+                    } else if collection != persistence.defaultCollection {
+                        Button(action: {
+                            _ = stickerManager.delete(collection: collection)
+                            persistence.removeCollection(of: collection)
+                            isCollectionInfoViewPresented = false
+                        }, label: {
+                            Text("删掉我吧！").foregroundColor(.red)
+                        })
+                    }
+                }
+                .navigationBarTitle(self.collectionName)
+                .navigationBarItems(trailing: Button(action: {
+                    isCollectionInfoViewPresented = false
+                }, label: {
+                    Text("好")
+                }))
+            }
     }
     
     var body: some View {
@@ -143,117 +265,36 @@ struct StickerCollectionView: View {
                         isImagePickerViewPresented = true
                     }, label: {
                         VStack(spacing: 10){
-                            Image(systemName: "rectangle.badge.plus")
+                            Image(systemName: "heart.circle")
+                                .resizable()
+                                .foregroundColor(.red)
+                                .padding()
                                 .frame(width: 60, height: 60, alignment: .center)
                                 .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
+                                .shadow(color: Color("ShadowColor").opacity(0.3), radius: 6, x: 0, y: 5)
                         }.padding(30)
                     })
                     
                     ForEach(items.wrappedValue){ item in
-                        NavigationLink(
-                            destination: StickerDetailView(sticker: item, persistence: persistence),
-                            label: {
-                                VStack(spacing: 10){
-                                    Image(uiImage: stickerManager.get(sticker: item))
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .frame(width: 100, height: 100, alignment: .center)
-    //                                    .background(Color.white)
-                                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                        .shadow(color: Color("ShadowColor").opacity(0.6), radius: 6, x: 0, y: 5)
-                                    Text("\(item.name!)\(item.order)")
-                                        .font(.body)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.3)
-                                }.padding(10)
-                                .drawingGroup()
-                            }
-                        )
+                        OneStickerShowView(item)
                     }
                 }.padding()
-//                .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
+                .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
-            .navigationTitle(collection.name ?? "Deleted")
+            .navigationTitle(collectionName)
             .navigationBarItems(trailing: HStack {
                 Button {
                     isCollectionInfoViewPresented = true
                 } label: {
                     Image(systemName: "info.circle")
                 }
-            }.opacity(collection != persistence.defaultCollection ? 1 : 0))
+            })
             .sheet(isPresented: $isImagePickerViewPresented){
-                ZStack{
-                    ImagePickerView(
-                        filter: .any(of: [.images, .livePhotos]),
-                        selectionLimit: 0,
-                        delegate: ImagePickerView.Delegate(
-                            isPresented: $isImagePickerViewPresented,
-                            isProccesing: $isProccesing,
-                            didCancel: { (phPickerViewController) in print("Did Cancel: \(phPickerViewController)") },
-                            didSelect: { (result) in
-                                isAnimating = true
-                                let phPickerViewController = result.picker
-                                let images = result.images
-                                print("Did Select images: \(images) from \(phPickerViewController)")
-                                let pickedImages = images
-                                DispatchQueue.main.async {
-                                    for img in pickedImages {
-                                        
-                                        let sticker = persistence.addSticker(with: "Sticker", in: collection)
-                                        let stauts = stickerManager.save(image: img, named: sticker)
-                                        if stauts {
-                                            sticker.hasSaved = true
-                                            persistence.save()
-                                        }
-                                    }
-                                }
-                                isAnimating = false
-                            },
-                            didFail: { (imagePickerError) in
-                                let phPickerViewController = imagePickerError.picker
-                                let error = imagePickerError.error
-                                print("Did Fail with error: \(error) in \(phPickerViewController)")
-                            }
-                        )
-                    ).blur(radius: isProccesing ? 5 : 0)
-                    
-                    if isProccesing {
-                        Color.white.opacity(0.1)
-                            .overlay(
-                                ProgressView()
-                                    .scaleEffect(3)
-                            )
-                    }
-                }
+                CurrentImagePickerView()
             }
             .sheet(isPresented: $isCollectionInfoViewPresented) {
-                let image = stickerManager.get(profile: collection, targetSize: 600)
-                
-                Form{
-                    Section(
-                        header:
-                            Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .padding()
-                    ){
-                        List{
-                            Text(collection.name ?? "")
-                            Text(image.size.debugDescription)
-                            Text(collection.createDate ?? Date(), style: .date)
-                            Text("\(collection.stickerSet?.count ?? 0)")
-                        }
-                        Button(action: {
-                            _ = stickerManager.delete(collection: collection)
-                            persistence.removeCollection(of: collection)
-                            isCollectionInfoViewPresented = false
-                        }, label: {
-                            Text("删掉我吧！").foregroundColor(.red)
-                        })
-                    }
-                }
+                CurrentInfomationView()
             }
             
             if isAnimating {
@@ -275,10 +316,16 @@ struct StickerDetailView: View {
         Form{
             Section(
                 header:
-                    Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
+                    VStack{
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    }
                     .padding()
+                    .background(Color.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
+                    .padding([.bottom], 30)
             ){
                 List{
                     Text(sticker.name ?? "")
@@ -295,6 +342,6 @@ struct StickerDetailView: View {
                     Text("删掉我吧！").foregroundColor(.red)
                 })
             }
-        }
+        }.navigationBarTitle(sticker.name ?? "已删除")
     }
 }

@@ -100,7 +100,9 @@ class StickerManager {
             let img = downsample(imageAt: readPath, targetMaxSize: targetSize!)
             return img
         } else {
-            guard let img = UIImage(contentsOfFile: readPath.path)
+            guard let imgData = try? Data(contentsOf: readPath)
+            else { return StickerManager.defaultImage }
+            guard let img = UIImage(data: imgData)
             else { return StickerManager.defaultImage }
             return img
         }
