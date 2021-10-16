@@ -58,12 +58,10 @@ class StickerManager {
             UIGraphicsEndImageContext()
             
             saveRes = fsmngr.createFile(atPath: savePath.path, contents: newImage.pngData())
-//            newImage.finalize()
         } else {
             saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
         }
         
-//        image.finalize()
         print(saveRes)
         return saveRes
     }

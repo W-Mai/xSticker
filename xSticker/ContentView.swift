@@ -126,6 +126,7 @@ struct StickerCollectionView: View {
     
     @State var isAnimating = false
     @State var isProccesing = false
+    @State var isShowingStickerDetails = false
     
     let collectionName: String!
     
@@ -139,6 +140,7 @@ struct StickerCollectionView: View {
     fileprivate func OneStickerShowView(_ item: FetchedResults<Stickers>.Element) -> some View {
         return NavigationLink(
             destination: StickerDetailView(sticker: item, persistence: persistence),
+            isActive: $isShowingStickerDetails,
             label: {
                 VStack(spacing: 10){
                     VStack{
@@ -158,7 +160,11 @@ struct StickerCollectionView: View {
                 }.padding(10)
                 .drawingGroup()
             }
-        )
+        ).onChange(of: isShowingStickerDetails) { v in
+            if v == false {
+//                persistence.save()
+            }
+        }
     }
     
     fileprivate func CurrentImagePickerView() -> some View {
@@ -230,32 +236,45 @@ struct StickerCollectionView: View {
                         
                     ){
                         List{
-                            Text(collection.name ?? "")
-                            Text(collection.collectionDescription ?? "")
-                            Text(image.size.debugDescription)
-                            Text(collection.createDate ?? Date(), style: .date)
-                            Text("\(collection.stickerSet?.count ?? 0)")
+                            NavigationEditor(
+                                title: "贴贴集名字", systemImage: "square.grid.2x2",
+                                text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
+                            NavigationEditor(
+                                title: "贴贴集作者", systemImage: "person.circle",
+                                text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
+                            NavigationEditor(
+                                title: "贴贴集描述", systemImage: "doc.plaintext",
+                                text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }))
                         }
                     }
-                    if collection == persistence.defaultCollection && items.wrappedValue.count != 0 {
-                        Button(action: {
-                            items.wrappedValue.forEach { sticker in
-                                _ = stickerManager.delete(sticker: sticker)
-                                persistence.removeSticker(of: sticker)
-                                print(sticker)
-                            }
-                            isCollectionInfoViewPresented = false
-                        }, label: {
-                            Text("清空「我喜欢」").foregroundColor(.red)
-                        })
-                    } else if collection != persistence.defaultCollection {
-                        Button(action: {
-                            _ = stickerManager.delete(collection: collection)
-                            persistence.removeCollection(of: collection)
-                            isCollectionInfoViewPresented = false
-                        }, label: {
-                            Text("删掉我吧！").foregroundColor(.red)
-                        })
+                    
+                    Section {
+                        Label("\(image.size.width, specifier: "%.1f") x \(image.size.height, specifier: "%.1f")", systemImage: "aspectratio")
+                        Label("\(collection.stickerSet?.count ?? 0)", systemImage: "number")
+                        Label("\(collection.createDate ?? Date(), formatter: itemFormatter)", systemImage: "calendar")
+                    }
+                    
+                    Section{
+                        if collection == persistence.defaultCollection && items.wrappedValue.count != 0 {
+                            Button(action: {
+                                items.wrappedValue.forEach { sticker in
+                                    _ = stickerManager.delete(sticker: sticker)
+                                    persistence.removeSticker(of: sticker)
+                                    print(sticker)
+                                }
+                                isCollectionInfoViewPresented = false
+                            }, label: {
+                                Text("清空「我喜欢」").foregroundColor(.red)
+                            })
+                        } else if collection != persistence.defaultCollection {
+                            Button(action: {
+                                _ = stickerManager.delete(collection: collection)
+                                persistence.removeCollection(of: collection)
+                                isCollectionInfoViewPresented = false
+                            }, label: {
+                                Text("删掉我吧！").foregroundColor(.red)
+                            })
+                        }
                     }
                 }
                 .navigationBarTitle(self.collectionName)
@@ -302,7 +321,9 @@ struct StickerCollectionView: View {
             .sheet(isPresented: $isImagePickerViewPresented){
                 CurrentImagePickerView()
             }
-            .sheet(isPresented: $isCollectionInfoViewPresented) {
+            .sheet(isPresented: $isCollectionInfoViewPresented, onDismiss: {
+                persistence.save()
+            }) {
                 CurrentInfomationView()
             }
             
@@ -321,8 +342,8 @@ struct StickerDetailView: View {
     
     var body: some View {
         let image = stickerManager.get(sticker: sticker)
-        
-        Form{
+        print(sticker)
+        return Form{
             Section(
                 header:
                     VStack{
@@ -340,11 +361,19 @@ struct StickerDetailView: View {
                     .padding([.bottom], 30)
             ){
                 List{
-                    Text(sticker.name ?? "")
-                    Text(image.size.debugDescription)
-                    Text(sticker.addDate ?? Date(), style: .date)
-                    Text(sticker.collection?.name ?? "")
+                    NavigationEditor(
+                        title: "贴贴名字", systemImage: "square.grid.2x2",
+                        text: Binding(get: { sticker.name ?? "" }, set: { v in sticker.name = v }))
                 }
+            }
+            
+            Section{
+                Label("\(image.size.width, specifier: "%.1f") x \(image.size.height, specifier: "%.1f")", systemImage: "aspectratio")
+                Label("\(sticker.addDate ?? Date(), formatter: itemFormatter)", systemImage: "calendar")
+                Label("\(sticker.order)", systemImage: "number.circle")
+            }
+            
+            Section{
                 Button(action: {
                     sticker.hasSaved = false
                     _ = stickerManager.delete(sticker: sticker)
@@ -355,5 +384,20 @@ struct StickerDetailView: View {
                 })
             }
         }.navigationBarTitle(sticker.name ?? "已删除")
+    }
+}
+
+struct NavigationEditor: View {
+    var title: String
+    var systemImage: String
+    @Binding var text: String
+    
+    
+    var body: some View {
+        NavigationLink(destination: Form{
+            TextEditor(text: $text)
+        }.navigationBarTitle(title)) {
+            Label(text, systemImage: systemImage)
+        }
     }
 }

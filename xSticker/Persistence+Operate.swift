@@ -32,13 +32,15 @@ extension PersistenceController {
             collection.profile = sticker.image
             save()
         }
+        
+        reorder(for: collection)
         return sticker
     }
     
     func removeSticker(of sticker: Stickers) {
-//        let collection = sticker.collection!
+        let collection = sticker.collection!
         container.viewContext.delete(sticker)
-//        reorder(for: collection)
+        reorder(for: collection)
         save()
     }
     
@@ -80,7 +82,7 @@ extension PersistenceController {
         let items = try! context.fetch(req)
         
         for item in items {
-            item.order = Int64(items.firstIndex(of: item)! * 10)
+            item.order = Int64(items.firstIndex(of: item)!)
         }
         save()
     }
