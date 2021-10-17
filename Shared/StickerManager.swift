@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 class StickerManager {
-    static let defaultImagePath = Bundle.main.url(forResource: "ld", withExtension: "jpg")!
+    static let defaultImagePath = Bundle.main.url(forResource: "tempLogo", withExtension: "png")!
     static let defaultImage = UIImage(data: try! Data(contentsOf: defaultImagePath))!
     static let stickerMaxSize: CGFloat = 618
     

@@ -25,8 +25,6 @@
 		5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
 		5E474211271848DD001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
 		5E474212271856FB001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
-		5E47421827185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
-		5E47421927185E38001E0E11 /* ld.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 5E47421727185E38001E0E11 /* ld.jpg */; };
 		5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
 		5E8686EB2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
 		5E8686EC2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
@@ -38,6 +36,8 @@
 		5E8686FC271A052700A65DF4 /* UIImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */; };
 		5EB9225A271AC10200A2CF7B /* AuxTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB92259271AC10200A2CF7B /* AuxTool.swift */; };
 		5EB9225B271AC10200A2CF7B /* AuxTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB92259271AC10200A2CF7B /* AuxTool.swift */; };
+		5EB9227D271C060E00A2CF7B /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
+		5EB9227E271C060E00A2CF7B /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,13 +83,13 @@
 		5E47420E271840E4001E0E11 /* xSticker.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xSticker.entitlements; sourceTree = "<group>"; };
 		5E47420F271840FF001E0E11 /* iMsgExtPart.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = iMsgExtPart.entitlements; sourceTree = "<group>"; };
 		5E474210271848DD001E0E11 /* CloudKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CloudKit.framework; path = System/Library/Frameworks/CloudKit.framework; sourceTree = SDKROOT; };
-		5E47421727185E38001E0E11 /* ld.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = ld.jpg; sourceTree = "<group>"; };
 		5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Persistence+Operate.swift"; sourceTree = "<group>"; };
 		5E8686EA2719764100A65DF4 /* StickerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StickerManager.swift; sourceTree = "<group>"; };
 		5E8686F12719E5EA00A65DF4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		5E8686F7271A052700A65DF4 /* ImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePickerView.swift; sourceTree = "<group>"; };
 		5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UIImagePickerView.swift; sourceTree = "<group>"; };
 		5EB92259271AC10200A2CF7B /* AuxTool.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuxTool.swift; sourceTree = "<group>"; };
+		5EB9227C271C060E00A2CF7B /* tempLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tempLogo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -184,7 +184,7 @@
 		5E47421327185DC0001E0E11 /* TmpStickers */ = {
 			isa = PBXGroup;
 			children = (
-				5E47421727185E38001E0E11 /* ld.jpg */,
+				5EB9227C271C060E00A2CF7B /* tempLogo.png */,
 			);
 			path = TmpStickers;
 			sourceTree = "<group>";
@@ -295,7 +295,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E47421827185E38001E0E11 /* ld.jpg in Resources */,
+				5EB9227D271C060E00A2CF7B /* tempLogo.png in Resources */,
 				5E4741E227181B25001E0E11 /* Preview Assets.xcassets in Resources */,
 				5E8686F22719E5EA00A65DF4 /* Assets.xcassets in Resources */,
 				5E4741DF27181B25001E0E11 /* Assets.xcassets in Resources */,
@@ -306,7 +306,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5E47421927185E38001E0E11 /* ld.jpg in Resources */,
+				5EB9227E271C060E00A2CF7B /* tempLogo.png in Resources */,
 				5E4741FD271824D0001E0E11 /* Assets.xcassets in Resources */,
 				5E8686F32719E5EA00A65DF4 /* Assets.xcassets in Resources */,
 				5E4741FB271824CE001E0E11 /* MainInterface.storyboard in Resources */,
