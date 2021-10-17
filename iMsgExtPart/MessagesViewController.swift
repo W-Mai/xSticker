@@ -13,7 +13,7 @@ class MessagesViewController: MSMessagesAppViewController {
     let persistenceController = PersistenceController()
     
     @IBOutlet weak var stickerPickerViewController: UIScrollView!
-    @IBOutlet weak var collectionPickerViewController: UIScrollView!
+    @IBOutlet weak var collectionPickerViewController: UIView!
     
     var stickerBrowser: MSStickerBrowserViewController!
     var collectionViewDelegateAndDataSource: MyCollectionDelegate!
@@ -30,17 +30,21 @@ class MessagesViewController: MSMessagesAppViewController {
     
     // MARK: - Conversation Handling
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    func forceLayout() {
+        stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.maxY)
         
-        stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
-        
-        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.maxY)
 //        stickerPickerViewController.contentSize = stickerBrowser.view.frame.size
         
-        collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80, width: view.frame.width, height: 80)
+        collectionPickerViewController.frame = CGRect(x: 0, y: stickerBrowser.view.frame.maxY + 10, width: view.frame.width, height: 80)
         collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        
         stickerBrowser.stickerBrowserView.reloadData()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        forceLayout()
     }
     
     override func willBecomeActive(with conversation: MSConversation) {

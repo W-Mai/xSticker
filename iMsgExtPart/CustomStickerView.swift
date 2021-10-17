@@ -12,10 +12,10 @@ import CoreData
 
 extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
-        view.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        view.backgroundColor = UIColor(named: "BGColor")
         
-        collectionPickerViewController.showsHorizontalScrollIndicator = false
-        collectionPickerViewController.backgroundColor = .blue
+//        collectionPickerViewController.showsHorizontalScrollIndicator = false
+        collectionPickerViewController.backgroundColor = UIColor(named: "BGColor")
         
         createStickerBrowser()
         createColletionSelector()
@@ -29,7 +29,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         stickerPickerViewController.addSubview(stickerBrowser.view)
         
         stickerBrowser.stickerBrowserView.dataSource = self
-        stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "AccentColor")
+        stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "BGColor")
     }
     
     func createColletionSelector() {
@@ -40,14 +40,16 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         collectionView.delegate = collectionViewDelegateAndDataSource
         collectionView.dataSource = collectionViewDelegateAndDataSource
         
-        collectionView.backgroundColor = .orange
+        collectionView.backgroundColor = UIColor(named: "BGColor")
         collectionView.showsHorizontalScrollIndicator = false
         
-        fllayout.minimumInteritemSpacing = 0
+        fllayout.minimumInteritemSpacing = 5
         fllayout.scrollDirection = .horizontal
-        fllayout.itemSize = CGSize(width: 70, height: 70)
+        fllayout.itemSize = CGSize(width: 50, height: 50)
         
         collectionView.contentSize = fllayout.collectionViewContentSize
+        collectionView.isPagingEnabled = false
+        collectionView.decelerationRate = .fast
         
         collectionView.register(MyCollectionCell.self, forCellWithReuseIdentifier: "Cell")
         collectionPickerViewController.addSubview(collectionView)
@@ -117,12 +119,14 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
         let collection = collections?[indexPath.row]
         let img = stickerManager.get(profile: collection!)
         cell.setProfile(img: img)
-        cell.labelView.text = "\(indexPath)"
+        cell.labelView.text = "\(cell.frame)"
+        cell.labelView.adjustsFontSizeToFitWidth = true
         if isFirstTimeToSelected && indexPath.row == 0{
             cell.update(force: true)
             return cell
         }
         cell.update()
+        layoutIfNeeded()
         return cell
     }
     
@@ -161,12 +165,14 @@ class MyCollectionCell: UICollectionViewCell {
     }
     
     func initView() {
-        imageView = UIImageView(frame: CGRect(x: 0, y: 30, width: 70, height: 70))
-        labelView = UILabel(frame: CGRect(x: 0, y: 0, width: 70, height: 30))
+        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        labelView = UILabel(frame: CGRect(x: 0, y: 10, width: 50, height: 30))
+        
+        layer.cornerRadius = 16
+        clipsToBounds = true
         
         addSubview(imageView)
-        addSubview(labelView)
-        backgroundColor = .green
+        layer.borderColor = UIColor(named: "AccentColor")?.cgColor
     }
     
     func setProfile(img: UIImage) {
@@ -174,20 +180,12 @@ class MyCollectionCell: UICollectionViewCell {
     }
     
     func update(force: Bool? = nil) {
-        if force != nil {
-            if force! == true {
-                layer.cornerRadius = 20
-            } else {
-                layer.cornerRadius = 0
-            }
-            clipsToBounds = true
+        let myIsSelected = force == nil ? isSelected : (force!)
+        
+        if myIsSelected == true {
+            layer.borderWidth = 2
         } else {
-            if isSelected == true {
-                layer.cornerRadius = 20
-            } else {
-                layer.cornerRadius = 0
-            }
-            clipsToBounds = true
+            layer.borderWidth = 0
         }
     }
 }
