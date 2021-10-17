@@ -18,6 +18,9 @@ class MessagesViewController: MSMessagesAppViewController {
     var stickerBrowser: MSStickerBrowserViewController!
     var collectionViewDelegateAndDataSource: MyCollectionDelegate!
     
+    var currentSelected: Collections!
+    var currentStickers: [Stickers]!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
@@ -37,6 +40,7 @@ class MessagesViewController: MSMessagesAppViewController {
         
         collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80, width: view.frame.width, height: 80)
         collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        stickerBrowser.stickerBrowserView.reloadData()
     }
     
     override func willBecomeActive(with conversation: MSConversation) {
