@@ -67,15 +67,15 @@ struct ContentView: View {
             }.navigationBarTitle(Text("俺的Sticker"))
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
-                if UIDevice.current.userInterfaceIdiom != .pad {
-                    Button {
-                        withAnimation(.easeInOut(duration: 0.3)) {
-                            let collection = persistence.addCollection(with: "Collection")
-                            _ = stickerManager.createCollectionDir(for: collection)
-                        }
-                    } label: {
-                        Image(systemName: "rectangle.stack.badge.plus")
+                Button {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        let collection = persistence.addCollection(with: "Collection")
+                        _ = stickerManager.createCollectionDir(for: collection)
                     }
+                } label: {
+                    Image(systemName: "rectangle.stack.badge.plus")
+                }
+                if UIDevice.current.userInterfaceIdiom != .pad {
                     Button {
                         isShowingAbout = true
                     } label: {
@@ -259,7 +259,8 @@ struct StickerCollectionView: View {
                                 text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
                             NavigationEditor(
                                 title: "贴贴集描述", systemImage: "doc.plaintext",
-                                text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }))
+                                text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }),
+                                longTextMode: true)
                         }
                     }
                     
@@ -430,13 +431,34 @@ struct NavigationEditor: View {
     var title: String
     var systemImage: String
     @Binding var text: String
-    
+    var longTextMode = false
     
     var body: some View {
-        NavigationLink(destination: Form{
-            TextEditor(text: $text)
-        }.navigationBarTitle(title)) {
+        NavigationLink(
+            destination:
+                NavigationEditorEditor(title: title, text: $text, longTextMode: longTextMode)
+        ) {
             Label(text, systemImage: systemImage)
+        }
+    }
+    
+    private struct NavigationEditorEditor: View {
+        var title: String
+        @Binding var text: String
+        var longTextMode: Bool
+        
+        @Environment(\.presentationMode) var presentationMode
+        
+        var body: some View {
+            Form{
+                if longTextMode {
+                    TextEditor(text: $text).frame(minHeight: 300)
+                } else {
+                    MyTextField(text: $text) {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+            }.navigationBarTitle(title)
         }
     }
 }

@@ -21,3 +21,48 @@ struct NavigationConfigurator: UIViewControllerRepresentable {
         }
     }
 }
+
+struct MyTextField: UIViewRepresentable {
+    typealias UIViewType = UITextField
+    
+    @Binding var text: String
+    var didFinished: ()->()
+    
+    func makeUIView(context: Context) -> UIViewType {
+        let textField = UIViewType()
+        
+        textField.clearButtonMode = .always
+        textField.returnKeyType = .done
+        
+        textField.delegate = context.coordinator
+        return textField
+    }
+    
+    func updateUIView(_ uiView: UIViewType, context: Context) {
+        uiView.text = text
+    }
+    
+    class Coordinator: NSObject, UITextFieldDelegate {
+        var text: Binding<String>
+        var didFinished: ()->()
+        
+        init(text: Binding<String>, didFinished: @escaping ()->()) {
+            self.text = text
+            self.didFinished = didFinished
+        }
+        
+        func textFieldDidChangeSelection(_ textField: UITextField) {
+            text.wrappedValue = textField.text ?? ""
+        }
+        
+        func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            textField.resignFirstResponder()
+            didFinished()
+            return true
+        }
+    }
+    
+    func makeCoordinator() -> Coordinator {
+        return Coordinator(text: $text, didFinished: didFinished)
+    }
+}
