@@ -10,60 +10,13 @@ import UIKit
 import Messages
 import CoreData
 
-public extension UIView {
-    typealias ConstraintsTupleStretched = (top:NSLayoutConstraint, bottom:NSLayoutConstraint, leading:NSLayoutConstraint, trailing:NSLayoutConstraint)
-    func addSubviewStretched(subview:UIView?, insets: UIEdgeInsets = UIEdgeInsets() ) -> ConstraintsTupleStretched? {
-        guard let subview = subview else {
-            return nil
-        }
-        
-        subview.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(subview)
-        
-        let constraintLeading = NSLayoutConstraint(item: subview, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: insets.left)
-        addConstraint(constraintLeading)
-        
-        let constraintTrailing = NSLayoutConstraint(item: self,
-                                                    attribute: .right,
-                                                    relatedBy: .equal,
-                                                    toItem: subview,
-                                                    attribute: .right,
-                                                    multiplier: 1,
-                                                    constant: insets.right)
-        addConstraint(constraintTrailing)
-        
-        let constraintTop = NSLayoutConstraint(item: subview,
-                                               attribute: .top,
-                                               relatedBy: .equal,
-                                               toItem: self,
-                                               attribute: .top,
-                                               multiplier: 1,
-                                               constant: insets.top)
-        addConstraint(constraintTop)
-        
-        let constraintBottom = NSLayoutConstraint(item: self,
-                                                  attribute: .bottom,
-                                                  relatedBy: .equal,
-                                                  toItem: subview,
-                                                  attribute: .bottom,
-                                                  multiplier: 1,
-                                                  constant: insets.bottom)
-        addConstraint(constraintBottom)
-        return (constraintTop, constraintBottom, constraintLeading, constraintTrailing)
-    }
-    
-}
-
-
 extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
         view.backgroundColor = UIColor(named: "BGColor")
         
-        collectionPickerViewController.backgroundColor = UIColor(named: "BGColor")
-        
         createStickerBrowser()
         createColletionSelector()
-        BindConstraint()
+        BindConstraint(.compact)
     }
     
     func loadCurrentCollection() -> Collections{
@@ -85,37 +38,15 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         
         stickerBrowser = MSStickerBrowserViewController()
         addChild(stickerBrowser)
-//        stickerPickerViewController.addSubview(stickerBrowser.stickerBrowserView)
-        
-        
-        
-//        view.addSubviewStretched(subview: stickerBrowser.view, insets: UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0))
-//        let BorderedBackgroundInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
-//        view?.addSubviewStretched(calendar.view, insets: BorderedBackgroundInset)
-        
         view.addSubview(stickerBrowser.view)
-        
 
-        
         stickerBrowser.stickerBrowserView.dataSource = self
         stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "BGColor")
-//        NSLayoutConstraint.activate([
-//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-//            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
-//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-//        ])
-        
-//
-//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .right, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .bottom, multiplier: 1, constant: 0))
     }
     
     func createColletionSelector() {
         let fllayout = UICollectionViewFlowLayout()
-        collectionView = UICollectionView(frame: collectionPickerViewController.bounds, collectionViewLayout: fllayout)
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: fllayout)
         
         collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistenceController, defaultCollection: currentSelected, onSelected: collectionSelected(collection:))
         collectionView.delegate = collectionViewDelegateAndDataSource
@@ -127,40 +58,34 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         fllayout.minimumInteritemSpacing = 5
         fllayout.scrollDirection = .horizontal
         fllayout.itemSize = CGSize(width: 50, height: 50)
-        fllayout.sectionInset.left = 20
+        fllayout.sectionInset = UIEdgeInsets(top: 0, left: 20, bottom: 0, right: 20)
         
         collectionView.contentSize = fllayout.collectionViewContentSize
         collectionView.isPagingEnabled = false
         collectionView.decelerationRate = .fast
         
         collectionView.register(MyCollectionCell.self, forCellWithReuseIdentifier: "Cell")
-//        collectionPickerViewController.addSubviewStretched(subview: collectionView)
-//        view.addSubviewStretched(subview: collectionPickerViewController, insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         view.addSubview(collectionView)
         collectionSelected(collection: currentSelected)
     }
     
-    func BindConstraint() {
-//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .right, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .bottom, multiplier: 1, constant: 100))
+    func BindConstraint(_ status: MSMessagesAppPresentationStyle) {
         stickerBrowser.view.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         
         stickerBrowser.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stickerBrowser.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         stickerBrowser.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80).isActive = true
+        
+        
+        cons1 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
+        cons2 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80)
         
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        collectionView.topAnchor.constraint(equalTo: stickerBrowser.view.bottomAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 80).isActive = true
-//        view.addConstraint(NSLayoutConstraint(item: collectionView!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: collectionView!, attribute: .top, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 80))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: collectionView, attribute: .right, multiplier: 1, constant: 0))
-//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 0))
+//        collectionView.heightAnchor.constraint(equalToConstant: 80).isActive = true
 
     }
     
