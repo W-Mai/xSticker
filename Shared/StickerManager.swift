@@ -135,6 +135,14 @@ class StickerManager {
         return rootPath.appendingPathComponent(collection.id!.uuidString, isDirectory: true)
     }
     
+    func get(size sticker: Stickers) -> String {
+        guard let path = get(path: sticker) else { return "0 KB" }
+        guard let attr = try? fsmngr.attributesOfItem(atPath: path.path) else { return "0 KB" }
+        let size = Float((attr[FileAttributeKey.size] as? Int64) ?? 0)
+        
+        return String(format: "%.2f KB", size / 1024)
+    }
+    
     func createCollectionDir(for collection: Collections) -> Bool {
         let collectionPath = get(path: collection)
         let collectionExt = fsmngr.fileExists(atPath: collectionPath.path)
