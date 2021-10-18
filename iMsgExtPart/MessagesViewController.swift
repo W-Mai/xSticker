@@ -19,6 +19,7 @@ class MessagesViewController: MSMessagesAppViewController {
     @IBOutlet weak var collectionPickerViewController: UIView!
     
     var stickerBrowser: MSStickerBrowserViewController!
+    var collectionView: UICollectionView!
     var collectionViewDelegateAndDataSource: MyCollectionDelegate!
     
     var currentSelected: Collections!
@@ -34,21 +35,15 @@ class MessagesViewController: MSMessagesAppViewController {
     // MARK: - Conversation Handling
     
     func forceLayout() {
-        stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.maxY)
         
-        stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.maxY)
-//        stickerPickerViewController.contentSize = stickerBrowser.view.frame.size
         
-        collectionPickerViewController.frame = CGRect(x: 0, y: stickerBrowser.view.frame.maxY + 10, width: view.frame.width, height: 80)
-        collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
-        
-        stickerBrowser.stickerBrowserView.reloadData()
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        forceLayout()
-    }
+//    override func viewDidLayoutSubviews() {
+//        super.viewDidLayoutSubviews()
+//        forceLayout()
+//    }
+    
     
     override func willBecomeActive(with conversation: MSConversation) {
         // Called when the extension is about to move from the inactive to active state.
@@ -91,9 +86,30 @@ class MessagesViewController: MSMessagesAppViewController {
     }
     
     override func didTransition(to presentationStyle: MSMessagesAppPresentationStyle) {
-        // Called after the extension transitions to a new presentation style.
-    
-        // Use this method to finalize any behaviors associated with the change in presentation style.
+        if presentationStyle == .compact {
+//            stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+//            stickerBrowser.stickerBrowserView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+//            stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height)
+//
+//            collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height, width: view.frame.width, height: 80)
+//            collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+            
+            collectionPickerViewController.layer.opacity = 0
+        } else if presentationStyle == .expanded {
+//            stickerBrowser.view.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - 90)
+//            stickerBrowser.stickerBrowserView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - 90)
+//            stickerPickerViewController.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: view.frame.height - 90)
+            
+            collectionPickerViewController.layer.opacity = 1
+//            collectionPickerViewController.frame = CGRect(x: 0, y: view.frame.height - 80, width: view.frame.width, height: 80)
+//            collectionPickerViewController.subviews.first?.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 80)
+        }
+        
+        stickerBrowser.stickerBrowserView.reloadData()
+        
+//        activeConversation?.insertText("\(view.frame) - \(stickerBrowser.view.frame)", completionHandler: { error in
+//            NSLog("%@", error.debugDescription)
+//        })
     }
 
 }

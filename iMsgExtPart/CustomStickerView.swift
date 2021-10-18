@@ -10,6 +10,51 @@ import UIKit
 import Messages
 import CoreData
 
+public extension UIView {
+    typealias ConstraintsTupleStretched = (top:NSLayoutConstraint, bottom:NSLayoutConstraint, leading:NSLayoutConstraint, trailing:NSLayoutConstraint)
+    func addSubviewStretched(subview:UIView?, insets: UIEdgeInsets = UIEdgeInsets() ) -> ConstraintsTupleStretched? {
+        guard let subview = subview else {
+            return nil
+        }
+        
+        subview.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(subview)
+        
+        let constraintLeading = NSLayoutConstraint(item: subview, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: insets.left)
+        addConstraint(constraintLeading)
+        
+        let constraintTrailing = NSLayoutConstraint(item: self,
+                                                    attribute: .right,
+                                                    relatedBy: .equal,
+                                                    toItem: subview,
+                                                    attribute: .right,
+                                                    multiplier: 1,
+                                                    constant: insets.right)
+        addConstraint(constraintTrailing)
+        
+        let constraintTop = NSLayoutConstraint(item: subview,
+                                               attribute: .top,
+                                               relatedBy: .equal,
+                                               toItem: self,
+                                               attribute: .top,
+                                               multiplier: 1,
+                                               constant: insets.top)
+        addConstraint(constraintTop)
+        
+        let constraintBottom = NSLayoutConstraint(item: self,
+                                                  attribute: .bottom,
+                                                  relatedBy: .equal,
+                                                  toItem: subview,
+                                                  attribute: .bottom,
+                                                  multiplier: 1,
+                                                  constant: insets.bottom)
+        addConstraint(constraintBottom)
+        return (constraintTop, constraintBottom, constraintLeading, constraintTrailing)
+    }
+    
+}
+
+
 extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
         view.backgroundColor = UIColor(named: "BGColor")
@@ -18,6 +63,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         
         createStickerBrowser()
         createColletionSelector()
+        BindConstraint()
     }
     
     func loadCurrentCollection() -> Collections{
@@ -39,15 +85,37 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         
         stickerBrowser = MSStickerBrowserViewController()
         addChild(stickerBrowser)
-        stickerPickerViewController.addSubview(stickerBrowser.view)
+//        stickerPickerViewController.addSubview(stickerBrowser.stickerBrowserView)
+        
+        
+        
+//        view.addSubviewStretched(subview: stickerBrowser.view, insets: UIEdgeInsets(top: 80, left: 0, bottom: 0, right: 0))
+//        let BorderedBackgroundInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+//        view?.addSubviewStretched(calendar.view, insets: BorderedBackgroundInset)
+        
+        view.addSubview(stickerBrowser.view)
+        
+        stickerBrowser.view.translatesAutoresizingMaskIntoConstraints = false
         
         stickerBrowser.stickerBrowserView.dataSource = self
         stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "BGColor")
+//        NSLayoutConstraint.activate([
+//            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+//            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
+//            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+//            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+//        ])
+        
+//
+//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .right, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .bottom, multiplier: 1, constant: 0))
     }
     
     func createColletionSelector() {
         let fllayout = UICollectionViewFlowLayout()
-        let collectionView = UICollectionView(frame: collectionPickerViewController.bounds, collectionViewLayout: fllayout)
+        collectionView = UICollectionView(frame: collectionPickerViewController.bounds, collectionViewLayout: fllayout)
         
         collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistenceController, defaultCollection: currentSelected, onSelected: collectionSelected(collection:))
         collectionView.delegate = collectionViewDelegateAndDataSource
@@ -59,15 +127,31 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         fllayout.minimumInteritemSpacing = 5
         fllayout.scrollDirection = .horizontal
         fllayout.itemSize = CGSize(width: 50, height: 50)
+        fllayout.sectionInset.left = 20
         
         collectionView.contentSize = fllayout.collectionViewContentSize
         collectionView.isPagingEnabled = false
         collectionView.decelerationRate = .fast
         
         collectionView.register(MyCollectionCell.self, forCellWithReuseIdentifier: "Cell")
-        collectionPickerViewController.addSubview(collectionView)
+        collectionPickerViewController.addSubviewStretched(subview: collectionView)
+//        view.addSubviewStretched(subview: collectionPickerViewController, insets: UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0))
         
         collectionSelected(collection: currentSelected)
+    }
+    
+    func BindConstraint() {
+        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: stickerBrowser.view!, attribute: .top, relatedBy: .equal, toItem: view, attribute: .top, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .right, multiplier: 1, constant: 0))
+        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: stickerBrowser.view, attribute: .bottom, multiplier: 1, constant: 100))
+        
+        
+//        view.addConstraint(NSLayoutConstraint(item: collectionView!, attribute: .left, relatedBy: .equal, toItem: view, attribute: .left, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: collectionView!, attribute: .top, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 80))
+//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .right, relatedBy: .equal, toItem: collectionView, attribute: .right, multiplier: 1, constant: 0))
+//        view.addConstraint(NSLayoutConstraint(item: view!, attribute: .bottom, relatedBy: .equal, toItem: collectionView, attribute: .bottom, multiplier: 1, constant: 0))
+
     }
     
     func collectionSelected(collection: Collections) {
@@ -182,9 +266,13 @@ class MyCollectionCell: UICollectionViewCell {
     }
     
     func initView() {
-        imageView = UIImageView(frame: CGRect(x: 0, y: 0, width: frame.width, height: frame.height))
+        imageView = UIImageView(frame: CGRect(x: frame.width * 0.1, y: frame.width * 0.1, width: frame.width * 0.8, height: frame.height*0.8))
         labelView = UILabel(frame: CGRect(x: 0, y: 10, width: 50, height: 30))
         
+        imageView.layer.cornerRadius = 16 - frame.width * 0.1
+        imageView.clipsToBounds = true
+        
+        backgroundColor = UIColor(named: "ShallowShadowColor")
         layer.cornerRadius = 16
         clipsToBounds = true
         
@@ -200,9 +288,11 @@ class MyCollectionCell: UICollectionViewCell {
         let myIsSelected = force == nil ? isSelected : (force!)
         
         if myIsSelected == true {
-            layer.borderWidth = 2
+            layer.borderWidth = 1
+            backgroundColor = UIColor(named: "ShadowColor")
         } else {
             layer.borderWidth = 0
+            backgroundColor = UIColor(named: "ShallowShadowColor")
         }
     }
 }
