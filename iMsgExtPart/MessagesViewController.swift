@@ -11,6 +11,9 @@ import CoreData
 
 class MessagesViewController: MSMessagesAppViewController {
     let persistenceController = PersistenceController()
+    var localSettingManager: LocalSettingsManager {
+        return LocalSettingsManager(with: persistenceController)
+    }
     
     @IBOutlet weak var stickerPickerViewController: UIScrollView!
     @IBOutlet weak var collectionPickerViewController: UIView!

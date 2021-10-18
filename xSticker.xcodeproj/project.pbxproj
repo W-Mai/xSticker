@@ -40,6 +40,7 @@
 		5EB9227E271C060E00A2CF7B /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
 		5EB9228E271D2BD800A2CF7B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EB92291271D2BD800A2CF7B /* Localizable.strings */; };
 		5EB9228F271D2BD800A2CF7B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EB92291271D2BD800A2CF7B /* Localizable.strings */; };
+		5EB92293271D883000A2CF7B /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -346,6 +347,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EB92293271D883000A2CF7B /* Persistence+Operate.swift in Sources */,
 				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
 				5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */,

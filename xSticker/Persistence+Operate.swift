@@ -88,3 +88,49 @@ extension PersistenceController {
         save()
     }
 }
+
+@propertyWrapper struct LocalSetingWrapper {
+    private var name: String
+    private var context: NSManagedObjectContext
+    
+    var wrappedValue: String? {
+        set {
+            let req: NSFetchRequest<LocalSettings> = LocalSettings.fetchRequest()
+            req.predicate = NSPredicate(format: "name=%@", self.name)
+            guard let res = try? context.fetch(req) else { return }
+            guard let first = res.first else { return }
+            
+            first.val = newValue
+            try? context.save()
+        }
+        get {
+            let req: NSFetchRequest<LocalSettings> = LocalSettings.fetchRequest()
+            req.predicate = NSPredicate(format: "name=%@", self.name)
+            guard let res = try? context.fetch(req) else { return nil }
+            guard let first = res.first else {
+                let l = LocalSettings(context: context)
+                l.name = name
+                l.val = nil
+                return nil
+            }
+            return first.val
+        }
+    }
+    
+    init(name: String, _ persistence: PersistenceController) {
+        self.name = name
+        self.context = persistence.container.viewContext
+    }
+}
+
+class LocalSettingsManager {
+    var persistence: PersistenceController
+    
+    var lastUsedCollection: LocalSetingWrapper /// UUID
+    
+    init(with persistence: PersistenceController) {
+        self.persistence = persistence
+        
+        lastUsedCollection = LocalSetingWrapper(name: "LastUsedCollection", persistence)
+    }
+}

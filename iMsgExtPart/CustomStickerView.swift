@@ -14,15 +14,28 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
         view.backgroundColor = UIColor(named: "BGColor")
         
-//        collectionPickerViewController.showsHorizontalScrollIndicator = false
         collectionPickerViewController.backgroundColor = UIColor(named: "BGColor")
         
         createStickerBrowser()
         createColletionSelector()
     }
     
+    func loadCurrentCollection() -> Collections{
+        guard let lastUserdCollectionUUID = localSettingManager.lastUsedCollection.wrappedValue
+        else { return persistenceController.defaultCollection }
+        
+        let contex = persistenceController.container.viewContext
+        let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        req.predicate = NSPredicate(format: "id=%@", NSUUID(uuidString: lastUserdCollectionUUID)!)
+        
+        guard let first = (try? contex.fetch(req))?.first
+        else { return persistenceController.defaultCollection }
+        
+        return first
+    }
+    
     func createStickerBrowser() {
-        currentSelected = persistenceController.defaultCollection
+        currentSelected = loadCurrentCollection()
         
         stickerBrowser = MSStickerBrowserViewController()
         addChild(stickerBrowser)
@@ -36,7 +49,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         let fllayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: collectionPickerViewController.bounds, collectionViewLayout: fllayout)
         
-        collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistenceController, onSelected: collectionSelected(collection:))
+        collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistenceController, defaultCollection: currentSelected, onSelected: collectionSelected(collection:))
         collectionView.delegate = collectionViewDelegateAndDataSource
         collectionView.dataSource = collectionViewDelegateAndDataSource
         
@@ -66,6 +79,8 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         currentStickers = try? context.fetch(req)
         
         stickerBrowser.stickerBrowserView.reloadData()
+        
+        localSettingManager.lastUsedCollection.wrappedValue = currentSelected.id?.uuidString
     }
     
     // MARK: - 数据源
@@ -92,17 +107,21 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
     
     var collections: [Collections]?
     
+    var defaultSelected: IndexPath!
     var isFirstTimeToSelected = true
     
-    init(persistence: PersistenceController, onSelected: @escaping (Collections)->()) {
+    init(persistence: PersistenceController, defaultCollection: Collections, onSelected: @escaping (Collections)->()) {
         super.init(frame: .zero)
         self.persistence = persistence
+        
         self.onSelected = onSelected
         
         let req: NSFetchRequest<Collections> = Collections.fetchRequest()
         
         let context = persistence.container.viewContext
         collections = try? context.fetch(req)
+        
+        self.defaultSelected = IndexPath(row: collections?.firstIndex(of: defaultCollection) ?? 0, section: 0)
     }
     
     required init?(coder: NSCoder) {
@@ -121,7 +140,7 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
         cell.setProfile(img: img)
         cell.labelView.text = "\(cell.frame)"
         cell.labelView.adjustsFontSizeToFitWidth = true
-        if isFirstTimeToSelected && indexPath.row == 0{
+        if isFirstTimeToSelected && indexPath == self.defaultSelected {
             cell.update(force: true)
             return cell
         }
@@ -133,11 +152,10 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as! MyCollectionCell
         onSelected(collections![indexPath.row])
-//        cell.isSelected = true
         cell.update()
         
-        if isFirstTimeToSelected && indexPath.row != 0{
-            let cell0 = collectionView.cellForItem(at: IndexPath(row: 0, section: 0)) as! MyCollectionCell
+        if isFirstTimeToSelected && indexPath != self.defaultSelected {
+            let cell0 = collectionView.cellForItem(at: self.defaultSelected) as! MyCollectionCell
             cell0.update(force: false)
             isFirstTimeToSelected = false
         }
@@ -145,7 +163,6 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
         let cell = collectionView.cellForItem(at: indexPath) as? MyCollectionCell
-//        cell.isSelected = false
         cell?.update()
     }
 }

@@ -9,8 +9,9 @@
         <attribute name="profile" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="stickerSet" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Stickers" inverseName="collection" inverseEntity="Stickers"/>
     </entity>
-    <entity name="Item" representedClassName="Item" syncable="YES" codeGenerationType="class">
-        <attribute name="timestamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
+    <entity name="LocalSettings" representedClassName="LocalSettings" syncable="YES" codeGenerationType="class">
+        <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="val" optional="YES" attributeType="String"/>
     </entity>
     <entity name="Stickers" representedClassName="Stickers" syncable="YES" codeGenerationType="class">
         <attribute name="addDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
@@ -22,7 +23,7 @@
     </entity>
     <elements>
         <element name="Collections" positionX="-71.890625" positionY="18.94140625" width="133.57421875" height="134"/>
-        <element name="Item" positionX="-582.6484375" positionY="-72.671875" width="128" height="44"/>
         <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="119"/>
+        <element name="LocalSettings" positionX="-198" positionY="72" width="128" height="59"/>
     </elements>
 </model>
