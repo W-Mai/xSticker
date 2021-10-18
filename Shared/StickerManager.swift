@@ -32,24 +32,26 @@ class StickerManager {
         }
     }
     
-    func save(image : UIImage, named sticker: Stickers) -> Bool {
+    func save(image : UIImage, named sticker: Stickers, downscaleRate: Double = 1) -> Bool {
         let savePath = get(path: sticker)!
         print(savePath)
         let size = image.size
         print(size)
+        var toSavedImage: UIImage
+        let localScale = StickerManager.stickerMaxSize * CGFloat(downscaleRate)
         
-        let saveRes: Bool
-        if size.width > StickerManager.stickerMaxSize || size.height > StickerManager.stickerMaxSize {
+        var saveRes: Bool
+        if size.width > localScale || size.height > localScale {
             // 计算尺寸
             let maxLength = max(size.width, size.height)
             let newSize: CGSize
             let ratio: CGFloat
             if size.width == maxLength {
-                ratio = StickerManager.stickerMaxSize / size.width
-                newSize = CGSize(width: StickerManager.stickerMaxSize, height: size.height * ratio)
+                ratio = localScale / size.width
+                newSize = CGSize(width: localScale, height: size.height * ratio)
             } else {
-                ratio = StickerManager.stickerMaxSize / size.height
-                newSize = CGSize(width: size.width * ratio, height: StickerManager.stickerMaxSize)
+                ratio = localScale / size.height
+                newSize = CGSize(width: size.width * ratio, height: localScale)
             }
             // 获取处理后的图像
             UIGraphicsBeginImageContext(newSize)
@@ -57,11 +59,21 @@ class StickerManager {
             let newImage = UIGraphicsGetImageFromCurrentImageContext()!
             UIGraphicsEndImageContext()
             
-            saveRes = fsmngr.createFile(atPath: savePath.path, contents: newImage.pngData())
+            toSavedImage = newImage
         } else {
-            saveRes = fsmngr.createFile(atPath: savePath.path, contents: image.pngData())
+            toSavedImage = image
         }
         
+        saveRes = fsmngr.createFile(atPath: savePath.path, contents: toSavedImage.pngData())
+        
+        if saveRes {
+            let fileSize: Int64 = get(size: sticker)
+            if fileSize > 500 * 1024 {
+                NSLog("Too Large, need to downscale.")
+                saveRes = save(image: toSavedImage, named: sticker, downscaleRate: 0.8 )
+            }
+        }
+       
         print(saveRes)
         return saveRes
     }
@@ -135,12 +147,16 @@ class StickerManager {
         return rootPath.appendingPathComponent(collection.id!.uuidString, isDirectory: true)
     }
     
-    func get(size sticker: Stickers) -> String {
-        guard let path = get(path: sticker) else { return "0 KB" }
-        guard let attr = try? fsmngr.attributesOfItem(atPath: path.path) else { return "0 KB" }
-        let size = Float((attr[FileAttributeKey.size] as? Int64) ?? 0)
+    func get(sizeStr sticker: Stickers) -> String {
+        return String(format: "%.2f KB", Float(get(size: sticker)) / 1024)
+    }
+    
+    func get(size sticker: Stickers) -> Int64 {
+        guard let path = get(path: sticker) else { return 0 }
+        guard let attr = try? fsmngr.attributesOfItem(atPath: path.path) else { return 0 }
+        let size = (attr[FileAttributeKey.size] as? Int64) ?? 0
         
-        return String(format: "%.2f KB", size / 1024)
+        return size
     }
     
     func createCollectionDir(for collection: Collections) -> Bool {

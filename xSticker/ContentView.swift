@@ -396,7 +396,7 @@ struct StickerDetailView: View {
             Section{
                 Label("\(image.size.width, specifier: "%.1f") x \(image.size.height, specifier: "%.1f")", systemImage: "aspectratio")
                 Label("\(sticker.addDate ?? Date(), formatter: itemFormatter)", systemImage: "calendar")
-                Label("\(stickerManager.get(size: sticker))", systemImage: "doc")
+                Label("\(stickerManager.get(sizeStr: sticker))", systemImage: "doc")
                 Label("\(sticker.order)", systemImage: "number.circle")
             }
             
