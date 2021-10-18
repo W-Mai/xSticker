@@ -35,6 +35,8 @@ struct ContentView: View {
         persistence = persistenceController
     }
     
+    @State var isShowingAbout = false
+    
     var body: some View {
         NavigationView{
             ScrollView(.vertical){
@@ -65,22 +67,39 @@ struct ContentView: View {
             }.navigationBarTitle(Text("俺的Sticker"))
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
-                Button {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        let collection = persistence.addCollection(with: "Collection")
-                        _ = stickerManager.createCollectionDir(for: collection)
+                if UIDevice.current.userInterfaceIdiom != .pad {
+                    Button {
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            let collection = persistence.addCollection(with: "Collection")
+                            _ = stickerManager.createCollectionDir(for: collection)
+                        }
+                    } label: {
+                        Image(systemName: "rectangle.stack.badge.plus")
                     }
-                } label: {
-                    Image(systemName: "rectangle.stack.badge.plus")
-                }
-                Button {
-                    
-                } label: {
-                    Text("🤔")
+                    Button {
+                        isShowingAbout = true
+                    } label: {
+                        Text("🤔")
+                    }
                 }
             })
+            .sheet(isPresented: $isShowingAbout) {
+                VStack(spacing: 30){
+                    xAbout()
+                    
+                    Text("快快") + Text("选中").bold() + Text("、") + Text("创建").bold() + Text("、") + Text("修改").bold() + Text("自己喜欢的表情包叭!")
+                    
+                    Spacer()
+                }.padding([.top], 100)
+                .foregroundColor(Color("AccentColor"))
+            }
+            
+            VStack(spacing: 30){
+                xAbout()
+                Text("打开侧边栏") + Text("选中").bold() + Text("、") + Text("创建").bold() + Text("、") + Text("修改").bold() + Text("自己喜欢的表情包叭!")
+                Spacer()
+            }.foregroundColor(Color("AccentColor"))
         }
-        
     }
     
     private func addItem() {
@@ -210,20 +229,22 @@ struct StickerCollectionView: View {
                 Form{
                     Section(
                         header:
-                            VStack{
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                            }
-                            .padding()
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
-                            .padding(2)
-                            .background(Color("AccentColor"))
-                            .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
-                            .padding([.vertical], 30)
-                        
+                            HStack(alignment: .center){
+                                VStack{
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: 300)
+                                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
+                                .padding(2)
+                                .background(Color("AccentColor"))
+                                .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
+                                .padding([.bottom], 30)
+                            }.frame(maxWidth: .infinity)
                     ){
                         List{
                             if collection == persistence.defaultCollection {
@@ -347,19 +368,22 @@ struct StickerDetailView: View {
         return Form{
             Section(
                 header:
-                    VStack{
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    }
-                    .padding()
-                    .background(Color.white)
-                    .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
-                    .padding(2)
-                    .background(Color("AccentColor"))
-                    .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
-                    .padding([.bottom], 30)
+                    HStack(alignment: .center){
+                        VStack{
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: 300)
+                                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
+                        .padding(2)
+                        .background(Color("AccentColor"))
+                        .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
+                        .padding([.bottom], 30)
+                    }.frame(maxWidth: .infinity)
             ){
                 List{
                     NavigationEditor(
@@ -414,5 +438,29 @@ struct NavigationEditor: View {
         }.navigationBarTitle(title)) {
             Label(text, systemImage: systemImage)
         }
+    }
+}
+
+struct xAbout: View {
+    var body: some View{
+        let info = Bundle.main.infoDictionary!
+        let name = info["CFBundleDisplayName"] as! String
+        let version = "Verison \(info["CFBundleShortVersionString"]!) build \(info["CFBundleVersion"]!)"
+        VStack(alignment: .center, spacing: 20){
+            Image("AppIcon-UsedForShowing").resizable().frame(width: 100, height: 100, alignment: .center).clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .shadow(color: Color("ShallowShadowColor"), radius: 10, x: 0.0, y: 0.0)
+            Text("\(name)")
+            Text(version)
+            HStack{
+                Image(systemName: "42.square")
+                Text("SETTINGS.ABOUT.AUTHOR")
+                Text("W-Mai").foregroundColor(.secondary)
+            }
+            HStack{
+                Image(systemName: "house")
+                Text("SETTINGS.ABOUT.STUDIO")
+                Text("XCLZ STUDIO").foregroundColor(.secondary)
+            }
+        }.frame(maxWidth: .infinity)
     }
 }
