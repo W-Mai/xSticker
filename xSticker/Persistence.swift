@@ -72,6 +72,8 @@ struct PersistenceController {
         
         defaultCollection = initDefaultCollection()
         _ = stickerManager.createCollectionDir(for: defaultCollection)
+        
+        reorder()
     }
     
     func initDefaultCollection() -> Collections{

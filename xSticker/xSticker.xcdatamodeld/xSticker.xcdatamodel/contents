@@ -6,6 +6,7 @@
         <attribute name="createDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="name" optional="YES" attributeType="String"/>
+        <attribute name="order" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="profile" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <relationship name="stickerSet" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Stickers" inverseName="collection" inverseEntity="Stickers"/>
     </entity>
@@ -22,8 +23,8 @@
         <relationship name="collection" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Collections" inverseName="stickerSet" inverseEntity="Collections"/>
     </entity>
     <elements>
-        <element name="Collections" positionX="-71.890625" positionY="18.94140625" width="133.57421875" height="134"/>
-        <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="119"/>
+        <element name="Collections" positionX="-71.890625" positionY="18.94140625" width="133.57421875" height="149"/>
         <element name="LocalSettings" positionX="-198" positionY="72" width="128" height="59"/>
+        <element name="Stickers" positionX="-331.921875" positionY="-1.40234375" width="128" height="119"/>
     </elements>
 </model>

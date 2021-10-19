@@ -31,7 +31,7 @@ struct ContentView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var envSettings: EnvSettings
     
-    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.createDate, ascending: true)])
+    @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.order, ascending: true)])
     private var collections: FetchedResults<Collections>
     
     init(persistenceController: PersistenceController) {
@@ -51,15 +51,20 @@ struct ContentView: View {
                             label: {
                                 OneCollectionEntryView(persistence: persistence, item: item)
                                     .animation(.spring(response: 0.3, dampingFraction: 0.8))
-                            }).contextMenu(ContextMenu{
+                            }).contextMenu(item == persistence.defaultCollection ? nil : ContextMenu{
                                 Text("\(item.name ?? "")")
                                 Divider()
-                                Button("删除「\(item.name ?? "")」") {
+                                Button {
+                                    item.order = 1
+                                    persistence.reorder()
+                                } label: {
+                                    Text("移到前面去！")
+                                }
+                                Button {
                                     deleteCollection(collection: item)
-                                }.foregroundColor(.red)
-                                Button("移到前面去「\(item.name ?? "")」") {
-//                                    deleteCollection(collection: item)
-                                }.foregroundColor(.red)
+                                } label: {
+                                    Text("删除「\(item.name ?? "")」").foregroundColor(.red)
+                                }
                             })
                         }
                     }

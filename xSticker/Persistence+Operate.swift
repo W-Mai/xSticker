@@ -52,7 +52,9 @@ extension PersistenceController {
         collection.createDate = Date()
         collection.id = UUID()
         collection.name = name
+        collection.order = 1
         
+        reorder()
         save()
         return collection
     }
@@ -84,6 +86,18 @@ extension PersistenceController {
         
         for item in items {
             item.order = Int64(items.firstIndex(of: item)!)
+        }
+        save()
+    }
+    
+    func reorder() {
+        let context = container.viewContext
+        let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \Collections.order, ascending: true)]
+        let items = try! context.fetch(req)
+        
+        for index in 1..<items.count {
+            items[index].order  = Int64(index + 1)
         }
         save()
     }
