@@ -15,6 +15,7 @@ private let itemFormatter: DateFormatter = {
     return formatter
 }()
 
+// MARK: - 🏞预览
 struct ContentView_Previews: PreviewProvider {
     static let persistenceController = PersistenceController.preview
     
@@ -23,6 +24,7 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
+// MARK: - 🌅主视图
 struct ContentView: View {
     var persistence: PersistenceController
     
@@ -132,7 +134,7 @@ struct ContentView: View {
     }
 }
 
-
+// MARK: - 😊贴纸集内容视图
 struct StickerCollectionView: View {
     var persistence: PersistenceController
     var collection: Collections
@@ -156,6 +158,7 @@ struct StickerCollectionView: View {
         collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
     }
     
+    // MARK: 🏷️一个表情
     fileprivate func OneStickerShowView(_ item: Stickers) -> some View {
         return VStack(spacing: 10){
             VStack{
@@ -176,6 +179,7 @@ struct StickerCollectionView: View {
         .drawingGroup()
     }
     
+    // MARK: - 🌁图片选择器
     fileprivate func CurrentImagePickerView() -> some View {
         return ZStack{
             ImagePickerView(
@@ -222,6 +226,7 @@ struct StickerCollectionView: View {
         }
     }
     
+    // MARK: - 💾当前集合关于页面
     fileprivate func CurrentInfomationView() -> some View {
         let image = stickerManager.get(profile: collection, targetSize: 600)
         return
@@ -357,6 +362,8 @@ struct StickerCollectionView: View {
     }
 }
 
+
+// MARK: - 🦸‍♀️贴纸详细内容视图
 struct StickerDetailView: View {
     var sticker: Stickers
     var persistence: PersistenceController
@@ -428,6 +435,8 @@ struct StickerDetailView: View {
     }
 }
 
+
+// MARK: - 🚄导航编辑器（其实就是编辑器可以通过导航导航到）
 struct NavigationEditor: View {
     var title: String
     var systemImage: String
@@ -464,6 +473,8 @@ struct NavigationEditor: View {
     }
 }
 
+
+// MARK: - 😯关于
 struct xAbout: View {
     var body: some View{
         let info = Bundle.main.infoDictionary!

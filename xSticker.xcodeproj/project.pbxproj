@@ -143,8 +143,8 @@
 			isa = PBXGroup;
 			children = (
 				5E47420E271840E4001E0E11 /* xSticker.entitlements */,
-				5E4741DA27181B24001E0E11 /* xStickerApp.swift */,
 				5E4741DC27181B24001E0E11 /* ContentView.swift */,
+				5E4741DA27181B24001E0E11 /* xStickerApp.swift */,
 				5E4741DE27181B25001E0E11 /* Assets.xcassets */,
 				5E4741E327181B25001E0E11 /* Persistence.swift */,
 				5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */,
