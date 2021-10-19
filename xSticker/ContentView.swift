@@ -49,7 +49,8 @@ struct ContentView: View {
                         NavigationLink(
                             destination: StickerCollectionView(persistence: persistence, collection: item),
                             label: {
-                                OneCollectionEntryView(persistence: persistence, item: item)
+                                OneCollectionEntryView(persistence: persistence,
+                                                       item: Binding(get: { item }, set: { v in }))
                                     .animation(.spring(response: 0.3, dampingFraction: 0.8))
                             }).contextMenu(item == persistence.defaultCollection ? nil : ContextMenu{
                                 Text("\(item.name ?? "")")
@@ -70,7 +71,7 @@ struct ContentView: View {
                     }
                 }.padding()
             }.navigationBarTitle(Text("俺的Sticker"))
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(DoubleColumnNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
                 Button {
                     envSettings.isEditing.toggle()
@@ -138,7 +139,7 @@ struct ContentView: View {
 // MARK: - 🕳️一个Collection的入口按钮样子
 struct OneCollectionEntryView : View {
     var persistence: PersistenceController
-    var item: Collections
+    @Binding var item: Collections
     
     @EnvironmentObject var envSettings: EnvSettings
     
