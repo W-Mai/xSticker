@@ -29,6 +29,7 @@ struct ContentView: View {
     var persistence: PersistenceController
     
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var envSettings: EnvSettings
     
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.createDate, ascending: true)])
     private var collections: FetchedResults<Collections>
@@ -42,49 +43,54 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             ScrollView(.vertical){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 10) {
                     ForEach(collections){ item in
+                        if !(envSettings.isEditing && item == persistence.defaultCollection){
                         NavigationLink(
                             destination: StickerCollectionView(persistence: persistence, collection: item),
                             label: {
-                                VStack(spacing: 10){
-                                    VStack{
-                                        Image(uiImage: stickerManager.get(profile: item))
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fill)
-                                            .frame(width: 96, height: 96, alignment: .center)
-                                            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                                    }.padding(2)
-                                    .background(Color("AccentColor").opacity(0.6))
-                                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                                    .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
-                                    Text("\(item == persistence.defaultCollection ? "我喜欢" : (item.name ?? "Deleted"))")
-                                        .font(.body)
-                                        .lineLimit(1)
-                                        .minimumScaleFactor(0.3)
-                                }
+                                OneCollectionEntryView(persistence: persistence, item: item)
+                                    .animation(.spring(response: 0.3, dampingFraction: 0.8))
+                            }).contextMenu(ContextMenu{
+                                Text("\(item.name ?? "")")
+                                Divider()
+                                Button("删除「\(item.name ?? "")」") {
+                                    deleteCollection(collection: item)
+                                }.foregroundColor(.red)
+                                Button("移到前面去「\(item.name ?? "")」") {
+//                                    deleteCollection(collection: item)
+                                }.foregroundColor(.red)
                             })
+                        }
                     }
                 }.padding()
             }.navigationBarTitle(Text("俺的Sticker"))
             .navigationViewStyle(StackNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
                 Button {
-                    withAnimation(.easeInOut(duration: 0.3)) {
-                        let collection = persistence.addCollection(with: "Collection")
-                        _ = stickerManager.createCollectionDir(for: collection)
-                    }
+                    envSettings.isEditing.toggle()
                 } label: {
-                    Image(systemName: "rectangle.stack.badge.plus")
+                    Image(systemName: !envSettings.isEditing ? "square.and.pencil" : "checkmark.circle")
                 }
-                if UIDevice.current.userInterfaceIdiom != .pad {
+                   
+                if !envSettings.isEditing {
                     Button {
-                        isShowingAbout = true
+                        withAnimation(.easeInOut(duration: 0.3)) {
+                            let collection = persistence.addCollection(with: "Collection")
+                            _ = stickerManager.createCollectionDir(for: collection)
+                        }
                     } label: {
-                        Text("🤔")
+                        Image(systemName: "rectangle.stack.badge.plus")
+                    }
+                    if UIDevice.current.userInterfaceIdiom != .pad {
+                        Button {
+                            isShowingAbout = true
+                        } label: {
+                            Text("🤔")
+                        }
                     }
                 }
-            })
+            }.animation(.spring(response: 0.3, dampingFraction: 0.6)))
             .sheet(isPresented: $isShowingAbout) {
                 VStack(spacing: 30){
                     xAbout()
@@ -118,19 +124,59 @@ struct ContentView: View {
         }
     }
     
-    private func deleteItems(offsets: IndexSet) {
-        withAnimation {
-            //            offsets.map { items[$0] }.forEach(viewContext.delete)
-            
-            do {
-                try viewContext.save()
-            } catch {
-                // Replace this implementation with code to handle the error appropriately.
-                // fatalError() causes the application to generate a crash log and terminate. You should not use this function in a shipping application, although it may be useful during development.
-                let nsError = error as NSError
-                fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
+    private func deleteCollection(collection: Collections) {
+        _ = stickerManager.delete(collection: collection)
+        persistence.removeCollection(of: collection)
+    }
+}
+
+// MARK: - 🕳️一个Collection的入口按钮样子
+struct OneCollectionEntryView : View {
+    var persistence: PersistenceController
+    var item: Collections
+    
+    @EnvironmentObject var envSettings: EnvSettings
+    
+    @State var isShowingAlert = false
+    
+    var body: some View{
+        VStack(spacing: 10){
+            VStack{
+                Image(uiImage: stickerManager.get(profile: item))
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .frame(width: 96, height: 96, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            }.padding(2)
+            .background(Color("AccentColor").opacity(0.4))
+            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
+            Text("\(item == persistence.defaultCollection ? "我喜欢" : (item.name ?? "Deleted"))")
+                .font(.body)
+                .lineLimit(1)
+                .minimumScaleFactor(0.3)
+        }.overlay(VStack {HStack{
+            Button {
+                isShowingAlert = true
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .imageScale(.large)
+                    .foregroundColor(.red)
+            }.alert(isPresented: $isShowingAlert) {
+                Alert(title: Text("您真的要残忍的删除我「\(item.name ?? "已删除")」了么"),
+                      primaryButton: .default(Text("对，很凶残！"), action: {
+                        print(item)
+                        _ = stickerManager.delete(collection: item)
+                        persistence.removeCollection(of: item)
+                      }), secondaryButton: .cancel())
             }
+            Spacer()
         }
+        Spacer()
+        }.offset(x: -8, y: -8)
+        .opacity(envSettings.isEditing ? 1 : 0)
+        )
+        
     }
 }
 
