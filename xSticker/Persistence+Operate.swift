@@ -24,6 +24,7 @@ extension PersistenceController {
         sticker.collection = collection
         sticker.image = UUID()
         sticker.name = name
+        sticker.order = 0
         
         save()
         
@@ -40,7 +41,6 @@ extension PersistenceController {
     func removeSticker(of sticker: Stickers) {
         let collection = sticker.collection!
         container.viewContext.delete(sticker)
-        reorder(for: collection)
         save()
     }
     
@@ -82,10 +82,11 @@ extension PersistenceController {
         let context = container.viewContext
         let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
         req.predicate = NSPredicate(format: "collection=%@", collection)
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)]
         let items = try! context.fetch(req)
         
-        for item in items {
-            item.order = Int64(items.firstIndex(of: item)!)
+        for index in 0..<items.count {
+            items[index].order = Int64(index + 1)
         }
         save()
     }

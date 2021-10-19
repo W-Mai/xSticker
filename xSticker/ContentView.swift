@@ -205,7 +205,7 @@ struct StickerCollectionView: View {
     init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
         self.collection = collection
-        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.addDate, ascending: false)], predicate: NSPredicate(format: "collection=%@", self.collection))
+        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)], predicate: NSPredicate(format: "collection=%@", self.collection))
         collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
     }
     
