@@ -39,7 +39,6 @@ extension PersistenceController {
     }
     
     func removeSticker(of sticker: Stickers) {
-        let collection = sticker.collection!
         container.viewContext.delete(sticker)
         save()
     }
