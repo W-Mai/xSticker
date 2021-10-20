@@ -115,6 +115,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         let context = persistenceController.container.viewContext
         let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
         req.predicate = NSPredicate(format: "collection=%@", currentSelected!)
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)]
         currentStickers = try? context.fetch(req)
         
         hintLabel.layer.opacity = currentStickers.count == 0 ? 1 : 0
@@ -158,6 +159,7 @@ class MyCollectionDelegate: UIView, UICollectionViewDelegate, UICollectionViewDa
         self.onSelected = onSelected
         
         let req: NSFetchRequest<Collections> = Collections.fetchRequest()
+        req.sortDescriptors = [NSSortDescriptor(keyPath: \Collections.order, ascending: true)]
         
         let context = persistence.container.viewContext
         collections = try? context.fetch(req)
