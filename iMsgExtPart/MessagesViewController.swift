@@ -18,6 +18,7 @@ class MessagesViewController: MSMessagesAppViewController {
     var stickerBrowser: MSStickerBrowserViewController!
     var collectionView: UICollectionView!
     var collectionViewDelegateAndDataSource: MyCollectionDelegate!
+    var hintLabel: UILabel!
     
     var currentSelected: Collections!
     var currentStickers: [Stickers]!

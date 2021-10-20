@@ -14,6 +14,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     func initView() -> Void {
         view.backgroundColor = UIColor(named: "BGColor")
         
+        createHintLabel()
         createStickerBrowser()
         createColletionSelector()
         BindConstraint(.compact)
@@ -31,6 +32,22 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         else { return persistenceController.defaultCollection }
         
         return first
+    }
+    
+    func createHintLabel() {
+        hintLabel = UILabel()
+        
+        hintLabel.numberOfLines = 0
+        hintLabel.lineBreakMode = .byCharWrapping
+        
+        let kkry = NSMutableAttributedString(string: "🈳️🈳️如👴", attributes: [.font: UIFont.systemFont(ofSize: 60)])
+        kkry.append(NSAttributedString(string: "\n\n打开xSticker APP添加自己喜欢的Sticker叭😁"))
+        kkry.append(NSAttributedString(string: "\n\n👆向上滑动 查看更多"))
+        
+        hintLabel.attributedText = kkry
+        hintLabel.textAlignment = .center
+        
+        view.addSubview(hintLabel)
     }
     
     func createStickerBrowser() {
@@ -72,6 +89,7 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
     func BindConstraint(_ status: MSMessagesAppPresentationStyle) {
         stickerBrowser.view.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        hintLabel.translatesAutoresizingMaskIntoConstraints = false
         
         stickerBrowser.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         stickerBrowser.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
@@ -85,8 +103,10 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.topAnchor.constraint(equalTo: stickerBrowser.view.bottomAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//        collectionView.heightAnchor.constraint(equalToConstant: 80).isActive = true
 
+        hintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        hintLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -60).isActive = true
+//        hintLabel.heightAnchor.constraint(equalToConstant: 120).isActive = true
     }
     
     func collectionSelected(collection: Collections) {
@@ -96,6 +116,8 @@ extension MessagesViewController: MSStickerBrowserViewDataSource {
         let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
         req.predicate = NSPredicate(format: "collection=%@", currentSelected!)
         currentStickers = try? context.fetch(req)
+        
+        hintLabel.layer.opacity = currentStickers.count == 0 ? 1 : 0
         
         stickerBrowser.stickerBrowserView.reloadData()
         
