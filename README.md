@@ -13,6 +13,8 @@ You can manually add stickers through the app, and then sort them and view them 
 * Save the name and other information of the emoji package
 * Freely choose the emoticon package collection in iMessage, and send your favorite emoticon package to your friends
 
+AppStore Link: https://apps.apple.com/us/app/xsticker/id1590725210
+
 Captures of this app：
 
 <div>
