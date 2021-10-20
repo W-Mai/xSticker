@@ -218,7 +218,7 @@ struct StickerCollectionView: View {
                 Image(uiImage: stickerManager.get(sticker: item))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 76, height: 76, alignment: .center)
+                    .frame(width: 66, height: 66, alignment: .center)
                     .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             }.padding(2)
             .background(Color("AccentColor").opacity(0.3))
@@ -366,7 +366,7 @@ struct StickerCollectionView: View {
     var body: some View {
         ZStack {
             ScrollView(.vertical){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80), alignment: .top)], spacing: 10) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 70), alignment: .top)], spacing: 10) {
                     Button(action: {
                         isImagePickerViewPresented = true
                     }, label: {
@@ -378,7 +378,7 @@ struct StickerCollectionView: View {
                                 .background(Color.white)
                                 .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                                 .shadow(color: Color("ShadowColor").opacity(0.3), radius: 6, x: 0, y: 5)
-                        }.padding(20)
+                        }.padding(15)
                     }).overlay(
                         HStack{
                             Image(systemName: "hand.tap.fill")
