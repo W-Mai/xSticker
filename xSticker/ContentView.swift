@@ -46,41 +46,40 @@ struct ContentView: View {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 10) {
                     ForEach(collections){ item in
                         if !(envSettings.isEditing && item == persistence.defaultCollection){
-                            NavigationLink(
-                                destination: StickerCollectionView(persistence: persistence,
-                                                                   collection: Binding(get: { item }, set: { v in })),
-                                label: {
-                                    OneCollectionEntryView(persistence: persistence,
-                                                           item: Binding(get: { item }, set: { v in }))
-                                        .animation(.spring(response: 0.3, dampingFraction: 0.8))
-                                })
-                                .contextMenu(item == persistence.defaultCollection ? nil : ContextMenu{
-                                    Text("\(item.name ?? "")")
-                                    Divider()
-                                    Button {
-                                        item.order = 1
-                                        persistence.reorder()
-                                    } label: {
-                                        Text("移到前面去！")
-                                    }
-                                    Button {
-                                        deleteCollection(collection: item)
-                                    } label: {
-                                        Text("删除「\(item.name ?? "")」").foregroundColor(.red)
-                                    }
-                                })
+                        NavigationLink(
+                            destination: StickerCollectionView(persistence: persistence, collection: item),
+                            label: {
+                                OneCollectionEntryView(persistence: persistence,
+                                                       item: Binding(get: { item }, set: { v in }))
+                                    .animation(.spring(response: 0.3, dampingFraction: 0.8))
+                            }).contextMenu(item == persistence.defaultCollection ? nil : ContextMenu{
+                                Text("\(item.name ?? "")")
+                                Divider()
+                                Button {
+                                    item.order = 1
+                                    persistence.reorder()
+                                } label: {
+                                    Text("移到前面去！")
+                                }
+                                Divider()
+                                Button {
+                                    deleteCollection(collection: item)
+                                } label: {
+                                    Text("删除「\(item.name ?? "")」").foregroundColor(.red)
+                                }
+                            })
                         }
                     }
                 }.padding()
             }.navigationBarTitle(Text("俺的Sticker"))
-            .navigationViewStyle(StackNavigationViewStyle())
+            .navigationViewStyle(DoubleColumnNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
                 Button {
                     envSettings.isEditing.toggle()
                 } label: {
                     Image(systemName: !envSettings.isEditing ? "square.and.pencil" : "checkmark.circle")
                 }
-                
+                   
                 if !envSettings.isEditing {
                     Button {
                         withAnimation(.easeInOut(duration: 0.3)) {
@@ -191,7 +190,7 @@ struct OneCollectionEntryView : View {
 // MARK: - 😊贴纸集内容视图
 struct StickerCollectionView: View {
     var persistence: PersistenceController
-    var collection: Binding<Collections>
+    var collection: Collections
     
     @Environment(\.managedObjectContext) private var viewContext
     private var items: FetchRequest<Stickers>
@@ -205,11 +204,11 @@ struct StickerCollectionView: View {
     
     let collectionName: String!
     
-    init(persistence: PersistenceController, collection: Binding<Collections>) {
+    init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
         self.collection = collection
-        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)], predicate: NSPredicate(format: "collection=%@", self.collection.wrappedValue))
-        collectionName = collection.wrappedValue == persistence.defaultCollection ? "我喜欢" : (collection.wrappedValue.name ?? "已删除")
+        self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)], predicate: NSPredicate(format: "collection=%@", self.collection))
+        collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
     }
     
     // MARK: 🏷️一个表情
@@ -219,14 +218,14 @@ struct StickerCollectionView: View {
                 Image(uiImage: stickerManager.get(sticker: item))
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .frame(width: 96, height: 96, alignment: .center)
-                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .frame(width: 76, height: 76, alignment: .center)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             }.padding(2)
-            .background(Color("AccentColor").opacity(0.6))
-            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .background(Color("AccentColor").opacity(0.3))
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
             .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
             Text("\(item.name ?? "已删除")")
-                .font(.body)
+                .font(.footnote)
                 .lineLimit(1)
                 .minimumScaleFactor(0.3)
         }.padding(10)
@@ -252,7 +251,7 @@ struct StickerCollectionView: View {
                         DispatchQueue.main.async {
                             for img in pickedImages {
                                 
-                                let sticker = persistence.addSticker(with: "贴贴", in: collection.wrappedValue)
+                                let sticker = persistence.addSticker(with: "贴贴", in: collection)
                                 let stauts = stickerManager.save(image: img, named: sticker)
                                 if stauts {
                                     sticker.hasSaved = true
@@ -280,10 +279,93 @@ struct StickerCollectionView: View {
         }
     }
     
+    // MARK: - 💾当前集合关于页面
+    fileprivate func CurrentInfomationView() -> some View {
+        let image = stickerManager.get(profile: collection, targetSize: 600)
+        return
+            NavigationView{
+                Form{
+                    Section(
+                        header:
+                            HStack(alignment: .center){
+                                VStack{
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(maxWidth: 300)
+                                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                                }
+                                .padding()
+                                .background(Color.white)
+                                .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
+                                .padding(2)
+                                .background(Color("AccentColor"))
+                                .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
+                                .padding([.bottom], 30)
+                            }.frame(maxWidth: .infinity)
+                    ){
+                        List{
+                            if collection == persistence.defaultCollection {
+                                Label("我喜欢", systemImage: "square.grid.2x2")
+                            } else {
+                                NavigationEditor(
+                                    title: "贴贴集名字", systemImage: "square.grid.2x2",
+                                    text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
+                            }
+                            NavigationEditor(
+                                title: "贴贴集作者", systemImage: "person.circle",
+                                text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
+                            NavigationEditor(
+                                title: "贴贴集描述", systemImage: "doc.plaintext",
+                                text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }),
+                                longTextMode: true)
+                        }
+                    }
+                    
+                    Section {
+                        Label("\(image.size.width, specifier: "%.1f") x \(image.size.height, specifier: "%.1f")", systemImage: "aspectratio")
+                        Label("\(collection.stickerSet?.count ?? 0)", systemImage: "number")
+                        Label("\(collection.createDate ?? Date(), formatter: itemFormatter)", systemImage: "calendar")
+                    }
+                    
+                    Section{
+                        if collection == persistence.defaultCollection && items.wrappedValue.count != 0 {
+                            Button(action: {
+                                items.wrappedValue.forEach { sticker in
+                                    _ = stickerManager.delete(sticker: sticker)
+                                    persistence.removeSticker(of: sticker)
+                                    print(sticker)
+                                }
+                                isCollectionInfoViewPresented = false
+                            }, label: {
+                                Label("清空「我喜欢」", systemImage: "trash.circle")
+                                    .foregroundColor(.red)
+                            })
+                        } else if collection != persistence.defaultCollection {
+                            Button(action: {
+                                _ = stickerManager.delete(collection: collection)
+                                persistence.removeCollection(of: collection)
+                                isCollectionInfoViewPresented = false
+                            }, label: {
+                                Label("删掉我呗", systemImage: "trash.circle")
+                                    .foregroundColor(.red)
+                            })
+                        }
+                    }
+                }
+                .navigationBarTitle(self.collectionName)
+                .navigationBarItems(trailing: Button(action: {
+                    isCollectionInfoViewPresented = false
+                }, label: {
+                    Text("好")
+                }))
+            }
+    }
+    
     var body: some View {
         ZStack {
             ScrollView(.vertical){
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 100), alignment: .top)], spacing: 20) {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 80), alignment: .top)], spacing: 10) {
                     Button(action: {
                         isImagePickerViewPresented = true
                     }, label: {
@@ -293,9 +375,9 @@ struct StickerCollectionView: View {
                                 .padding()
                                 .frame(width: 60, height: 60, alignment: .center)
                                 .background(Color.white)
-                                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                                .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                                 .shadow(color: Color("ShadowColor").opacity(0.3), radius: 6, x: 0, y: 5)
-                        }.padding(30)
+                        }.padding(20)
                     })
                     
                     ForEach(items.wrappedValue){ item in
@@ -304,8 +386,23 @@ struct StickerCollectionView: View {
                             label: {
                                 OneStickerShowView(item)
                             }
-                        )
-                    }
+                        ).contextMenu(ContextMenu{
+                            Text("\(item.name ?? "")")
+                            Divider()
+                            Button {
+                                item.order = 0
+                                persistence.reorder(for: collection)
+                            } label: {
+                                Text("移到前面去！")
+                            }
+                            Divider()
+                            Button {
+                                deleteSticker(sticker: item)
+                            } label: {
+                                Text("删除「\(item.name ?? "")」").foregroundColor(.red)
+                            }
+                        })
+                    }.animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 1))
                 }.padding()
                 .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
@@ -323,9 +420,7 @@ struct StickerCollectionView: View {
             .sheet(isPresented: $isCollectionInfoViewPresented, onDismiss: {
                 persistence.save()
             }) {
-                CurrentInfomationView(persistence: persistence, items: items,
-                                      collection: Binding(get: { collection.wrappedValue }, set: {_,_ in }),
-                                      isCollectionInfoViewPresented: $isCollectionInfoViewPresented)
+                CurrentInfomationView()
             }
             
             if isAnimating {
@@ -333,97 +428,10 @@ struct StickerCollectionView: View {
             }
         }
     }
-}
-
-
-// MARK: - 💾当前集合关于页面
-struct CurrentInfomationView: View {
-    var persistence: PersistenceController
-    var items: FetchRequest<Stickers>
-    @Binding var collection: Collections
     
-    @Binding var isCollectionInfoViewPresented: Bool
-    
-    var body: some View{
-        let collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
-        let image = stickerManager.get(profile: collection, targetSize: 600)
-        NavigationView{
-            Form{
-                Section(
-                    header:
-                        HStack(alignment: .center){
-                            VStack{
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(maxWidth: 300)
-                                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                            }
-                            .padding()
-                            .background(Color.white)
-                            .clipShape(RoundedRectangle(cornerRadius: 46, style: .continuous))
-                            .padding(2)
-                            .background(Color("AccentColor"))
-                            .clipShape(RoundedRectangle(cornerRadius: 48, style: .continuous))
-                            .padding([.bottom], 30)
-                        }.frame(maxWidth: .infinity)
-                ){
-                    List{
-                        if collection == persistence.defaultCollection {
-                            Label("我喜欢", systemImage: "square.grid.2x2")
-                        } else {
-                            NavigationEditor(
-                                title: "贴贴集名字", systemImage: "square.grid.2x2",
-                                text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
-                        }
-                        NavigationEditor(
-                            title: "贴贴集作者", systemImage: "person.circle",
-                            text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
-                        NavigationEditor(
-                            title: "贴贴集描述", systemImage: "doc.plaintext",
-                            text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }),
-                            longTextMode: true)
-                    }
-                }
-                
-                Section {
-                    Label("\(image.size.width, specifier: "%.1f") x \(image.size.height, specifier: "%.1f")", systemImage: "aspectratio")
-                    Label("\(collection.stickerSet?.count ?? 0)", systemImage: "number")
-                    Label("\(collection.createDate ?? Date(), formatter: itemFormatter)", systemImage: "calendar")
-                }
-                
-                Section{
-                    if collection == persistence.defaultCollection && items.wrappedValue.count != 0 {
-                        Button(action: {
-                            items.wrappedValue.forEach { sticker in
-                                _ = stickerManager.delete(sticker: sticker)
-                                persistence.removeSticker(of: sticker)
-                                print(sticker)
-                            }
-                            isCollectionInfoViewPresented = false
-                        }, label: {
-                            Label("清空「我喜欢」", systemImage: "trash.circle")
-                                .foregroundColor(.red)
-                        })
-                    } else if collection != persistence.defaultCollection {
-                        Button(action: {
-                            _ = stickerManager.delete(collection: collection)
-                            persistence.removeCollection(of: collection)
-                            isCollectionInfoViewPresented = false
-                        }, label: {
-                            Label("删掉我呗", systemImage: "trash.circle")
-                                .foregroundColor(.red)
-                        })
-                    }
-                }
-            }
-            .navigationBarTitle(collectionName)
-            .navigationBarItems(trailing: Button(action: {
-                isCollectionInfoViewPresented = false
-            }, label: {
-                Text("好")
-            }))
-        }
+    func deleteSticker(sticker: Stickers) {
+        _ = stickerManager.delete(sticker: sticker)
+        persistence.removeSticker(of: sticker)
     }
 }
 
