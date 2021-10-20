@@ -362,6 +362,7 @@ struct StickerCollectionView: View {
             }
     }
     
+    //MARK: 😊主要在这显示（Stickers）
     var body: some View {
         ZStack {
             ScrollView(.vertical){
@@ -378,7 +379,23 @@ struct StickerCollectionView: View {
                                 .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
                                 .shadow(color: Color("ShadowColor").opacity(0.3), radius: 6, x: 0, y: 5)
                         }.padding(20)
-                    })
+                    }).overlay(
+                        HStack{
+                            Image(systemName: "hand.tap.fill")
+                                .foregroundColor(Color("AccentColor"))
+                                .rotationEffect(Angle(degrees: -30)).imageScale(.large)
+                            Text("点我添加自己喜欢的Sticker吧！😆")
+                                .minimumScaleFactor(0.3)
+                                .multilineTextAlignment(.center)
+                                .frame(width: 160, height: 40, alignment: .center)
+                                .padding(10)
+                                .background(Color("ItemBackgroundColor"))
+                                .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+                        }
+                        .rotationEffect(Angle(degrees: 30), anchor: UnitPoint(x: 0, y: 0))
+                        .offset(x: 132, y: 20)
+                        .opacity(items.wrappedValue.count == 0 ? 1 : 0)
+                    )
                     
                     ForEach(items.wrappedValue){ item in
                         NavigationLink(
