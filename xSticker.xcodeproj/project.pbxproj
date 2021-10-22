@@ -27,7 +27,6 @@
 		5E474212271856FB001E0E11 /* CloudKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5E474210271848DD001E0E11 /* CloudKit.framework */; };
 		5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
 		5E8686EB2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
-		5E8686EC2719764100A65DF4 /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
 		5E8686F22719E5EA00A65DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
 		5E8686F32719E5EA00A65DF4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
 		5E8686F9271A052700A65DF4 /* ImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F7271A052700A65DF4 /* ImagePickerView.swift */; };
@@ -36,12 +35,23 @@
 		5E8686FC271A052700A65DF4 /* UIImagePickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686F8271A052700A65DF4 /* UIImagePickerView.swift */; };
 		5EB10BA4271EDB8D0096C777 /* Defs.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB10BA3271EDB8D0096C777 /* Defs.swift */; };
 		5EB9225A271AC10200A2CF7B /* AuxTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB92259271AC10200A2CF7B /* AuxTool.swift */; };
-		5EB9225B271AC10200A2CF7B /* AuxTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB92259271AC10200A2CF7B /* AuxTool.swift */; };
 		5EB9227D271C060E00A2CF7B /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
 		5EB9227E271C060E00A2CF7B /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
 		5EB9228E271D2BD800A2CF7B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EB92291271D2BD800A2CF7B /* Localizable.strings */; };
 		5EB9228F271D2BD800A2CF7B /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EB92291271D2BD800A2CF7B /* Localizable.strings */; };
-		5EB92293271D883000A2CF7B /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
+		5EF7784F2722874A00689E5F /* xStickerBoard.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 5EF778482722874A00689E5F /* xStickerBoard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		5EF7785A27228DE000689E5F /* AuxTool.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EB92259271AC10200A2CF7B /* AuxTool.swift */; };
+		5EF7785B27228DE300689E5F /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
+		5EF7785C27228DEB00689E5F /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
+		5EF7785D27228F5000689E5F /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7784A2722874A00689E5F /* KeyboardViewController.swift */; };
+		5EF7785E27228F5700689E5F /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7784A2722874A00689E5F /* KeyboardViewController.swift */; };
+		5EF7786027228F6900689E5F /* KeyboardViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7784A2722874A00689E5F /* KeyboardViewController.swift */; };
+		5EF7786127228F7400689E5F /* CustomStickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E474206271825AF001E0E11 /* CustomStickerView.swift */; };
+		5EF7786227228F7700689E5F /* MessagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741F7271824CE001E0E11 /* MessagesViewController.swift */; };
+		5EF7786327228F7900689E5F /* Persistence+Operate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686E52718A51C00A65DF4 /* Persistence+Operate.swift */; };
+		5EF7786427228F7C00689E5F /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E327181B25001E0E11 /* Persistence.swift */; };
+		5EF7786527228F8100689E5F /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
+		5EF7786627228FA900689E5F /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -52,6 +62,13 @@
 			remoteGlobalIDString = 5E4741F1271824CE001E0E11;
 			remoteInfo = iMsgExtPart;
 		};
+		5EF7784D2722874A00689E5F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 5E4741CF27181B24001E0E11 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 5EF778472722874A00689E5F;
+			remoteInfo = xStickerBoard;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -61,6 +78,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 13;
 			files = (
+				5EF7784F2722874A00689E5F /* xStickerBoard.appex in Embed App Extensions */,
 				5E474201271824D0001E0E11 /* iMsgExtPart.appex in Embed App Extensions */,
 			);
 			name = "Embed App Extensions";
@@ -97,6 +115,10 @@
 		5EB9227C271C060E00A2CF7B /* tempLogo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = tempLogo.png; sourceTree = "<group>"; };
 		5EB92290271D2BD800A2CF7B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5EB92292271D2BE700A2CF7B /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Localizable.strings"; sourceTree = "<group>"; };
+		5EF778482722874A00689E5F /* xStickerBoard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = xStickerBoard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		5EF7784A2722874A00689E5F /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
+		5EF7784C2722874A00689E5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		5EF778532722875A00689E5F /* xStickerBoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xStickerBoard.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -117,6 +139,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5EF778452722874A00689E5F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -127,6 +156,7 @@
 				5E8686ED2719764B00A65DF4 /* Shared */,
 				5E4741D927181B24001E0E11 /* xSticker */,
 				5E4741F6271824CE001E0E11 /* iMsgExtPart */,
+				5EF778492722874A00689E5F /* xStickerBoard */,
 				5E4741F3271824CE001E0E11 /* Frameworks */,
 				5E4741D827181B24001E0E11 /* Products */,
 			);
@@ -137,6 +167,7 @@
 			children = (
 				5E4741D727181B24001E0E11 /* xSticker.app */,
 				5E4741F2271824CE001E0E11 /* iMsgExtPart.appex */,
+				5EF778482722874A00689E5F /* xStickerBoard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -217,6 +248,16 @@
 			path = ImagePickerView;
 			sourceTree = "<group>";
 		};
+		5EF778492722874A00689E5F /* xStickerBoard */ = {
+			isa = PBXGroup;
+			children = (
+				5EF778532722875A00689E5F /* xStickerBoard.entitlements */,
+				5EF7784A2722874A00689E5F /* KeyboardViewController.swift */,
+				5EF7784C2722874A00689E5F /* Info.plist */,
+			);
+			path = xStickerBoard;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -233,6 +274,7 @@
 			);
 			dependencies = (
 				5E474200271824D0001E0E11 /* PBXTargetDependency */,
+				5EF7784E2722874A00689E5F /* PBXTargetDependency */,
 			);
 			name = xSticker;
 			packageProductDependencies = (
@@ -258,6 +300,23 @@
 			productReference = 5E4741F2271824CE001E0E11 /* iMsgExtPart.appex */;
 			productType = "com.apple.product-type.app-extension.messages";
 		};
+		5EF778472722874A00689E5F /* xStickerBoard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 5EF778522722874A00689E5F /* Build configuration list for PBXNativeTarget "xStickerBoard" */;
+			buildPhases = (
+				5EF778442722874A00689E5F /* Sources */,
+				5EF778452722874A00689E5F /* Frameworks */,
+				5EF778462722874A00689E5F /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = xStickerBoard;
+			productName = xStickerBoard;
+			productReference = 5EF778482722874A00689E5F /* xStickerBoard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -274,6 +333,9 @@
 						CreatedOnToolsVersion = 12.5.1;
 					};
 					5E4741F1271824CE001E0E11 = {
+						CreatedOnToolsVersion = 12.5.1;
+					};
+					5EF778472722874A00689E5F = {
 						CreatedOnToolsVersion = 12.5.1;
 					};
 				};
@@ -296,6 +358,7 @@
 			targets = (
 				5E4741D627181B24001E0E11 /* xSticker */,
 				5E4741F1271824CE001E0E11 /* iMsgExtPart */,
+				5EF778472722874A00689E5F /* xStickerBoard */,
 			);
 		};
 /* End PBXProject section */
@@ -325,6 +388,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		5EF778462722874A00689E5F /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -340,6 +410,7 @@
 				5EB9225A271AC10200A2CF7B /* AuxTool.swift in Sources */,
 				5E47420B27183878001E0E11 /* CustomStickerView.swift in Sources */,
 				5E8686F9271A052700A65DF4 /* ImagePickerView.swift in Sources */,
+				5EF7786027228F6900689E5F /* KeyboardViewController.swift in Sources */,
 				5E4741E727181B25001E0E11 /* xSticker.xcdatamodeld in Sources */,
 				5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */,
 				5E4741DB27181B24001E0E11 /* xStickerApp.swift in Sources */,
@@ -351,15 +422,30 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5EB92293271D883000A2CF7B /* Persistence+Operate.swift in Sources */,
+				5EF7785C27228DEB00689E5F /* Persistence+Operate.swift in Sources */,
+				5EF7785E27228F5700689E5F /* KeyboardViewController.swift in Sources */,
 				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
 				5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */,
 				5E8686FC271A052700A65DF4 /* UIImagePickerView.swift in Sources */,
-				5EB9225B271AC10200A2CF7B /* AuxTool.swift in Sources */,
-				5E8686EC2719764100A65DF4 /* StickerManager.swift in Sources */,
+				5EF7785A27228DE000689E5F /* AuxTool.swift in Sources */,
 				5E8686FA271A052700A65DF4 /* ImagePickerView.swift in Sources */,
 				5E474208271825AF001E0E11 /* CustomStickerView.swift in Sources */,
+				5EF7785B27228DE300689E5F /* StickerManager.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		5EF778442722874A00689E5F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5EF7786327228F7900689E5F /* Persistence+Operate.swift in Sources */,
+				5EF7786227228F7700689E5F /* MessagesViewController.swift in Sources */,
+				5EF7785D27228F5000689E5F /* KeyboardViewController.swift in Sources */,
+				5EF7786527228F8100689E5F /* StickerManager.swift in Sources */,
+				5EF7786127228F7400689E5F /* CustomStickerView.swift in Sources */,
+				5EF7786627228FA900689E5F /* xSticker.xcdatamodeld in Sources */,
+				5EF7786427228F7C00689E5F /* Persistence.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +456,11 @@
 			isa = PBXTargetDependency;
 			target = 5E4741F1271824CE001E0E11 /* iMsgExtPart */;
 			targetProxy = 5E4741FF271824D0001E0E11 /* PBXContainerItemProxy */;
+		};
+		5EF7784E2722874A00689E5F /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 5EF778472722874A00689E5F /* xStickerBoard */;
+			targetProxy = 5EF7784D2722874A00689E5F /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -610,6 +701,46 @@
 			};
 			name = Release;
 		};
+		5EF778502722874A00689E5F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 25LKBCVZX2;
+				INFOPLIST_FILE = xStickerBoard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xclz-studio.xSticker.xStickerBoard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		5EF778512722874A00689E5F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 25LKBCVZX2;
+				INFOPLIST_FILE = xStickerBoard/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "xclz-studio.xSticker.xStickerBoard";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -636,6 +767,15 @@
 			buildConfigurations = (
 				5E474203271824D0001E0E11 /* Debug */,
 				5E474204271824D0001E0E11 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		5EF778522722874A00689E5F /* Build configuration list for PBXNativeTarget "xStickerBoard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				5EF778502722874A00689E5F /* Debug */,
+				5EF778512722874A00689E5F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
