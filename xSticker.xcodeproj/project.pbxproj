@@ -52,6 +52,10 @@
 		5EF7786427228F7C00689E5F /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E327181B25001E0E11 /* Persistence.swift */; };
 		5EF7786527228F8100689E5F /* StickerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5E8686EA2719764100A65DF4 /* StickerManager.swift */; };
 		5EF7786627228FA900689E5F /* xSticker.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 5E4741E527181B25001E0E11 /* xSticker.xcdatamodeld */; };
+		5EF77868272292A800689E5F /* CustomKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77867272292A800689E5F /* CustomKeyboardView.swift */; };
+		5EF778692722948E00689E5F /* CustomKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77867272292A800689E5F /* CustomKeyboardView.swift */; };
+		5EF7786A2722948E00689E5F /* CustomKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77867272292A800689E5F /* CustomKeyboardView.swift */; };
+		5EF7786B2722988100689E5F /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -119,6 +123,7 @@
 		5EF7784A2722874A00689E5F /* KeyboardViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardViewController.swift; sourceTree = "<group>"; };
 		5EF7784C2722874A00689E5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EF778532722875A00689E5F /* xStickerBoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xStickerBoard.entitlements; sourceTree = "<group>"; };
+		5EF77867272292A800689E5F /* CustomKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboardView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +258,7 @@
 			children = (
 				5EF778532722875A00689E5F /* xStickerBoard.entitlements */,
 				5EF7784A2722874A00689E5F /* KeyboardViewController.swift */,
+				5EF77867272292A800689E5F /* CustomKeyboardView.swift */,
 				5EF7784C2722874A00689E5F /* Info.plist */,
 			);
 			path = xStickerBoard;
@@ -392,6 +398,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EF7786B2722988100689E5F /* tempLogo.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -414,6 +421,7 @@
 				5E4741E727181B25001E0E11 /* xSticker.xcdatamodeld in Sources */,
 				5E8686E62718A51C00A65DF4 /* Persistence+Operate.swift in Sources */,
 				5E4741DB27181B24001E0E11 /* xStickerApp.swift in Sources */,
+				5EF778692722948E00689E5F /* CustomKeyboardView.swift in Sources */,
 				5E8686EB2719764100A65DF4 /* StickerManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,6 +432,7 @@
 			files = (
 				5EF7785C27228DEB00689E5F /* Persistence+Operate.swift in Sources */,
 				5EF7785E27228F5700689E5F /* KeyboardViewController.swift in Sources */,
+				5EF7786A2722948E00689E5F /* CustomKeyboardView.swift in Sources */,
 				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
 				5E47420D2718392A001E0E11 /* xSticker.xcdatamodeld in Sources */,
@@ -441,6 +450,7 @@
 			files = (
 				5EF7786327228F7900689E5F /* Persistence+Operate.swift in Sources */,
 				5EF7786227228F7700689E5F /* MessagesViewController.swift in Sources */,
+				5EF77868272292A800689E5F /* CustomKeyboardView.swift in Sources */,
 				5EF7785D27228F5000689E5F /* KeyboardViewController.swift in Sources */,
 				5EF7786527228F8100689E5F /* StickerManager.swift in Sources */,
 				5EF7786127228F7400689E5F /* CustomStickerView.swift in Sources */,

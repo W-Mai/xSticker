@@ -7,11 +7,10 @@
 
 import UIKit
 import CoreData
+import SwiftUI
+import UniformTypeIdentifiers
 
 class KeyboardViewController: UIInputViewController {
-
-    @IBOutlet var nextKeyboardButton: UIButton!
-    
     override func updateViewConstraints() {
         super.updateViewConstraints()
         
@@ -19,9 +18,25 @@ class KeyboardViewController: UIInputViewController {
     }
     
     let persistence = PersistenceController.shared
+    var localSettingManager: LocalSettingsManager {
+        return LocalSettingsManager(with: persistence)
+    }
+    
+    @IBOutlet var nextKeyboardButton: UIButton!
+    var collectionView: UICollectionView!
+    var collectionViewDelegateAndDataSource: MyCollectionDelegate!
+    var hintLabel: UILabel!
+    
+    var currentSelected: Collections!
+    var currentStickers: [Stickers]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        self.inputView?.allowsSelfSizing = true
+        
+        
+        self.view.heightAnchor.constraint(equalToConstant: 400).isActive = true
         
         // Perform custom UI setup here
         self.nextKeyboardButton = UIButton(type: .system)
@@ -36,7 +51,7 @@ class KeyboardViewController: UIInputViewController {
         
         self.nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
         self.nextKeyboardButton.bottomAnchor.constraint(equalTo: self.view.bottomAnchor).isActive = true
-        self.nextKeyboardButton.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        self.nextKeyboardButton.widthAnchor.constraint(equalToConstant: 40).isActive = true
         self.nextKeyboardButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         let context = persistence.container.viewContext
@@ -44,6 +59,25 @@ class KeyboardViewController: UIInputViewController {
         let count = (try? context.count(for: req)) ?? 0
         
         self.nextKeyboardButton.setTitle("\(count)", for: [])
+        
+        self.initView()
+        
+        
+        let myView = UIHostingController(
+            rootView: HStack{
+                Text("ok i am fine").onDrag({ NSItemProvider(object: NSString("fuck up")) })
+                
+            })
+        
+        self.addChild(myView)
+        self.view.addSubview(myView.view)
+        
+        myView.view.translatesAutoresizingMaskIntoConstraints = false
+        
+        myView.view.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        myView.view.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        myView.view.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        myView.view.heightAnchor.constraint(equalToConstant: 60).isActive = true
     }
     
     override func viewWillLayoutSubviews() {
