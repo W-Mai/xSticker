@@ -41,14 +41,16 @@ struct KeyboardStickerManagerContentView: View {
     }
     
     var body: some View{
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], alignment: .center, spacing: nil, pinnedViews: [], content: {
-            Text(collection.name ?? "collection")
-            Text("\(stickers.wrappedValue.count)")
-            ForEach(stickers.wrappedValue){ sticker in
-                Text(sticker.name ?? "name")
-            }
-        })
-        
+        ScrollView(.vertical){
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], alignment: .center, spacing: nil, pinnedViews: [], content: {
+                ForEach(stickers.wrappedValue){ sticker in
+                    Image(uiImage: stickerManager.get(sticker: sticker))
+                        .resizable()
+                        .frame(width: 60, height: 60, alignment: .center)
+                        .onDrag({ NSItemProvider(object: stickerManager.get(sticker: sticker)) })
+                }
+            })
+        }
     }
 }
 
