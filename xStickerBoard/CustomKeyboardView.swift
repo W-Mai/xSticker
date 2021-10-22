@@ -79,7 +79,6 @@ extension KeyboardViewController {
             rootView: HStack{
                 VStack{
                     KeyboardStickerManagerView(collection: self.currentSelected, persistence: persistence)
-                    Text("ok i am fine").onDrag({ NSItemProvider(object: NSString(string: self.currentSelected.v.name ?? "null")) })
                 }
             }.environment(\.managedObjectContext, persistence.container.viewContext))
         keyboardStickerManagerView = host.view
@@ -134,8 +133,11 @@ extension KeyboardViewController {
 
 //        cons1 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
 //        cons2 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80)
-
-        collectionView.leftAnchor.constraint(equalTo: self.nextKeyboardButton.rightAnchor, constant: -10).isActive = true
+        
+        csCollection.append(collectionView.leftAnchor.constraint(equalTo: self.nextKeyboardButton.rightAnchor, constant: -10))
+        csCollection.append(collectionView.leftAnchor.constraint(equalTo: self.view.leftAnchor))
+        
+//        collectionView.leftAnchor.constraint(equalTo: self.nextKeyboardButton.rightAnchor, constant: -10).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.topAnchor.constraint(equalTo: keyboardStickerManagerView.bottomAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true

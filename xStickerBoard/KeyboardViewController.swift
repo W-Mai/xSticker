@@ -39,11 +39,16 @@ class KeyboardViewController: UIInputViewController {
         self.initView()
     }
     
+    var csCollection = [NSLayoutConstraint]()
+    
     override func viewWillLayoutSubviews() {
         self.nextKeyboardButton.isHidden = !self.needsInputModeSwitchKey
-        super.viewWillLayoutSubviews()
+        csCollection[self.needsInputModeSwitchKey ? 0 : 1].isActive = true
+        csCollection[self.needsInputModeSwitchKey ? 1 : 0].isActive = false
         
         nextKeyboardButton.layer.shadowColor = UIColor(named: "ShallowShadowColor")?.cgColor
+        
+        super.viewWillLayoutSubviews()
     }
     
     override func textWillChange(_ textInput: UITextInput?) {
