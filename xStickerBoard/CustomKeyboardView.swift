@@ -78,10 +78,10 @@ extension KeyboardViewController {
         let host = UIHostingController(
             rootView: HStack{
                 VStack{
-                    KeyboardStickerManagerView(collection: self.currentSelected)
+                    KeyboardStickerManagerView(collection: self.currentSelected, persistence: persistence)
                     Text("ok i am fine").onDrag({ NSItemProvider(object: NSString(string: self.currentSelected.v.name ?? "null")) })
                 }
-            })
+            }.environment(\.managedObjectContext, persistence.container.viewContext))
         keyboardStickerManagerView = host.view
         
         self.addChild(host)
@@ -157,25 +157,6 @@ extension KeyboardViewController {
         
         hintLabel.layer.opacity = currentStickers.count == 0 ? 1 : 0
         
-//        stickerBrowser.stickerBrowserView.reloadData()
-        
         localSettingManager.lastUsedCollection.wrappedValue = currentSelected.v.id?.uuidString
     }
-    
-    // MARK: - 数据源
-    
-//    func numberOfStickers(in stickerBrowserView: MSStickerBrowserView) -> Int {
-//        return currentStickers?.count ?? 0
-//    }
-//
-//    func stickerBrowserView(_ stickerBrowserView: MSStickerBrowserView, stickerAt index: Int) -> MSSticker {
-//        if currentStickers == nil {
-//            return try! MSSticker(contentsOfFileURL: StickerManager.defaultImagePath, localizedDescription: "拉普兰德和德克萨斯")
-//        }
-//        let sticker = currentStickers[index]
-//        let stickerPath = stickerManager.get(path: sticker) ?? StickerManager.defaultImagePath
-//
-//        return try! MSSticker(contentsOfFileURL: stickerPath, localizedDescription: sticker.name!)
-//    }
-    
 }

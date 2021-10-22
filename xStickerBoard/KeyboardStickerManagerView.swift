@@ -6,19 +6,49 @@
 //
 
 import SwiftUI
+import CoreData
 
 class CollectionModel: ObservableObject {
     @Published var v: Collections!
 }
 
 struct KeyboardStickerManagerView: View {
+    var persistence: PersistenceController
     @ObservedObject var collection: CollectionModel
     
+    
+    init(collection: CollectionModel, persistence: PersistenceController) {
+        self.persistence = persistence
+        self.collection = collection
+    }
+    
     var body: some View {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], alignment: .center, spacing: nil, pinnedViews: [], content: {
-            Text(collection.v.name ?? "name")
-            Text(collection.v.author ?? "author")
+        KeyboardStickerManagerContentView(collection: collection.v, persistence: persistence)
+    }
+}
+
+struct KeyboardStickerManagerContentView: View {
+    var persistence: PersistenceController
+    var collection: Collections
+    
+    var stickers: FetchRequest<Stickers>
+    
+    init(collection: Collections, persistence: PersistenceController) {
+        self.collection = collection
+        self.persistence = persistence
+        
+        self.stickers = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)], predicate: NSPredicate(format: "collection=%@", self.collection))
+    }
+    
+    var body: some View{
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], alignment: .center, spacing: nil, pinnedViews: [], content: {
+            Text(collection.name ?? "collection")
+            Text("\(stickers.wrappedValue.count)")
+            ForEach(stickers.wrappedValue){ sticker in
+                Text(sticker.name ?? "name")
+            }
         })
+        
     }
 }
 
@@ -37,6 +67,6 @@ struct KeyboardStickerManagerView_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        KeyboardStickerManagerView(collection: collectionModel)
+        KeyboardStickerManagerView(collection: collectionModel, persistence: persistence)
     }
 }
