@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import UniformTypeIdentifiers
 
 class CollectionModel: ObservableObject {
     @Published var v: Collections!
