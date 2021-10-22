@@ -8,12 +8,14 @@
 import Foundation
 import UIKit
 import CoreData
+import SwiftUI
 
 extension KeyboardViewController {
     
     func initView() -> Void {
         view.backgroundColor = UIColor(named: "BGColor")
         
+        createKeyboardChangeButton()
         createHintLabel()
         createStickerBrowser()
         createColletionSelector()
@@ -34,6 +36,26 @@ extension KeyboardViewController {
         return first
     }
     
+    func createKeyboardChangeButton(){
+        // Perform custom UI setup here
+        nextKeyboardButton = UIButton(type: .system)
+        
+        nextKeyboardButton.setImage(UIImage(systemName: "globe"), for: .normal)
+//        nextKeyboardButton.setTitle(NSLocalizedString("", comment: "Title for 'Next Keyboard' button"), for: [])
+        nextKeyboardButton.tintColor = UIColor(named: "AccentColor")
+        nextKeyboardButton.backgroundColor = UIColor(named: "BGColor")
+        
+        nextKeyboardButton.layer.cornerRadius = 10
+        nextKeyboardButton.layer.shadowColor = UIColor(named: "ShallowShadowColor")?.cgColor
+        nextKeyboardButton.layer.shadowRadius = 5
+        nextKeyboardButton.layer.shadowOpacity = 1
+        nextKeyboardButton.layer.shadowOffset = CGSize(width: 1, height: 2)
+        
+        nextKeyboardButton.addTarget(self, action: #selector(handleInputModeList(from:with:)), for: .allTouchEvents)
+        
+        view.addSubview(self.nextKeyboardButton)
+    }
+    
     func createHintLabel() {
         hintLabel = UILabel()
         
@@ -51,21 +73,27 @@ extension KeyboardViewController {
     }
     
     func createStickerBrowser() {
-        currentSelected = loadCurrentCollection()
+        currentSelected.v = loadCurrentCollection()
         
-//        stickerBrowser = MSStickerBrowserViewController()
-//        addChild(stickerBrowser)
-//        view.addSubview(stickerBrowser.view)
-//
-//        stickerBrowser.stickerBrowserView.dataSource = self
-//        stickerBrowser.stickerBrowserView.backgroundColor = UIColor(named: "BGColor")
+        let host = UIHostingController(
+            rootView: HStack{
+                VStack{
+                    KeyboardStickerManagerView(collection: self.currentSelected)
+                    Text("ok i am fine").onDrag({ NSItemProvider(object: NSString(string: self.currentSelected.v.name ?? "null")) })
+                }
+            })
+        keyboardStickerManagerView = host.view
+        
+        self.addChild(host)
+        self.view.addSubview(keyboardStickerManagerView)
+        host.didMove(toParent: self)
     }
     
     func createColletionSelector() {
         let fllayout = UICollectionViewFlowLayout()
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: fllayout)
         
-        collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistence, defaultCollection: currentSelected, onSelected: collectionSelected(collection:))
+        collectionViewDelegateAndDataSource = MyCollectionDelegate(persistence: persistence, defaultCollection: currentSelected.v, onSelected: collectionSelected(collection:))
         collectionView.delegate = collectionViewDelegateAndDataSource
         collectionView.dataSource = collectionViewDelegateAndDataSource
         
@@ -83,38 +111,47 @@ extension KeyboardViewController {
         
         collectionView.register(MyCollectionCell.self, forCellWithReuseIdentifier: "Cell")
         view.addSubview(collectionView)
-        collectionSelected(collection: currentSelected)
+        collectionSelected(collection: currentSelected.v)
     }
     
     func BindConstraint() {
-//        stickerBrowser.view.translatesAutoresizingMaskIntoConstraints = false
+        // 设置自动转换为关闭
+        nextKeyboardButton.translatesAutoresizingMaskIntoConstraints = false
+        keyboardStickerManagerView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         hintLabel.translatesAutoresizingMaskIntoConstraints = false
 
-//        stickerBrowser.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        stickerBrowser.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        stickerBrowser.view.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-
+        //设置约束
+        nextKeyboardButton.leftAnchor.constraint(equalTo: self.view.leftAnchor, constant: 5).isActive = true
+        nextKeyboardButton.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        nextKeyboardButton.widthAnchor.constraint(equalToConstant: 35).isActive = true
+        nextKeyboardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+        keyboardStickerManagerView.topAnchor.constraint(equalTo: self.view.topAnchor).isActive = true
+        keyboardStickerManagerView.leftAnchor.constraint(equalTo: self.view.leftAnchor).isActive = true
+        keyboardStickerManagerView.rightAnchor.constraint(equalTo: self.view.rightAnchor).isActive = true
+        keyboardStickerManagerView.bottomAnchor.constraint(equalTo: self.view.bottomAnchor, constant: -60).isActive = true
 
 //        cons1 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
 //        cons2 = stickerBrowser.view.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -80)
 
-        collectionView.leftAnchor.constraint(equalTo: self.nextKeyboardButton.rightAnchor).isActive = true
+        collectionView.leftAnchor.constraint(equalTo: self.nextKeyboardButton.rightAnchor, constant: -10).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        collectionView.topAnchor.constraint(equalTo: keyboardStickerManagerView.bottomAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         hintLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         hintLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -60).isActive = true
-//        hintLabel.heightAnchor.constraint(equalToConstant: 120).isActive = true
+        
+        view.sendSubviewToBack(collectionView)
     }
     
     func collectionSelected(collection: Collections) {
-        currentSelected = collection
+        currentSelected.v = collection
         
         let context = persistence.container.viewContext
         let req: NSFetchRequest<Stickers> = Stickers.fetchRequest()
-        req.predicate = NSPredicate(format: "collection=%@", currentSelected!)
+        req.predicate = NSPredicate(format: "collection=%@", currentSelected.v!)
         req.sortDescriptors = [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)]
         currentStickers = try? context.fetch(req)
         
@@ -122,7 +159,7 @@ extension KeyboardViewController {
         
 //        stickerBrowser.stickerBrowserView.reloadData()
         
-        localSettingManager.lastUsedCollection.wrappedValue = currentSelected.id?.uuidString
+        localSettingManager.lastUsedCollection.wrappedValue = currentSelected.v.id?.uuidString
     }
     
     // MARK: - 数据源

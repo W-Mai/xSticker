@@ -56,6 +56,11 @@
 		5EF778692722948E00689E5F /* CustomKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77867272292A800689E5F /* CustomKeyboardView.swift */; };
 		5EF7786A2722948E00689E5F /* CustomKeyboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF77867272292A800689E5F /* CustomKeyboardView.swift */; };
 		5EF7786B2722988100689E5F /* tempLogo.png in Resources */ = {isa = PBXBuildFile; fileRef = 5EB9227C271C060E00A2CF7B /* tempLogo.png */; };
+		5EF7786D2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */; };
+		5EF7786E2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */; };
+		5EF7786F2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */; };
+		5EF778702722C84200689E5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
+		5EF778732722C89700689E5F /* Assests.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EF778722722C89700689E5F /* Assests.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,6 +129,8 @@
 		5EF7784C2722874A00689E5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5EF778532722875A00689E5F /* xStickerBoard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = xStickerBoard.entitlements; sourceTree = "<group>"; };
 		5EF77867272292A800689E5F /* CustomKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboardView.swift; sourceTree = "<group>"; };
+		5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardStickerManagerView.swift; sourceTree = "<group>"; };
+		5EF778722722C89700689E5F /* Assests.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assests.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,7 +266,9 @@
 				5EF778532722875A00689E5F /* xStickerBoard.entitlements */,
 				5EF7784A2722874A00689E5F /* KeyboardViewController.swift */,
 				5EF77867272292A800689E5F /* CustomKeyboardView.swift */,
+				5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */,
 				5EF7784C2722874A00689E5F /* Info.plist */,
+				5EF778722722C89700689E5F /* Assests.xcassets */,
 			);
 			path = xStickerBoard;
 			sourceTree = "<group>";
@@ -398,7 +407,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5EF778702722C84200689E5F /* Assets.xcassets in Resources */,
 				5EF7786B2722988100689E5F /* tempLogo.png in Resources */,
+				5EF778732722C89700689E5F /* Assests.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +422,7 @@
 			files = (
 				5E47420A2718386F001E0E11 /* MessagesViewController.swift in Sources */,
 				5E4741E427181B25001E0E11 /* Persistence.swift in Sources */,
+				5EF7786D2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */,
 				5E8686FB271A052700A65DF4 /* UIImagePickerView.swift in Sources */,
 				5EB10BA4271EDB8D0096C777 /* Defs.swift in Sources */,
 				5E4741DD27181B24001E0E11 /* ContentView.swift in Sources */,
@@ -432,6 +444,7 @@
 			files = (
 				5EF7785C27228DEB00689E5F /* Persistence+Operate.swift in Sources */,
 				5EF7785E27228F5700689E5F /* KeyboardViewController.swift in Sources */,
+				5EF7786E2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */,
 				5EF7786A2722948E00689E5F /* CustomKeyboardView.swift in Sources */,
 				5E47420C271838F8001E0E11 /* Persistence.swift in Sources */,
 				5E4741F8271824CE001E0E11 /* MessagesViewController.swift in Sources */,
@@ -453,6 +466,7 @@
 				5EF77868272292A800689E5F /* CustomKeyboardView.swift in Sources */,
 				5EF7785D27228F5000689E5F /* KeyboardViewController.swift in Sources */,
 				5EF7786527228F8100689E5F /* StickerManager.swift in Sources */,
+				5EF7786F2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */,
 				5EF7786127228F7400689E5F /* CustomStickerView.swift in Sources */,
 				5EF7786627228FA900689E5F /* xSticker.xcdatamodeld in Sources */,
 				5EF7786427228F7C00689E5F /* Persistence.swift in Sources */,
@@ -621,7 +635,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -647,7 +661,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -671,7 +685,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -694,7 +708,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -716,6 +730,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -723,6 +738,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "xclz-studio.xSticker.xStickerBoard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
@@ -736,6 +752,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 2;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -743,6 +760,7 @@
 					"@executable_path/Frameworks",
 					"@executable_path/../../Frameworks",
 				);
+				MARKETING_VERSION = 1.1.1;
 				PRODUCT_BUNDLE_IDENTIFIER = "xclz-studio.xSticker.xStickerBoard";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
