@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreData
+import UniformTypeIdentifiers
 
 private let itemFormatter: DateFormatter = {
     let formatter = DateFormatter()
@@ -202,7 +203,11 @@ struct StickerCollectionView: View {
     @State var isProccesing = false
     @State var isShowingStickerDetails = false
     
+    @State var isIn = false
+    
     let collectionName: String!
+    
+    @State var currentProviderItem: NSItemProvider?
     
     init(persistence: PersistenceController, collection: Collections) {
         self.persistence = persistence
@@ -362,6 +367,8 @@ struct StickerCollectionView: View {
             }
     }
     
+    @State var showAlertTTT = false
+    @State var importedCount: Int = 0
     //MARK: 😊主要在这显示（Stickers）
     var body: some View {
         ZStack {
@@ -418,11 +425,26 @@ struct StickerCollectionView: View {
                             } label: {
                                 Text("删除「\(item.name ?? "")」").foregroundColor(.red)
                             }
-                        })
+                        }).onDrag {
+                            currentProviderItem = NSItemProvider(object: stickerManager.get(sticker: item))
+                            currentProviderItem?.registerItem(forTypeIdentifier: "xsticker-item", loadHandler: { h, c, t in })
+                            return currentProviderItem!
+                        }
                     }.animation(.spring(response: 0.3, dampingFraction: 0.6, blendDuration: 1))
                 }.padding()
                 .animation(isAnimating ? .easeInOut(duration: 0.3) : .none)
             }
+            .onDrop(of: [UTType.image], isTargeted: $isIn, perform: { providers in
+//                print(currentProviderItem, providers.first?.registeredTypeIdentifiers, isIn)
+                importedCount = importStickers(providers: providers)
+                if importedCount > 0 {
+                    showAlertTTT = true
+                }
+                return importedCount > 0
+            })
+            .alert(isPresented: $showAlertTTT, content: {
+                Alert(title: Text("一共拉进来了\(importedCount)个哦"))
+            })
             .navigationTitle(collectionName)
             .navigationBarItems(trailing: HStack {
                 Button {
@@ -449,6 +471,46 @@ struct StickerCollectionView: View {
     func deleteSticker(sticker: Stickers) {
         _ = stickerManager.delete(sticker: sticker)
         persistence.removeSticker(of: sticker)
+    }
+    
+    func importStickers(providers: [NSItemProvider]) -> Int {
+        var count = 0
+        isAnimating = true
+        for pro in providers {
+            // 防止自我导入
+            if pro.registeredTypeIdentifiers.contains("xsticker-item") {
+                continue
+            }
+            pro.loadItem(forTypeIdentifier: UTType.image.identifier, options: nil) { data, error in
+                let img: UIImage?
+                switch data {
+                case let image as Data :
+                    img = UIImage(data: image)
+                case let url as URL:
+                    print(url)
+                    let imgData = (try? Data(contentsOf: url)) ?? nil
+                    if imgData == nil {
+                        img = nil
+                    } else {
+                        img = UIImage(data: imgData!)
+                    }
+                default:
+                    img = nil
+                }
+                
+                if img == nil { return }
+                
+                let sticker = persistence.addSticker(with: "贴贴", in: collection)
+                let stauts = stickerManager.save(image: img!, named: sticker)
+                if stauts {
+                    sticker.hasSaved = true
+                    persistence.save()
+                    count += 1
+                }
+            }
+        }
+        isAnimating = false
+        return count
     }
 }
 

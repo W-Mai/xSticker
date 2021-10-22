@@ -635,7 +635,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -661,7 +661,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -730,7 +730,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -752,7 +752,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

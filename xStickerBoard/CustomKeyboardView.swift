@@ -146,6 +146,7 @@ extension KeyboardViewController {
         hintLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -60).isActive = true
         
         view.sendSubviewToBack(collectionView)
+        view.bringSubviewToFront(hintLabel)
     }
     
     func collectionSelected(collection: Collections) {
