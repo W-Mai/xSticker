@@ -730,7 +730,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -752,7 +752,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = xStickerBoard/xStickerBoard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 4;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = xStickerBoard/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

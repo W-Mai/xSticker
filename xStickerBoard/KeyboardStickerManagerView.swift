@@ -44,12 +44,12 @@ struct KeyboardStickerManagerContentView: View {
         ScrollView(.vertical){
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 60))], alignment: .center, spacing: nil, pinnedViews: [], content: {
                 ForEach(stickers.wrappedValue){ sticker in
-                    Image(uiImage: stickerManager.get(sticker: sticker))
+                    Image(uiImage: stickerManager.get(sticker: sticker, targetSize: 80))
                         .resizable()
                         .frame(width: 60, height: 60, alignment: .center)
                         .onDrag({ NSItemProvider(object: stickerManager.get(sticker: sticker)) })
                 }
-            })
+            }).padding()
         }
     }
 }
