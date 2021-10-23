@@ -18,15 +18,15 @@ AppStore Link: https://apps.apple.com/us/app/xsticker/id1590725210
 Captures of this app：
 
 <div>
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.32.37.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p1%402x.jpg" width = "300" alt="" align=center />
 
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.33.55.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p2%402x.jpg" width = "300" alt="" align=center />
 
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.33.57.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p3%402x.jpg" width = "300" alt="" align=center />
 
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.34.01.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p4%402x.jpg" width = "300" alt="" align=center />
 
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.34.06.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p5%402x.jpg" width = "300" alt="" align=center />
 
-<img src="https://github.com/W-Mai/xSticker/blob/main/images/Simulator%20Screen%20Shot%20-%20iPhone%2011%20Pro%20Max%20-%202021-10-17%20at%2016.34.22.png" width = "300" alt="" align=center />
+<img src="https://github.com/W-Mai/xSticker/blob/main/images/p6%402x.jpg" width = "300" alt="" align=center />
 </div>
