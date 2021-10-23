@@ -141,10 +141,12 @@ class LocalSettingsManager {
     var persistence: PersistenceController
     
     var lastUsedCollection: LocalSetingWrapper /// UUID
+    var lastSoftwareVersion: LocalSetingWrapper /// String
     
     init(with persistence: PersistenceController) {
         self.persistence = persistence
         
         lastUsedCollection = LocalSetingWrapper(name: "LastUsedCollection", persistence)
+        lastSoftwareVersion = LocalSetingWrapper(name: "LastSoftwareVersion", persistence)
     }
 }

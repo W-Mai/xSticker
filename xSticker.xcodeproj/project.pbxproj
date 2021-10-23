@@ -61,6 +61,7 @@
 		5EF7786F2722B72300689E5F /* KeyboardStickerManagerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */; };
 		5EF778702722C84200689E5F /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5E8686F12719E5EA00A65DF4 /* Assets.xcassets */; };
 		5EF778732722C89700689E5F /* Assests.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 5EF778722722C89700689E5F /* Assests.xcassets */; };
+		5EF7787D2723A81B00689E5F /* keyboardSettingPlay.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 5EF7787C2723A81B00689E5F /* keyboardSettingPlay.mp4 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -131,6 +132,7 @@
 		5EF77867272292A800689E5F /* CustomKeyboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomKeyboardView.swift; sourceTree = "<group>"; };
 		5EF7786C2722B72300689E5F /* KeyboardStickerManagerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeyboardStickerManagerView.swift; sourceTree = "<group>"; };
 		5EF778722722C89700689E5F /* Assests.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assests.xcassets; sourceTree = "<group>"; };
+		5EF7787C2723A81B00689E5F /* keyboardSettingPlay.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = keyboardSettingPlay.mp4; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -243,6 +245,7 @@
 		5E8686ED2719764B00A65DF4 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				5EF7787C2723A81B00689E5F /* keyboardSettingPlay.mp4 */,
 				5E8686EA2719764100A65DF4 /* StickerManager.swift */,
 				5E8686F12719E5EA00A65DF4 /* Assets.xcassets */,
 				5EB92259271AC10200A2CF7B /* AuxTool.swift */,
@@ -385,6 +388,7 @@
 			files = (
 				5EB9227D271C060E00A2CF7B /* tempLogo.png in Resources */,
 				5E4741E227181B25001E0E11 /* Preview Assets.xcassets in Resources */,
+				5EF7787D2723A81B00689E5F /* keyboardSettingPlay.mp4 in Resources */,
 				5E8686F22719E5EA00A65DF4 /* Assets.xcassets in Resources */,
 				5E4741DF27181B25001E0E11 /* Assets.xcassets in Resources */,
 				5EB9228E271D2BD800A2CF7B /* Localizable.strings in Resources */,
@@ -635,7 +639,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -661,7 +665,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = xSticker/xSticker.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 3;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_ASSET_PATHS = "\"xSticker/Preview Content\"";
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				ENABLE_PREVIEWS = YES;
@@ -685,7 +689,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -708,7 +712,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = "iMessage App Icon";
 				CODE_SIGN_ENTITLEMENTS = iMsgExtPart/iMsgExtPart.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 25LKBCVZX2;
 				INFOPLIST_FILE = iMsgExtPart/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (

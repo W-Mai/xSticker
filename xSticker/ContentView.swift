@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import AVKit
 import CoreData
 import UniformTypeIdentifiers
 
@@ -28,6 +29,7 @@ struct ContentView_Previews: PreviewProvider {
 // MARK: - 🌅主视图
 struct ContentView: View {
     var persistence: PersistenceController
+    var localSettingsManager :LocalSettingsManager!
     
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var envSettings: EnvSettings
@@ -35,8 +37,11 @@ struct ContentView: View {
     @FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Collections.order, ascending: true)])
     private var collections: FetchedResults<Collections>
     
+    @State var needShowWelcome: Bool = false
+    
     init(persistenceController: PersistenceController) {
         persistence = persistenceController
+        localSettingsManager = LocalSettingsManager(with: persistence)
     }
     
     @State var isShowingAbout = false
@@ -80,7 +85,7 @@ struct ContentView: View {
                 } label: {
                     Image(systemName: !envSettings.isEditing ? "square.and.pencil" : "checkmark.circle")
                 }
-                   
+
                 if !envSettings.isEditing {
                     Button {
                         withAnimation(.easeInOut(duration: 0.3)) {
@@ -102,12 +107,20 @@ struct ContentView: View {
             .sheet(isPresented: $isShowingAbout) {
                 VStack(spacing: 30){
                     xAbout()
-                    
+
                     Text("快快") + Text("选中").bold() + Text("、") + Text("创建").bold() + Text("、") + Text("修改").bold() + Text("自己喜欢的表情包叭!")
-                    
+
                     Spacer()
                 }.padding([.top], 100)
                 .foregroundColor(Color("AccentColor"))
+            }
+            .sheet(isPresented: $needShowWelcome) {
+                welcomePage(showing: $needShowWelcome)
+                    .onDisappear {
+                        localSettingsManager.lastSoftwareVersion.wrappedValue = getVerStr()
+                    }
+            }.onAppear {
+                needShowWelcome = localSettingsManager.lastSoftwareVersion.wrappedValue != getVerStr()
             }
             
             VStack(spacing: 30){
@@ -135,6 +148,60 @@ struct ContentView: View {
     private func deleteCollection(collection: Collections) {
         _ = stickerManager.delete(collection: collection)
         persistence.removeCollection(of: collection)
+    }
+}
+
+struct welcomePage: View {
+    @Binding var showing: Bool
+    
+    var body: some View{
+        let url = Bundle.main.url(forResource: "keyboardSettingPlay", withExtension: "mp4")!
+        let av = AVPlayer(url: url)
+        let ob = av.addBoundaryTimeObserver(forTimes: [NSValue(time: CMTime(seconds: 4, preferredTimescale: 1))], queue: .main) {
+            print("over")
+            av.seek(to: .zero)
+            av.play()
+        }
+        return VStack{
+            Text("欢迎使用👏").font(.largeTitle).padding([.top], 40)
+            Spacer()
+            Form{
+                Section{
+                    Text("+ 本次更新更新了一些更新🎆🎉").font(.title3)
+                }
+                Section{
+                    
+                    HStack{
+                        VideoPlayer(player: av).frame(width: 280, height: 300).onAppear {
+                            av.play()
+                        }.clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                    }.frame(maxWidth: .infinity)
+                    Text("本程序包含贴纸键盘扩展，点击下面的按钮打开设置，然后启动键盘选项和完全访问选项")
+                    Button(action:{
+                        guard let url = URL(string: UIApplication.openSettingsURLString) else {
+                            return
+                        }
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    }, label:{
+                        Label("打开xSticker的系统设置", systemImage: "gear")
+                    })
+                }
+                Section{
+                    Button {
+                        showing = false
+                        
+                    } label: {
+                        HStack{
+                            Text("开始使用！")
+                                .font(.title2)
+                        }.frame(maxWidth: .infinity)
+                    }
+                }
+            }
+            Spacer()
+        }.onDisappear(){
+            av.removeTimeObserver(ob)
+        }
     }
 }
 

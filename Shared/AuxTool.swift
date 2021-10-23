@@ -66,3 +66,10 @@ struct MyTextField: UIViewRepresentable {
         return Coordinator(text: $text, didFinished: didFinished)
     }
 }
+
+func getVerStr() -> String {
+    let info = Bundle.main.infoDictionary!
+    let version = "Verison \(info["CFBundleShortVersionString"]!) build \(info["CFBundleVersion"]!)"
+    
+    return version
+}
