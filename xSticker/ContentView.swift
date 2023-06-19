@@ -65,19 +65,19 @@ struct ContentView: View {
                                     item.order = 1
                                     persistence.reorder()
                                 } label: {
-                                    Text("移到前面去！")
+                                    Text("MAIN.ENTRY.ONE.MOVEFORWARD")
                                 }
                                 Divider()
                                 Button {
                                     deleteCollection(collection: item)
                                 } label: {
-                                    Text("删除「\(item.name ?? "")」").foregroundColor(.red)
+                                    Text(L("MAIN.ENTRY.ONE.DELETE") + "「\(item.name ?? L("MAIN.COMMON.DELETED"))」").foregroundColor(.red)
                                 }
                             })
                         }
                     }
                 }.padding()
-            }.navigationBarTitle(Text("俺的Sticker"))
+            }.navigationBarTitle(Text("PROGRAM.NAME"))
             .navigationViewStyle(DoubleColumnNavigationViewStyle())
             .navigationBarItems(trailing: HStack(spacing: 20){
                 Button {
@@ -107,10 +107,6 @@ struct ContentView: View {
             .sheet(isPresented: $isShowingAbout) {
                 VStack(spacing: 30){
                     xAbout()
-
-                    Text("快快") + Text("选中").bold() + Text("、") + Text("创建").bold() + Text("、") + Text("修改").bold() + Text("自己喜欢的表情包叭!")
-
-                    Spacer()
                 }.padding([.top], 100)
                 .foregroundColor(Color("AccentColor"))
             }
@@ -125,8 +121,6 @@ struct ContentView: View {
             
             VStack(spacing: 30){
                 xAbout()
-                Text("打开侧边栏") + Text("选中").bold() + Text("、") + Text("创建").bold() + Text("、") + Text("修改").bold() + Text("自己喜欢的表情包叭!")
-                Spacer()
             }.foregroundColor(Color("AccentColor"))
         }
     }
@@ -226,7 +220,7 @@ struct OneCollectionEntryView : View {
             .background(Color("AccentColor").opacity(0.4))
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
             .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
-            Text("\(item == persistence.defaultCollection ? "我喜欢" : (item.name ?? "Deleted"))")
+            Text("\(item == persistence.defaultCollection ? L("MAIN.ENTRY.ONE.FAVORITE") : (item.name ?? L("MAIN.COMMON.DELETED")))")
                 .font(.body)
                 .lineLimit(1)
                 .minimumScaleFactor(0.3)
@@ -238,8 +232,8 @@ struct OneCollectionEntryView : View {
                     .imageScale(.large)
                     .foregroundColor(.red)
             }.alert(isPresented: $isShowingAlert) {
-                Alert(title: Text("您真的要残忍的删除我「\(item.name ?? "已删除")」了么"),
-                      primaryButton: .default(Text("对，很凶残！"), action: {
+                Alert(title: Text("MAIN.ENTRY.COLLECTION.DELETING") + Text("「\(item.name ?? L("MAIN.COMMON.DELETED"))」😭?"),
+                      primaryButton: .default(Text("MAIN.ENTRY.COLLECTION.DELETING.YES") + Text("😎"), action: {
                         print(item)
                         _ = stickerManager.delete(collection: item)
                         persistence.removeCollection(of: item)
@@ -280,7 +274,7 @@ struct StickerCollectionView: View {
         self.persistence = persistence
         self.collection = collection
         self.items = FetchRequest(sortDescriptors: [NSSortDescriptor(keyPath: \Stickers.order, ascending: true)], predicate: NSPredicate(format: "collection=%@", self.collection))
-        collectionName = collection == persistence.defaultCollection ? "我喜欢" : (collection.name ?? "已删除")
+        collectionName = collection == persistence.defaultCollection ? L("MAIN.ENTRY.ONE.FAVORITE") : (collection.name ?? L("MAIN.COMMON.DELETED"))
     }
     
     // MARK: 🏷️一个表情
@@ -296,7 +290,7 @@ struct StickerCollectionView: View {
             .background(Color("AccentColor").opacity(0.3))
             .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
             .shadow(color: Color("AccentColor").opacity(0.2), radius: 6, x: 0, y: 5)
-            Text("\(item.name ?? "已删除")")
+            Text("\(item.name ?? L("MAIN.COMMON.DELETED"))")
                 .font(.footnote)
                 .lineLimit(1)
                 .minimumScaleFactor(0.3)
@@ -378,7 +372,7 @@ struct StickerCollectionView: View {
                     ){
                         List{
                             if collection == persistence.defaultCollection {
-                                Label("我喜欢", systemImage: "square.grid.2x2")
+                                Label(L("MAIN.ENTRY.ONE.FAVORITE"), systemImage: "square.grid.2x2")
                             } else {
                                 NavigationEditor(
                                     title: "贴贴集名字", systemImage: "square.grid.2x2",
@@ -410,7 +404,7 @@ struct StickerCollectionView: View {
                                 }
                                 isCollectionInfoViewPresented = false
                             }, label: {
-                                Label("清空「我喜欢」", systemImage: "trash.circle")
+                                Label("清空" + "「" + L("MAIN.ENTRY.ONE.FAVORITE") + "」", systemImage: "trash.circle")
                                     .foregroundColor(.red)
                             })
                         } else if collection != persistence.defaultCollection {
@@ -419,7 +413,7 @@ struct StickerCollectionView: View {
                                 persistence.removeCollection(of: collection)
                                 isCollectionInfoViewPresented = false
                             }, label: {
-                                Label("删掉我呗", systemImage: "trash.circle")
+                                Label("MAIN.ENTRY.COLLECTION.DETAIL.DELETE", systemImage: "trash.circle")
                                     .foregroundColor(.red)
                             })
                         }
@@ -458,7 +452,7 @@ struct StickerCollectionView: View {
                             Image(systemName: "hand.tap.fill")
                                 .foregroundColor(Color("AccentColor"))
                                 .rotationEffect(Angle(degrees: -30)).imageScale(.large)
-                            Text("点我添加自己喜欢的Sticker吧！😆")
+                            Text("MAIN.ENTRY.COLLECTION.ADD")
                                 .minimumScaleFactor(0.3)
                                 .multilineTextAlignment(.center)
                                 .frame(width: 160, height: 40, alignment: .center)
@@ -484,13 +478,13 @@ struct StickerCollectionView: View {
                                 item.order = 0
                                 persistence.reorder(for: collection)
                             } label: {
-                                Text("移到前面去！")
+                                Text("MAIN.ENTRY.ONE.MOVEFORWARD")
                             }
                             Divider()
                             Button {
                                 deleteSticker(sticker: item)
                             } label: {
-                                Text("删除「\(item.name ?? "")」").foregroundColor(.red)
+                                Text(L("MAIN.ENTRY.ONE.DELETE") + "「\(item.name ?? L("MAIN.COMMON.DELETED"))」").foregroundColor(.red)
                             }
                         }).onDrag {
                             currentProviderItem = NSItemProvider(object: stickerManager.get(sticker: item))
@@ -714,6 +708,9 @@ struct xAbout: View {
                 Text("SETTINGS.ABOUT.STUDIO")
                 Text("XCLZ STUDIO").foregroundColor(.secondary)
             }
+
+            Text("SETTINGS.ABOUT.SLOGAN.0") + Text("SETTINGS.ABOUT.SLOGAN.1").bold() + Text("、") + Text("SETTINGS.ABOUT.SLOGAN.2").bold() + Text("、") + Text("SETTINGS.ABOUT.SLOGAN.3").bold() + Text("SETTINGS.ABOUT.SLOGAN.4")
+            Spacer()
         }.frame(maxWidth: .infinity)
     }
 }
