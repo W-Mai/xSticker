@@ -360,7 +360,7 @@
 			};
 			buildConfigurationList = 5E4741D227181B24001E0E11 /* Build configuration list for PBXProject "xSticker" */;
 			compatibilityVersion = "Xcode 9.3";
-			developmentRegion = en;
+			developmentRegion = "zh-Hans";
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,

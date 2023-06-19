@@ -1,4 +1,4 @@
-/* 
+/*
   File.strings
   xSticker
 
@@ -6,25 +6,54 @@
   
 */
 
-"PROGRAM.NAME" = "xSticker";
+/**/
+"MAIN.COMMON.DELETED" = "Deleted";
 
-"MAIN.ENTRY.ONE.FAVORITE" = "Favorite";
-"MAIN.ENTRY.ONE.DELETE" = "Delete";
-"MAIN.ENTRY.ONE.MOVEFORWARD" = "Move forward!";
+/**/
+"MAIN.ENTRY.COLLECTION.ADD" = "Click me to add your favorite stickers! 😆";
 
+/**/
 "MAIN.ENTRY.COLLECTION.DELETING" = "Are you really going to cruelly delete me ";
+
+/**/
 "MAIN.ENTRY.COLLECTION.DELETING.YES" = "Sure! Cruelly!";
 
-"MAIN.ENTRY.COLLECTION.ADD" = "Click me to add your favorite stickers! 😆";
+/**/
 "MAIN.ENTRY.COLLECTION.DETAIL.DELETE" = "Kill me😭";
 
+/**/
+"MAIN.ENTRY.ONE.DELETE" = "Delete";
+
+/**/
+"MAIN.ENTRY.ONE.FAVORITE" = "Favorite";
+
+/**/
+"MAIN.ENTRY.ONE.MOVEFORWARD" = "Move forward!";
+
+/**/
+"PROGRAM.NAME" = "xSticker";
+
+/**/
 "SETTINGS.ABOUT" = "About";
+
+/**/
 "SETTINGS.ABOUT.AUTHOR" = "Author";
-"SETTINGS.ABOUT.STUDIO" = "Studio";
+
+/**/
 "SETTINGS.ABOUT.SLOGAN.0" = "Quickly ";
+
+/**/
 "SETTINGS.ABOUT.SLOGAN.1" = "Select";
+
+/**/
 "SETTINGS.ABOUT.SLOGAN.2" = "Create";
+
+/**/
 "SETTINGS.ABOUT.SLOGAN.3" = "Modify ";
+
+/**/
 "SETTINGS.ABOUT.SLOGAN.4" = "Your favorite stickers!!";
 
-"MAIN.COMMON.DELETED" = "Deleted";
+/**/
+"SETTINGS.ABOUT.STUDIO" = "Studio";
+
