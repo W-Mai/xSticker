@@ -1,11 +1,70 @@
-/* 
-  File.strings
-  xSticker
 
-  Created by W-Mai on 2021/10/18.
-  
-*/
+/**/
+"MAIN.COMMON.DELETED" = "已删除";
 
+/**/
+"MAIN.ENTRY.COLLECTION.ADD" = "点我添加自己喜欢的贴贴吧！😆";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DELETING" = "您真的要残忍的删除我";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DELETING.YES" = "对，很凶残！";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.AUTHOR" = "贴贴集作者";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.CLEAR" = "清空";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.DELETE" = "删掉我呗😭";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.DESCRIBE" = "贴贴集描述";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.NAME" = "贴贴集名称";
+
+/**/
+"MAIN.ENTRY.ONE.DELETE" = "删除";
+
+/**/
+"MAIN.ENTRY.ONE.DETAIL.COVER" = "设置为封面";
+
+/**/
+"MAIN.ENTRY.ONE.DETAIL.NAME" = "贴贴名字！";
+
+/**/
+"MAIN.ENTRY.ONE.FAVORITE" = "我喜欢";
+
+/**/
+"MAIN.ENTRY.ONE.MOVEFORWARD" = "移到前面去！";
+
+/**/
+"PROGRAM.NAME" = "俺的贴贴";
+
+/**/
 "SETTINGS.ABOUT" = "关于";
+
+/**/
 "SETTINGS.ABOUT.AUTHOR" = "作者";
+
+/**/
+"SETTINGS.ABOUT.SLOGAN.0" = "快快";
+
+/**/
+"SETTINGS.ABOUT.SLOGAN.1" = "选中";
+
+/**/
+"SETTINGS.ABOUT.SLOGAN.2" = "创建";
+
+/**/
+"SETTINGS.ABOUT.SLOGAN.3" = "修改";
+
+/**/
+"SETTINGS.ABOUT.SLOGAN.4" = "自己喜欢的表情包吧";
+
+/**/
 "SETTINGS.ABOUT.STUDIO" = "工作室";
+

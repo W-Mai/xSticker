@@ -73,3 +73,9 @@ func getVerStr() -> String {
     
     return version
 }
+
+
+func L(_ str: String) -> String {
+    return NSLocalizedString(str, comment: "")
+}
+
