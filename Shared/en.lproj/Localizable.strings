@@ -1,10 +1,3 @@
-/*
-  File.strings
-  xSticker
-
-  Created by W-Mai on 2021/10/18.
-  
-*/
 
 /**/
 "MAIN.COMMON.DELETED" = "Deleted";
@@ -19,10 +12,28 @@
 "MAIN.ENTRY.COLLECTION.DELETING.YES" = "Sure! Cruelly!";
 
 /**/
+"MAIN.ENTRY.COLLECTION.DETAIL.AUTHOR" = "Collection Author";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.CLEAR" = "Clear";
+
+/**/
 "MAIN.ENTRY.COLLECTION.DETAIL.DELETE" = "Kill me😭";
 
 /**/
+"MAIN.ENTRY.COLLECTION.DETAIL.DESCRIBE" = "Collection Describe";
+
+/**/
+"MAIN.ENTRY.COLLECTION.DETAIL.NAME" = "Collection Name";
+
+/**/
 "MAIN.ENTRY.ONE.DELETE" = "Delete";
+
+/**/
+"MAIN.ENTRY.ONE.DETAIL.COVER" = "Set as cover";
+
+/**/
+"MAIN.ENTRY.ONE.DETAIL.NAME" = "贴贴's name";
 
 /**/
 "MAIN.ENTRY.ONE.FAVORITE" = "Favorite";

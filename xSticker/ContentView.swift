@@ -375,14 +375,14 @@ struct StickerCollectionView: View {
                                 Label(L("MAIN.ENTRY.ONE.FAVORITE"), systemImage: "square.grid.2x2")
                             } else {
                                 NavigationEditor(
-                                    title: "贴贴集名字", systemImage: "square.grid.2x2",
+                                    title: L("MAIN.ENTRY.COLLECTION.DETAIL.NAME"), systemImage: "square.grid.2x2",
                                     text: Binding(get: { collection.name ?? "" }, set: { v in collection.name = v }))
                             }
                             NavigationEditor(
-                                title: "贴贴集作者", systemImage: "person.circle",
+                                title: L("MAIN.ENTRY.COLLECTION.DETAIL.AUTHOR"), systemImage: "person.circle",
                                 text: Binding(get: { collection.author ?? "" }, set: { v in collection.author = v }))
                             NavigationEditor(
-                                title: "贴贴集描述", systemImage: "doc.plaintext",
+                                title: L("MAIN.ENTRY.COLLECTION.DETAIL.DESCRIBE"), systemImage: "doc.plaintext",
                                 text: Binding(get: { collection.collectionDescription ?? "" }, set: { v in collection.collectionDescription = v }),
                                 longTextMode: true)
                         }
@@ -404,7 +404,7 @@ struct StickerCollectionView: View {
                                 }
                                 isCollectionInfoViewPresented = false
                             }, label: {
-                                Label("清空" + "「" + L("MAIN.ENTRY.ONE.FAVORITE") + "」", systemImage: "trash.circle")
+                                Label(L("MAIN.ENTRY.COLLECTION.DETAIL.CLEAR") + "「" + L("MAIN.ENTRY.ONE.FAVORITE") + "」", systemImage: "trash.circle")
                                     .foregroundColor(.red)
                             })
                         } else if collection != persistence.defaultCollection {
@@ -608,7 +608,7 @@ struct StickerDetailView: View {
             ){
                 List{
                     NavigationEditor(
-                        title: "贴贴名字", systemImage: "square.grid.2x2",
+                        title: L("MAIN.ENTRY.ONE.DETAIL.NAME"), systemImage: "square.grid.2x2",
                         text: Binding(get: { sticker.name ?? "" }, set: { v in sticker.name = v }))
                 }
             }
@@ -626,7 +626,7 @@ struct StickerDetailView: View {
                     collection?.profile = sticker.image
                     presentationMode.wrappedValue.dismiss()
                 } label: {
-                    Label("设置「\(sticker.name ?? "已删除")」为封面", systemImage: "heart.text.square")
+                    Label("「\(sticker.name ?? L("MAIN.COMMON.DELETED"))」" + L("MAIN.ENTRY.ONE.DETAIL.COVER"), systemImage: "heart.text.square")
                 }
             }
             
@@ -637,11 +637,11 @@ struct StickerDetailView: View {
                     persistence.removeSticker(of: sticker)
                     presentationMode.wrappedValue.dismiss()
                 }, label: {
-                    Label("删掉我呗", systemImage: "trash.circle")
+                    Label("MAIN.ENTRY.COLLECTION.DETAIL.DELETE", systemImage: "trash.circle")
                         .foregroundColor(.red)
                 })
             }
-        }.navigationBarTitle(sticker.name ?? "已删除")
+        }.navigationBarTitle(sticker.name ?? L("MAIN.COMMON.DELETED"))
         .onDisappear {
             persistence.save()
         }
