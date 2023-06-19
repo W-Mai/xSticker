@@ -175,7 +175,7 @@ class StickerManager {
     }
 }
 
-let GroupRootPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.xSticker")!
+let GroupRootPath = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: "group.studio.xclz.xSticker")!
 let stickerManager = StickerManager(root: GroupRootPath)
 
 func downsample(imageAt imageURL: URL, targetMaxSize: CGFloat) -> UIImage {
@@ -190,7 +190,7 @@ func downsample(imageAt imageURL: URL, targetMaxSize: CGFloat) -> UIImage {
     let downsampleOptions = [kCGImageSourceCreateThumbnailFromImageAlways: true,
                                  kCGImageSourceShouldCacheImmediately: true,
                                  kCGImageSourceCreateThumbnailWithTransform: true,
-                                 kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as CFDictionary
+                                      kCGImageSourceThumbnailMaxPixelSize: maxDimensionInPixels] as [CFString : Any] as CFDictionary
     //生成
     let downsampledImage = CGImageSourceCreateThumbnailAtIndex(imageSource, 0, downsampleOptions)!
     return UIImage(cgImage: downsampledImage)
